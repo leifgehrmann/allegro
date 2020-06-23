@@ -6,3 +6,12 @@ Thumbs.db
 
 # NPM
 node_modules
+
+# Ignore things in app
+/app/**/*.js
+/app/**/*.map
+/app/**/*.svg
+
+# Release outputs
+/dist
+/temp

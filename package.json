@@ -3,8 +3,27 @@
   "version": "0.0.1",
   "description": "Submit worklogs to Tempo.io in batches",
   "main": "app/background.js",
+  "build": {
+    "appId": "com.leifgehrmann.allegro",
+    "productName": "Allegro",
+    "files": [
+      "app/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "resources"
+    },
+    "publish": null
+  },
   "scripts": {
-    "test": "npm run unit && npm run e2e"
+    "postinstall": "electron-builder install-app-deps",
+    "preunit": "webpack --config=build/webpack.unit.config.js --env=test --display=none",
+    "unit": "echo work in progress",
+    "e2e": "echo work in progress",
+    "test": "npm run unit && npm run e2e",
+    "start": "node build/start.js",
+    "release": "npm test && webpack --config=build/webpack.app.config.js --env=production && electron-builder"
   },
   "repository": {
     "type": "git",
@@ -19,5 +38,21 @@
   "bugs": {
     "url": "https://github.com/leifgehrmann/allegro/issues"
   },
-  "homepage": "https://github.com/leifgehrmann/allegro#readme"
+  "homepage": "https://github.com/leifgehrmann/allegro#readme",
+  "dependencies": {
+    "electron-store": "^5.2.0",
+    "fs-jetpack": "^2.4.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "babel-loader": "^8.1.0",
+    "electron": "^9.0.5",
+    "electron-builder": "^22.7.0",
+    "file-loader": "^6.0.0",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-merge": "^4.2.2",
+    "webpack-node-externals": "^1.7.2"
+  }
 }
