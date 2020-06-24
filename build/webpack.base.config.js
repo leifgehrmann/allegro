@@ -1,23 +1,34 @@
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 
 module.exports = env => {
   return {
-    target: "node",
     node: {
       __dirname: false,
       __filename: false
     },
+    mode: env !== 'production' ? 'development' : 'production',
     externals: [nodeExternals()],
     resolve: {
       alias: {
         env: path.resolve(__dirname, `../config/env_${env}.json`)
-      }
+      },
+      extensions: ['.ts', '.js']
     },
     devtool: "source-map",
     module: {
       rules: [
+        {
+          test: /\.vue$/,
+          loader: 'vue-loader'
+        },
+        {
+          test: /\.ts$/,
+          loader: 'ts-loader',
+          options: { appendTsSuffixTo: [/\.vue$/] }
+        },
         {
           test: /\.js$/,
           exclude: /node_modules/,
@@ -36,6 +47,7 @@ module.exports = env => {
       ]
     },
     plugins: [
+      new VueLoaderPlugin(),
       new FriendlyErrorsWebpackPlugin({ clearConsole: env === "development" })
     ]
   };

@@ -44,7 +44,11 @@ app.on("ready", () => {
         height: 600,
         minWidth: 450,
         backgroundColor: '#FFFFFF',
-        show: false
+        show: false,
+        webPreferences: {
+            // Because we are loading our own files, rather than a remote web page, this is safe
+            nodeIntegration: true
+        }
     });
 
     mainWindow.loadURL(
