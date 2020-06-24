@@ -15,11 +15,11 @@
 
 import { shell } from "electron";
 
-const supportExternalLinks = event => {
-  let href;
+const supportExternalLinks = (event: Event) => {
+  let href: string | null;
   let isExternal = false;
 
-  const checkDomElement = element => {
+  const checkDomElement = (element: HTMLElement) => {
     if (element.nodeName === "A") {
       href = element.getAttribute("href");
     }
@@ -34,7 +34,9 @@ const supportExternalLinks = event => {
     }
   };
 
-  checkDomElement(event.target);
+  if (event.target instanceof HTMLElement) {
+    checkDomElement(event.target);
+  }
 };
 
 document.addEventListener("click", supportExternalLinks, false);

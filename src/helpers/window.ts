@@ -3,10 +3,17 @@
 // Can be used for more than one window, just construct many
 // instances of it and give each different name.
 
-import { app, BrowserWindow, screen } from "electron";
+import { app, BrowserWindow, screen, BrowserWindowConstructorOptions } from "electron";
 import jetpack from "fs-jetpack";
 
-export default (name, options) => {
+interface WindowState {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+}
+
+export default (name: string, options: BrowserWindowConstructorOptions) => {
   const userDataDir = jetpack.cwd(app.getPath("userData"));
   const stateStoreFile = `window-state-${name}.json`;
   const defaultSize = {
@@ -14,7 +21,7 @@ export default (name, options) => {
     height: options.height
   };
   let state = {};
-  let win;
+  let win: BrowserWindow;
 
   const restore = () => {
     let restoredState = {};
@@ -38,7 +45,17 @@ export default (name, options) => {
     };
   };
 
-  const windowWithinBounds = (windowState, bounds) => {
+  const windowWithinBounds = (windowState: WindowState, bounds: WindowState) => {
+    if (windowState.x === undefined ||
+      windowState.y === undefined ||
+      windowState.width === undefined ||
+      windowState.height === undefined ||
+      bounds.x === undefined ||
+      bounds.y === undefined ||
+      bounds.width === undefined ||
+      bounds.height === undefined) {
+      return false;
+    }
     return (
       windowState.x >= bounds.x &&
       windowState.y >= bounds.y &&
@@ -50,12 +67,12 @@ export default (name, options) => {
   const resetToDefaults = () => {
     const bounds = screen.getPrimaryDisplay().bounds;
     return Object.assign({}, defaultSize, {
-      x: (bounds.width - defaultSize.width) / 2,
-      y: (bounds.height - defaultSize.height) / 2
+      x: (bounds.width - (defaultSize.width === undefined ? 0 : defaultSize.width)) / 2,
+      y: (bounds.height - (defaultSize.height === undefined ? 0 : defaultSize.height)) / 2
     });
   };
 
-  const ensureVisibleOnSomeDisplay = windowState => {
+  const ensureVisibleOnSomeDisplay = (windowState: WindowState) => {
     const visible = screen.getAllDisplays().some(display => {
       return windowWithinBounds(windowState, display.bounds);
     });

@@ -5,7 +5,7 @@
 
 import path from "path";
 import url from "url";
-import { app, Menu } from "electron";
+import {app, Menu, MenuItemConstructorOptions} from "electron";
 import { appMenuTemplate } from "./menu/app_menu_template";
 import { editMenuTemplate } from "./menu/edit_menu_template";
 import { devMenuTemplate } from "./menu/dev_menu_template";
@@ -15,6 +15,7 @@ import Store from 'electron-store'
 
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
+// @ts-ignore
 import env from "env";
 
 const setApplicationMenu = () => {
@@ -22,7 +23,7 @@ const setApplicationMenu = () => {
     if (env.name !== "production") {
         menus.push(devMenuTemplate);
     }
-    Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menus as MenuItemConstructorOptions[]));
 };
 
 // Save userData in separate folders for each environment.

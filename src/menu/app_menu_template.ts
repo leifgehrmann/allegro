@@ -13,7 +13,6 @@ export const appMenuTemplate = {
     {role: 'services', submenu: []},
     {type: 'separator'},
     {role: 'hide'},
-    {role: 'hideothers'},
     {role: 'unhide'},
     {type: 'separator'},
     {role: 'quit'}

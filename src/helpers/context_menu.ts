@@ -7,7 +7,7 @@ const Menu = remote.Menu;
 const MenuItem = remote.MenuItem;
 
 const isAnyTextSelected = () => {
-  return window.getSelection().toString() !== "";
+  return window.getSelection()?.toString() !== "";
 };
 
 const cut = new MenuItem({
@@ -42,15 +42,18 @@ textEditingMenu.append(paste);
 document.addEventListener(
   "contextmenu",
   event => {
-    switch (event.target.nodeName) {
+    // @ts-ignore
+    switch (event.target?.nodeName) {
       case "TEXTAREA":
       case "INPUT":
         event.preventDefault();
+        // @ts-ignore
         textEditingMenu.popup(remote.getCurrentWindow());
         break;
       default:
         if (isAnyTextSelected()) {
           event.preventDefault();
+          // @ts-ignore
           normalMenu.popup(remote.getCurrentWindow());
         }
     }

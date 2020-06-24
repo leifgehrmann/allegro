@@ -1,11 +1,12 @@
-import "./helpers/context_menu.js";
-import "./helpers/external_links.js";
+import "./helpers/context_menu.ts";
+import "./helpers/external_links.ts";
 
 import { remote } from "electron";
 import jetpack from "fs-jetpack";
+// @ts-ignore
 import env from "env";
-import Vue from "vue";
-import App from './App.vue';
+import Vue, {VNode} from "vue";
+import App from "./App.vue";
 
 const app = remote.app;
 const appDir = jetpack.cwd(app.getAppPath());
@@ -22,5 +23,5 @@ Vue.config.productionTip = false;
 console.log('hey!');
 
 new Vue({
-    render: (h) => h(App),
+    render: (h): VNode => h(App),
 }).$mount('#app');

@@ -15,7 +15,7 @@ module.exports = env => {
       alias: {
         env: path.resolve(__dirname, `../config/env_${env}.json`)
       },
-      extensions: ['.ts', '.js']
+      extensions: ['.tsx', '.ts', '.js']
     },
     devtool: "source-map",
     module: {
@@ -25,9 +25,10 @@ module.exports = env => {
           loader: 'vue-loader'
         },
         {
-          test: /\.ts$/,
+          test: /\.tsx?$/,
           loader: 'ts-loader',
-          options: { appendTsSuffixTo: [/\.vue$/] }
+          options: { appendTsSuffixTo: [/\.vue$/] },
+          exclude: /node_modules/,
         },
         {
           test: /\.js$/,

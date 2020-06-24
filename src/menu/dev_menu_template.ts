@@ -7,14 +7,14 @@ export const devMenuTemplate = {
       label: "Reload",
       accelerator: "CmdOrCtrl+R",
       click: () => {
-        BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache();
+        BrowserWindow.getFocusedWindow()?.webContents.reloadIgnoringCache();
       }
     },
     {
       label: "Toggle DevTools",
       accelerator: "Alt+CmdOrCtrl+I",
       click: () => {
-        BrowserWindow.getFocusedWindow().toggleDevTools();
+        BrowserWindow.getFocusedWindow()?.webContents.toggleDevTools();
       }
     },
     {
