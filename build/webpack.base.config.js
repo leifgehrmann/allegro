@@ -13,7 +13,8 @@ module.exports = env => {
     externals: [nodeExternals()],
     resolve: {
       alias: {
-        env: path.resolve(__dirname, `../config/env_${env}.json`)
+        env: path.resolve(__dirname, `../config/env_${env}.json`),
+        '@': path.resolve(__dirname + '/src')
       },
       extensions: ['.tsx', '.ts', '.js']
     },

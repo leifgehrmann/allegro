@@ -47,10 +47,12 @@
   "devDependencies": {
     "@babel/core": "^7.10.3",
     "babel-loader": "^8.1.0",
+    "css-loader": "^3.6.0",
     "electron": "^9.0.5",
     "electron-builder": "^22.7.0",
     "file-loader": "^6.0.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
+    "style-loader": "^1.2.1",
     "ts-loader": "^7.0.5",
     "typescript": "^3.9.5",
     "vue-loader": "^15.9.3",

@@ -20,7 +20,6 @@ const osMap = {
 };
 
 Vue.config.productionTip = false;
-console.log('hey!');
 
 new Vue({
     render: (h): VNode => h(App),
