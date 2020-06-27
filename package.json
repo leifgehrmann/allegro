@@ -1,0 +1,27 @@
+{
+  "name": "allegro",
+  "version": "0.0.1",
+  "description": "Submit worklogs to Tempo.io in batches",
+  "main": "index.js",
+  "dependencies": {
+    "vue-cli-plugin-electron-builder": "^2.0.0-rc.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leifgehrmann/allegro.git"
+  },
+  "keywords": [
+    "tempo",
+    "electron-app"
+  ],
+  "author": "Leif Gehrmann",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leifgehrmann/allegro/issues"
+  },
+  "homepage": "https://github.com/leifgehrmann/allegro#readme"
+}
