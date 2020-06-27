@@ -1,4 +1,4 @@
-![Allegro](allegro.png)
+![Allegro](resources/allegro.png)
 
 Submit worklogs to Tempo.io in batches
 
