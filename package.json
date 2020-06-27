@@ -1,28 +1,39 @@
 {
   "name": "allegro",
-  "version": "0.0.1",
-  "description": "Submit worklogs to Tempo.io in batches",
-  "main": "index.js",
-  "dependencies": {},
-  "devDependencies": {
-    "@vue/cli-shared-utils": "^4.4.6",
-    "vue-cli-plugin-electron-builder": "^2.0.0-rc.3"
-  },
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit",
+    "test:e2e": "vue-cli-service test:e2e",
+    "lint": "vue-cli-service lint"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/leifgehrmann/allegro.git"
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "vue": "^2.6.11",
+    "vue-class-component": "^7.2.3",
+    "vue-property-decorator": "^8.4.2"
   },
-  "keywords": [
-    "tempo",
-    "electron-app"
-  ],
-  "author": "Leif Gehrmann",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/leifgehrmann/allegro/issues"
-  },
-  "homepage": "https://github.com/leifgehrmann/allegro#readme"
+  "devDependencies": {
+    "@types/jest": "^24.0.19",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
+    "@vue/cli-plugin-babel": "^4.4.0",
+    "@vue/cli-plugin-e2e-cypress": "^4.4.0",
+    "@vue/cli-plugin-eslint": "^4.4.0",
+    "@vue/cli-plugin-typescript": "^4.4.0",
+    "@vue/cli-plugin-unit-jest": "^4.4.0",
+    "@vue/cli-service": "^4.4.0",
+    "@vue/eslint-config-airbnb": "^5.0.2",
+    "@vue/eslint-config-typescript": "^5.0.2",
+    "@vue/test-utils": "^1.0.3",
+    "eslint": "^6.7.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.2",
+    "typescript": "~3.9.3",
+    "vue-template-compiler": "^2.6.11"
+  }
 }

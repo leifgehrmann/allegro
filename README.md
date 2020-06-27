@@ -2,18 +2,35 @@
 
 Submit worklogs to Tempo.io in batches
 
----
-
-### Development
-
+## Project setup
 ```
 npm install
-npm start
 ```
 
-### To build the `.exe`/`.app`, etc.
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
+### Compiles and minifies for production
 ```
-npm install
-npm run release
+npm run build
 ```
+
+### Run your unit tests
+```
+npm run test:unit
+```
+
+### Run your end-to-end tests
+```
+npm run test:e2e
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
