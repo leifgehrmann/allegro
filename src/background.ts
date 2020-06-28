@@ -3,6 +3,7 @@ import {
   createProtocol,
   installVueDevtools,
 } from 'vue-cli-plugin-electron-builder/lib';
+import createWindowFromState from "./helpers/window";
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -15,11 +16,12 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } },
 ]);
 
-function createWindow() {
+function createMainWindow() {
   // Create the browser window.
-  win = new BrowserWindow({
+  win = createWindowFromState('main', {
     width: 800,
     height: 600,
+    backgroundColor: '#FFFFFF',
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // for more info, see:
@@ -27,6 +29,7 @@ function createWindow() {
       nodeIntegration: (process.env
         .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
     },
+    show: false
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -39,6 +42,18 @@ function createWindow() {
     win.loadURL('app://./index.html');
   }
 
+  win.on('blur', () => {
+    win?.webContents.executeJavaScript(`document.body.classList.add("window-unfocused")`);
+  });
+
+  win.on('focus', () => {
+    win?.webContents.executeJavaScript(`document.body.classList.remove("window-unfocused")`);
+  });
+
+  win.once('ready-to-show', () => {
+    win?.show()
+  })
+
   win.on('closed', () => {
     win = null;
   });
@@ -46,18 +61,14 @@ function createWindow() {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  app.quit();
 });
 
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
-    createWindow();
+    createMainWindow();
   }
 });
 
@@ -73,7 +84,7 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString());
     }
   }
-  createWindow();
+  createMainWindow();
 });
 
 // Exit cleanly on request from parent process in development mode.
