@@ -3,8 +3,10 @@
 // Can be used for more than one window, just construct many
 // instances of it and give each different name.
 
-import { app, BrowserWindow, screen, BrowserWindowConstructorOptions } from "electron";
-import jetpack from "fs-jetpack";
+import {
+  app, BrowserWindow, screen, BrowserWindowConstructorOptions,
+} from 'electron';
+import jetpack from 'fs-jetpack';
 
 interface WindowState {
   x?: number;
@@ -13,12 +15,12 @@ interface WindowState {
   height?: number;
 }
 
-export default (name: string, options: BrowserWindowConstructorOptions) => {
-  const userDataDir = jetpack.cwd(app.getPath("userData"));
+export default (name: string, options: BrowserWindowConstructorOptions): BrowserWindow => {
+  const userDataDir = jetpack.cwd(app.getPath('userData'));
   const stateStoreFile = `window-state-${name}.json`;
   const defaultSize = {
     width: options.width,
-    height: options.height
+    height: options.height,
   };
   let state = {};
   let win: BrowserWindow;
@@ -26,12 +28,12 @@ export default (name: string, options: BrowserWindowConstructorOptions) => {
   const restore = () => {
     let restoredState = {};
     try {
-      restoredState = userDataDir.read(stateStoreFile, "json");
+      restoredState = userDataDir.read(stateStoreFile, 'json');
     } catch (err) {
       // For some reason json can't be read (might be corrupted).
       // No worries, we have defaults.
     }
-    return Object.assign({}, defaultSize, restoredState);
+    return { ...defaultSize, ...restoredState };
   };
 
   const getCurrentPosition = () => {
@@ -41,43 +43,44 @@ export default (name: string, options: BrowserWindowConstructorOptions) => {
       x: position[0],
       y: position[1],
       width: size[0],
-      height: size[1]
+      height: size[1],
     };
   };
 
   const windowWithinBounds = (windowState: WindowState, bounds: WindowState) => {
-    if (windowState.x === undefined ||
-      windowState.y === undefined ||
-      windowState.width === undefined ||
-      windowState.height === undefined ||
-      bounds.x === undefined ||
-      bounds.y === undefined ||
-      bounds.width === undefined ||
-      bounds.height === undefined) {
+    if (windowState.x === undefined
+      || windowState.y === undefined
+      || windowState.width === undefined
+      || windowState.height === undefined
+      || bounds.x === undefined
+      || bounds.y === undefined
+      || bounds.width === undefined
+      || bounds.height === undefined) {
       return false;
     }
     return (
-      windowState.x >= bounds.x &&
-      windowState.y >= bounds.y &&
-      windowState.x + windowState.width <= bounds.x + bounds.width &&
-      windowState.y + windowState.height <= bounds.y + bounds.height
+      windowState.x >= bounds.x
+      && windowState.y >= bounds.y
+      && windowState.x + windowState.width <= bounds.x + bounds.width
+      && windowState.y + windowState.height <= bounds.y + bounds.height
     );
   };
 
   const resetToDefaults = () => {
-    const bounds = screen.getPrimaryDisplay().bounds;
+    const { bounds } = screen.getPrimaryDisplay();
     const defaultWidth = (defaultSize.width === undefined ? 0 : defaultSize.width);
     const defaultHeight = (defaultSize.width === undefined ? 0 : defaultSize.width);
-    return Object.assign({}, defaultSize, {
+    return {
+      ...defaultSize,
       x: (bounds.width - defaultWidth) / 2,
-      y: (bounds.height - defaultHeight) / 2
-    });
+      y: (bounds.height - defaultHeight) / 2,
+    };
   };
 
   const ensureVisibleOnSomeDisplay = (windowState: WindowState) => {
-    const visible = screen.getAllDisplays().some(display => {
-      return windowWithinBounds(windowState, display.bounds);
-    });
+    const visible = screen.getAllDisplays().some(
+      (display) => windowWithinBounds(windowState, display.bounds),
+    );
     if (!visible) {
       // Window is partially or fully not visible now.
       // Reset it to safe defaults.
@@ -95,9 +98,9 @@ export default (name: string, options: BrowserWindowConstructorOptions) => {
 
   state = ensureVisibleOnSomeDisplay(restore());
 
-  win = new BrowserWindow(Object.assign({}, options, state));
+  win = new BrowserWindow({ ...options, ...state });
 
-  win.on("close", saveState);
+  win.on('close', saveState);
 
   return win;
 };

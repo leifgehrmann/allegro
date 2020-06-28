@@ -3,7 +3,7 @@ import {
   createProtocol,
   installVueDevtools,
 } from 'vue-cli-plugin-electron-builder/lib';
-import createWindowFromState from "./helpers/window";
+import createWindowFromState from './helpers/window';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -29,7 +29,7 @@ function createMainWindow() {
       nodeIntegration: (process.env
         .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
     },
-    show: false
+    show: false,
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -42,17 +42,9 @@ function createMainWindow() {
     win.loadURL('app://./index.html');
   }
 
-  win.on('blur', () => {
-    win?.webContents.executeJavaScript(`document.body.classList.add("window-unfocused")`);
-  });
-
-  win.on('focus', () => {
-    win?.webContents.executeJavaScript(`document.body.classList.remove("window-unfocused")`);
-  });
-
-  win.once('ready-to-show', () => {
-    win?.show()
-  })
+  win.on('blur', () => win?.webContents.executeJavaScript('document.body.classList.add("window-unfocused")'));
+  win.on('focus', () => win?.webContents.executeJavaScript('document.body.classList.remove("window-unfocused")'));
+  win.once('ready-to-show', () => win?.show());
 
   win.on('closed', () => {
     win = null;
