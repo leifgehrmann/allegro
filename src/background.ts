@@ -1,79 +1,92 @@
-// This is main process of Electron, started as first thing when your
-// app starts. It runs through entire life of your application.
-// It doesn't have any windows which you can see on screen, but we can open
-// window from here.
+import { app, protocol, BrowserWindow } from 'electron';
+import {
+  createProtocol,
+  installVueDevtools,
+} from 'vue-cli-plugin-electron-builder/lib';
 
-import path from "path";
-import url from "url";
-import {app, Menu, MenuItemConstructorOptions} from "electron";
-import { appMenuTemplate } from "./menu/app_menu_template";
-import { editMenuTemplate } from "./menu/edit_menu_template";
-import { devMenuTemplate } from "./menu/dev_menu_template";
-import createWindow from "./helpers/window";
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
-import Store from 'electron-store'
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let win: BrowserWindow | null;
 
-// Special module holding environment variables which you declared
-// in config/env_xxx.json file.
-// @ts-ignore
-import env from "env";
+// Scheme must be registered before the app is ready
+protocol.registerSchemesAsPrivileged([
+  { scheme: 'app', privileges: { secure: true, standard: true } },
+]);
 
-const setApplicationMenu = () => {
-    const menus = [appMenuTemplate, editMenuTemplate];
-    if (env.name !== "production") {
-        menus.push(devMenuTemplate);
-    }
-    Menu.setApplicationMenu(Menu.buildFromTemplate(menus as MenuItemConstructorOptions[]));
-};
+function createWindow() {
+  // Create the browser window.
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      // Use pluginOptions.nodeIntegration, leave this alone
+      // for more info, see:
+      // nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration
+      nodeIntegration: (process.env
+        .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
+    },
+  });
 
-// Save userData in separate folders for each environment.
-// Thanks to this you can use production and development versions of the app
-// on same machine like those are two separate apps.
-if (env.name !== "production") {
-    const userDataPath = app.getPath("userData");
-    app.setPath("userData", `${userDataPath} (${env.name})`);
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    // Load the url of the dev server if in development mode
+    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
+    if (!process.env.IS_TEST) win.webContents.openDevTools();
+  } else {
+    createProtocol('app');
+    // Load the index.html when not in development
+    win.loadURL('app://./index.html');
+  }
+
+  win.on('closed', () => {
+    win = null;
+  });
 }
 
-// Setup the localStorage
-const store = new Store();
-
-app.on("ready", () => {
-    setApplicationMenu();
-
-    const mainWindow = createWindow("main", {
-        width: 1000,
-        height: 600,
-        minWidth: 450,
-        backgroundColor: '#FFFFFF',
-        show: false,
-        webPreferences: {
-            // Because we are loading our own files, rather than a remote web page, this is safe
-            nodeIntegration: true
-        }
-    });
-
-    mainWindow.loadURL(
-        url.format({
-            pathname: path.join(__dirname, "app.html"),
-            protocol: "file:",
-            slashes: true
-        })
-    );
-
-    mainWindow.on('blur', () => {
-        mainWindow.webContents.executeJavaScript(`document.body.classList.add("window-unfocused")`);
-    });
-
-    mainWindow.on('focus', () => {
-        mainWindow.webContents.executeJavaScript(`document.body.classList.remove("window-unfocused")`);
-    });
-
-    mainWindow.once('ready-to-show', () => {
-        mainWindow.show()
-    });
-
-});
-
-app.on("window-all-closed", () => {
+// Quit when all windows are closed.
+app.on('window-all-closed', () => {
+  // On macOS it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
+  if (process.platform !== 'darwin') {
     app.quit();
+  }
 });
+
+app.on('activate', () => {
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (win === null) {
+    createWindow();
+  }
+});
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.on('ready', async () => {
+  if (isDevelopment && !process.env.IS_TEST) {
+    // Install Vue Devtools
+    try {
+      await installVueDevtools();
+    } catch (e) {
+      console.error('Vue Devtools failed to install:', e.toString());
+    }
+  }
+  createWindow();
+});
+
+// Exit cleanly on request from parent process in development mode.
+if (isDevelopment) {
+  if (process.platform === 'win32') {
+    process.on('message', (data) => {
+      if (data === 'graceful-exit') {
+        app.quit();
+      }
+    });
+  } else {
+    process.on('SIGTERM', () => {
+      app.quit();
+    });
+  }
+}

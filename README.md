@@ -1,19 +1,33 @@
-![Allegro](allegro.png)
+![Allegro](resources/allegro.png)
 
 Submit worklogs to Tempo.io in batches
 
----
-
-### Development
-
+## Project setup
 ```
 npm install
-npm start
 ```
 
-### To build the `.exe`/`.app`, etc.
-
+### Compiles and hot-reloads for development
 ```
-npm install
-npm run release
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Run your unit tests
+```
+npm run test:unit
+```
+
+### Run your end-to-end tests
+```
+npm run test:e2e
+```
+
+### Lints and fixes files
+```
+npm run lint
 ```

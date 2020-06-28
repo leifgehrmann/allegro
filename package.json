@@ -1,65 +1,46 @@
 {
   "name": "allegro",
-  "version": "0.0.1",
-  "description": "Submit worklogs to Tempo.io in batches",
-  "main": "app/background.js",
-  "build": {
-    "appId": "com.leifgehrmann.allegro",
-    "productName": "Allegro",
-    "files": [
-      "app/**/*",
-      "node_modules/**/*",
-      "package.json"
-    ],
-    "directories": {
-      "buildResources": "resources"
-    },
-    "publish": null
-  },
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
+    "test": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint",
+    "build": "vue-cli-service electron:build",
+    "serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
-    "preunit": "webpack --config=build/webpack.unit.config.js --env=test --display=none",
-    "unit": "echo work in progress",
-    "e2e": "echo work in progress",
-    "test": "npm run unit && npm run e2e",
-    "start": "node build/start.js",
-    "release": "npm test && webpack --config=build/webpack.app.config.js --env=production && electron-builder"
+    "postuninstall": "electron-builder install-app-deps"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/leifgehrmann/allegro.git"
-  },
-  "keywords": [
-    "tempo",
-    "electron-app"
-  ],
-  "author": "Leif Gehrmann",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/leifgehrmann/allegro/issues"
-  },
-  "homepage": "https://github.com/leifgehrmann/allegro#readme",
+  "main": "background.js",
   "dependencies": {
-    "electron-store": "^5.2.0",
-    "fs-jetpack": "^2.4.0",
-    "vue": "^2.6.11"
+    "core-js": "^3.6.5",
+    "electron": "^9.0.0",
+    "is-electron": "^2.2.0",
+    "vue": "^2.6.11",
+    "vue-class-component": "^7.2.3",
+    "vue-cli-plugin-electron-builder": "^2.0.0-rc.3",
+    "vue-property-decorator": "^8.4.2",
+    "fs-jetpack": "2.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.3",
-    "babel-loader": "^8.1.0",
-    "css-loader": "^3.6.0",
-    "electron": "^9.0.5",
-    "electron-builder": "^22.7.0",
-    "file-loader": "^6.0.0",
-    "friendly-errors-webpack-plugin": "^1.7.0",
-    "style-loader": "^1.2.1",
-    "ts-loader": "^7.0.5",
-    "typescript": "^3.9.5",
-    "vue-loader": "^15.9.3",
-    "vue-template-compiler": "^2.6.11",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-merge": "^4.2.2",
-    "webpack-node-externals": "^1.7.2"
+    "@types/jest": "^26.0.3",
+    "@types/node": "^12.12.47",
+    "@typescript-eslint/eslint-plugin": "^3.4.0",
+    "@typescript-eslint/parser": "^3.4.0",
+    "@vue/cli-plugin-babel": "^4.4.0",
+    "@vue/cli-plugin-eslint": "^4.4.0",
+    "@vue/cli-plugin-typescript": "^4.4.0",
+    "@vue/cli-plugin-unit-jest": "^4.4.0",
+    "@vue/cli-service": "^4.4.0",
+    "@vue/eslint-config-airbnb": "^5.0.2",
+    "@vue/eslint-config-typescript": "^5.0.2",
+    "@vue/test-utils": "^1.0.3",
+    "eslint": "^7.3.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.2",
+    "spectron": "^11.0.0",
+    "typescript": "~3.9.3",
+    "vue-template-compiler": "^2.6.11"
   }
 }
