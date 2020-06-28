@@ -1,5 +1,7 @@
 ![Allegro](resources/allegro.png)
 
+![CI](https://github.com/leifgehrmann/allegro/workflows/CI/badge.svg?branch=master&event=push)
+
 Submit worklogs to Tempo.io in batches
 
 ## Project setup
@@ -17,14 +19,9 @@ npm run serve
 npm run build
 ```
 
-### Run your unit tests
+### Run your unit + integration (Spectron) tests
 ```
-npm run test:unit
-```
-
-### Run your end-to-end tests
-```
-npm run test:e2e
+npm run test
 ```
 
 ### Lints and fixes files
