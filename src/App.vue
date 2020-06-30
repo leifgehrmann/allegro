@@ -1,59 +1,12 @@
 <template>
   <div id="app">
     <div class="content">
-      <table class="worklogs">
-        <thead>
-        <tr>
-          <th>Date</th>
-          <th>Issue</th>
-          <th>Minutes</th>
-          <th>Message</th>
-          <th>Account</th>
-          <th>Category</th>
-          <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>
-            <input type="date">
-          </td>
-          <td>
-            <div class="issueField">
-              <input name="issueKey" type="text" placeholder="Key">
-              <span class="resolvedIssueName">Hello World this is a resolved issue name</span>
-            </div>
-          </td>
-          <td>
-            <input type="number" min="0">
-          </td>
-          <td>
-                            <span
-                              class="textarea"
-                              role="textbox"
-                              contenteditable>
-    99
-</span>
-          </td>
-          <td>
-
-          </td>
-          <td>
-
-          </td>
-          <td>
-            <button>Delete</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-      <div>isElectron: {{ isElectronApp }}</div>
-      <div>manifest: {{ manifest }}</div>
+      <Worklogs/>
     </div>
     <div class="footer">
       <div class="align-left">
-        <button>
+        <button
+          @click="showModal">
           <img src="./assets/jira-connected.svg"> OK
           <img src="./assets/tempo-connected.svg"> OK
         </button>
@@ -62,15 +15,20 @@
         <button id="submit-submitEntries">Submit Worklogs</button>
       </div>
     </div>
+    <PreferencesModal
+      v-show="isPreferencesModalVisible"
+      @close="closeModal"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Vue } from 'vue-property-decorator';
 import { remote } from 'electron';
 import jetpack from 'fs-jetpack';
 import isElectron from 'is-electron';
-import HelloWorld from './components/HelloWorld.vue';
+import Worklogs from '@/components/Worklogs.vue';
+import PreferencesModal from '@/components/PreferencesModal.vue';
 
 let manifest = 'N/A';
 if (isElectron()) {
@@ -79,16 +37,26 @@ if (isElectron()) {
   manifest = appDir.read('package.json', 'json');
 }
 
-@Component({
+export default Vue.extend({
+  name: 'App',
   components: {
-    HelloWorld,
+    Worklogs,
+    PreferencesModal,
   },
   data: () => ({
+    isPreferencesModalVisible: false,
     isElectronApp: isElectron() ? 'Yes' : 'No',
     manifest,
   }),
-})
-export default class App extends Vue {}
+  methods: {
+    showModal() {
+      this.isPreferencesModalVisible = true;
+    },
+    closeModal() {
+      this.isPreferencesModalVisible = false;
+    },
+  },
+});
 </script>
 
 <style lang="scss">
@@ -116,9 +84,6 @@ button {
   padding: 5px;
   border-radius: 5px;
   outline: none;
-}
-button:hover {
-  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .icon {
@@ -167,68 +132,16 @@ input:focus {
 <style scoped>
 .content {
   width: 100%;
-  height: 100%;
-  padding-bottom: 37px;
-}
-.worklogs {
-  width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
-  position: relative;
-}
-.worklogs tr {
-  font-weight: inherit;
-  text-align: left;
-  padding: 7px;
-  padding-left: 9px;
-  vertical-align: top;
-  top: 0;
-  position: sticky;
-  user-select: none;
-}
-.worklogs thead th {
-  font-weight: inherit;
-  text-align: left;
-  padding: 7px;
-  padding-left: 9px;
-  vertical-align: bottom;
-  background: #F7F7F7;
-  top: 0;
-  position: sticky;
-  user-select: none;
-}
-.worklogs tr td button {
-  visibility: hidden;
-}
-.worklogs tr:hover td button {
-  visibility: visible;
-}
-table td:nth-child(1), table th:nth-child(1) {
-  width: 135px; padding-left: 3px; padding-right: 3px;
-}
-table td:nth-child(2), table th:nth-child(2) {
-  width: 135px; padding-left: 3px; padding-right: 3px;
-}
-table td:nth-child(3), table th:nth-child(3) {
-  width: 60px; padding-left: 3px; padding-right: 3px;
-}
-.issueField {
-  display: flex;
-}
-.issueField input[name="issueKey"] {
-  width: 80px;
-}
-.resolvedIssueName {
-  white-space: nowrap;
-  display: block;
+  height: calc(100vh - 37px);
+  margin-bottom: 37px;
+  overflow: scroll;
 }
 .footer {
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
-  backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: #EEEEEE;
   height: 37px;
   padding: 7px;
   box-sizing: border-box;
