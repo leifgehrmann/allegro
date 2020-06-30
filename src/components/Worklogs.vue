@@ -2,6 +2,7 @@
   <table class="worklogs">
     <thead>
     <tr>
+      <th></th>
       <th>Date</th>
       <th>Issue</th>
       <th>Minutes</th>
@@ -13,6 +14,9 @@
     </thead>
     <tbody>
     <tr>
+      <td>
+        <div>dragHandler</div>
+      </td>
       <td>
         <input type="date">
       </td>
@@ -26,12 +30,7 @@
         <input type="number" min="0">
       </td>
       <td>
-                            <span
-                              class="textarea"
-                              role="textbox"
-                              contenteditable>
-    99
-</span>
+        <textarea>99</textarea>
       </td>
       <td>
 
@@ -52,11 +51,6 @@ import { Vue } from 'vue-property-decorator';
 
 export default Vue.extend({
   name: 'Worklogs',
-  methods: {
-    close() {
-      this.$emit('close');
-    },
-  },
 });
 </script>
 
