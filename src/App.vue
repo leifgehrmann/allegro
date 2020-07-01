@@ -16,6 +16,7 @@
       </template>
     </Footer>
     <PreferencesModal
+      :preferences="preferences"
       v-show="isPreferencesModalVisible"
       @close="closeModal"
     />
@@ -30,12 +31,20 @@ import Worklogs from '@/components/Worklogs.vue';
 import Footer from '@/components/Footer.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import '@/style/global.scss';
+import Preferences from '@/data/preferences';
 
 let manifest = 'N/A';
 
 const { app } = remote;
 const appDir = jetpack.cwd(app.getAppPath());
 manifest = appDir.read('package.json', 'json');
+
+const preferences: Preferences = {
+  jiraHost: '',
+  jiraToken: '',
+  jiraUsername: '',
+  tempoToken: '',
+};
 
 export default Vue.extend({
   name: 'App',
@@ -47,6 +56,7 @@ export default Vue.extend({
   data: () => ({
     isPreferencesModalVisible: false,
     manifest,
+    preferences,
   }),
   methods: {
     showModal() {

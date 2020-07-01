@@ -6,29 +6,55 @@
       Preferences
     </template>
     <template v-slot:body>
-      <label>JIRA Domain</label>
-      <input type="text">
+      <label>
+        JIRA Host
+        <input type="text" placeholder="http://example.atlassian.net" v-model="preferences.jiraHost">
+      </label>
       <br>
-      <label>JIRA Username</label>
-      <input type="text">
+      <label>
+        JIRA Username
+        <input type="text" placeholder="user@example.com" v-model="preferences.jiraUsername">
+      </label>
       <br>
-      <label>JIRA API Key</label>
-      <input type="text">
+      <label>
+        JIRA API Token
+        <input type="text" v-model="preferences.jiraToken">
+      </label>
       <br>
-      <label>Tempo API Key</label>
-      <input type="text">
+      <label>
+        Tempo API Token
+        <input type="text" v-model="preferences.tempoToken">
+      </label>
     </template>
     <template v-slot:footer>
+      <button>Test Connections</button>
+      <button
+        @click="close"
+      >
+        OK
+      </button>
     </template>
   </Modal>
 </template>
 
-<script>
+<script lang="ts">
 import { Vue } from 'vue-property-decorator';
 import Modal from '@/components/Modal.vue';
+import Preferences from '@/data/preferences';
 
 export default Vue.extend({
   name: 'PreferencesModal',
+  props: {
+    preferences: {
+      type: Object,
+      default: (): Preferences => ({
+        jiraHost: '',
+        jiraUsername: '',
+        jiraToken: '',
+        tempoToken: '',
+      }),
+    },
+  },
   components: {
     Modal,
   },
