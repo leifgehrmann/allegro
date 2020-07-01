@@ -26,18 +26,16 @@
 import { Vue } from 'vue-property-decorator';
 import { remote } from 'electron';
 import jetpack from 'fs-jetpack';
-import isElectron from 'is-electron';
 import Worklogs from '@/components/Worklogs.vue';
 import Footer from '@/components/Footer.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import '@/style/global.scss';
 
 let manifest = 'N/A';
-if (isElectron()) {
-  const { app } = remote;
-  const appDir = jetpack.cwd(app.getAppPath());
-  manifest = appDir.read('package.json', 'json');
-}
+
+const { app } = remote;
+const appDir = jetpack.cwd(app.getAppPath());
+manifest = appDir.read('package.json', 'json');
 
 export default Vue.extend({
   name: 'App',
@@ -48,7 +46,6 @@ export default Vue.extend({
   },
   data: () => ({
     isPreferencesModalVisible: false,
-    isElectronApp: isElectron() ? 'Yes' : 'No',
     manifest,
   }),
   methods: {

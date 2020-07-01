@@ -14,12 +14,11 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "electron": "^9.0.0",
-    "is-electron": "^2.2.0",
+    "fs-jetpack": "2.4.0",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-cli-plugin-electron-builder": "^2.0.0-rc.3",
-    "vue-property-decorator": "^8.4.2",
-    "fs-jetpack": "2.4.0"
+    "vue-property-decorator": "^8.4.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.3",
