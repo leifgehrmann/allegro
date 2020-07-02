@@ -1,67 +1,26 @@
 import { app, protocol, BrowserWindow } from 'electron';
 import {
-  createProtocol,
   installVueDevtools,
 } from 'vue-cli-plugin-electron-builder/lib';
-import createWindowFromState from './helpers/window';
+import initializeIpc from '@/backgroundIpc';
+import { PromiseIpcMain } from 'electron-promise-ipc/build/mainProcess';
+import createMainWindow from '@/backgroundMainWindow';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-// Keep a global reference of the window object, if you don't, the window will
+// Keep a global reference of the window and ipc object, if you don't, the instances will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow | null;
+let ipc: PromiseIpcMain | null;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } },
 ]);
 
-function createMainWindow() {
-  // Create the browser window.
-  win = createWindowFromState('main', {
-    width: 800,
-    height: 600,
-    backgroundColor: '#FFFFFF',
-    webPreferences: {
-      // Use pluginOptions.nodeIntegration, leave this alone
-      // for more info, see:
-      // nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration
-      nodeIntegration: (process.env
-        .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
-    },
-    show: false,
-  });
-
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
-    if (!process.env.IS_TEST) win.webContents.openDevTools();
-  } else {
-    createProtocol('app');
-    // Load the index.html when not in development
-    win.loadURL('app://./index.html');
-  }
-
-  win.on('blur', () => win?.webContents.executeJavaScript('document.body.classList.add("window-unfocused")'));
-  win.on('focus', () => win?.webContents.executeJavaScript('document.body.classList.remove("window-unfocused")'));
-  win.once('ready-to-show', () => win?.show());
-
-  win.on('closed', () => {
-    win = null;
-  });
-}
-
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   app.quit();
-});
-
-app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (win === null) {
-    createMainWindow();
-  }
 });
 
 // This method will be called when Electron has finished
@@ -76,7 +35,12 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString());
     }
   }
-  createMainWindow();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ipc = initializeIpc();
+  win = createMainWindow();
+  win.on('closed', () => {
+    win = null;
+  });
 });
 
 // Exit cleanly on request from parent process in development mode.

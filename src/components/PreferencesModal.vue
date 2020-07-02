@@ -8,7 +8,7 @@
     <template v-slot:body>
       <label>
         JIRA Host
-        <input type="text" placeholder="http://example.atlassian.net" v-model="preferences.jiraHost">
+        <input type="text" placeholder="example.atlassian.net" v-model="preferences.jiraHost">
       </label>
       <br>
       <label>
@@ -27,7 +27,11 @@
       </label>
     </template>
     <template v-slot:footer>
-      <button>Test Connections</button>
+      <button
+        @click="testConnection"
+      >
+        Test Connections
+      </button>
       <button
         @click="close"
       >
@@ -41,6 +45,7 @@
 import { Vue } from 'vue-property-decorator';
 import Modal from '@/components/Modal.vue';
 import Preferences from '@/data/preferences';
+import promiseIpc from 'electron-promise-ipc';
 
 export default Vue.extend({
   name: 'PreferencesModal',
@@ -61,6 +66,13 @@ export default Vue.extend({
   methods: {
     close() {
       this.$emit('close');
+    },
+    testConnection() {
+      console.log('hmmm');
+      promiseIpc.send('testConnection', this.preferences)
+        .then(() => {
+          console.log('Hurray success!');
+        });
     },
   },
 });
