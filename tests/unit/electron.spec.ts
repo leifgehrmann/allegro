@@ -4,7 +4,7 @@
 import spectron from 'spectron';
 import { testWithSpectron } from 'vue-cli-plugin-electron-builder';
 
-jest.setTimeout(50000);
+jest.setTimeout(120000);
 
 test('Window Loads Properly', async () => {
   // Wait for dev server to start
