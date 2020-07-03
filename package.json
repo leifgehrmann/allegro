@@ -15,6 +15,7 @@
     "core-js": "^3.6.5",
     "electron": "^9.0.0",
     "electron-promise-ipc": "^2.1.0",
+    "electron-store": "^5.2.0",
     "fs-jetpack": "2.4.0",
     "jira-client": "^6.17.0",
     "tempo-client": "^3.1.0",

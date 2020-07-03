@@ -19,6 +19,7 @@
       :preferences="preferences"
       v-show="isPreferencesModalVisible"
       @close="closeModal"
+      @save="savePreferences"
     />
   </div>
 </template>
@@ -32,6 +33,7 @@ import Footer from '@/components/Footer.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import '@/style/global.scss';
 import Preferences from '@/data/preferences';
+import Store from 'electron-store';
 
 let manifest = 'N/A';
 
@@ -39,12 +41,16 @@ const { app } = remote;
 const appDir = jetpack.cwd(app.getAppPath());
 manifest = appDir.read('package.json', 'json');
 
-const preferences: Preferences = {
+let preferences: Preferences = {
   jiraHost: '',
   jiraToken: '',
   jiraUsername: '',
   tempoToken: '',
 };
+
+const store = new Store();
+
+preferences = { ...preferences, ...store.get('preferences') };
 
 export default Vue.extend({
   name: 'App',
@@ -64,6 +70,10 @@ export default Vue.extend({
     },
     closeModal() {
       this.isPreferencesModalVisible = false;
+    },
+    savePreferences(newPreferences: Preferences) {
+      this.preferences = newPreferences;
+      store.set('preferences', this.preferences);
     },
   },
 });
