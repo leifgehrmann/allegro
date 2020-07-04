@@ -48,6 +48,7 @@ import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { faJira } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Worklog from '@/data/worklog';
+import WorklogPopulator from '@/utils/worklogPopulator';
 
 library.add(faCog);
 library.add(faCheckCircle);
@@ -133,7 +134,10 @@ export default Vue.extend({
   watch: {
     worklogs: {
       handler() {
+        // Todo: Defer to reduce massive I/O ops
         store.set('worklogs', this.worklogs);
+        const populator = new WorklogPopulator(this.worklogs, this.preferences);
+        populator.populate();
       },
       deep: true,
     },

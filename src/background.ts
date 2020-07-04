@@ -2,16 +2,18 @@ import { app, protocol, BrowserWindow } from 'electron';
 import {
   installVueDevtools,
 } from 'vue-cli-plugin-electron-builder/lib';
-import initializeIpc from '@/backgroundIpc';
+import promiseIpc from 'electron-promise-ipc';
 import { PromiseIpcMain } from 'electron-promise-ipc/build/mainProcess';
 import createMainWindow from '@/backgroundMainWindow';
+import initialiseJiraIpcMain from "@/utils/jiraIpcMain";
+import initializePreferencesIpcMain from "@/utils/preferencesIpcMain";
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // Keep a global reference of the window and ipc object, if you don't, the instances will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow | null;
-let ipc: PromiseIpcMain | null;
+let ipc: PromiseIpcMain = promiseIpc;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -35,8 +37,8 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString());
     }
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ipc = initializeIpc();
+  initializePreferencesIpcMain(ipc);
+  initialiseJiraIpcMain(ipc);
   win = createMainWindow();
   win.on('closed', () => {
     win = null;
