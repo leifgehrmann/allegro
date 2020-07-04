@@ -21,23 +21,7 @@
           <DateSelector :value.sync="item.date"/>
         </td>
         <td>
-          <div class="issueField">
-            <label>
-              <input name="issueKey" type="text" placeholder="ABC-123" v-model="item.id">
-            </label>
-            <span
-              class="resolvedIssueName"
-              :title="'Hello World this is a resolved issue name' + item.sport"
-            >
-              {{ item.sport }}
-            </span>
-            <button
-              class="resolvedIssueLink"
-              :title="`Open ${item.id} in JIRA`"
-            >
-              <font-awesome-icon icon="external-link-alt"/>
-            </button>
-          </div>
+          <IssueSelector :issue-key.sync="item.issueKey" />
         </td>
         <td>
           <div class="minutesField">
@@ -105,6 +89,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import DateSelector from '@/components/DateSelector.vue';
+import IssueSelector from '@/components/IssueSelector.vue';
 
 library.add(faGripLines);
 library.add(faPlus);
@@ -114,16 +99,16 @@ library.add(faExternalLinkAlt);
 
 const list = [
   {
-    id: 1, name: 'Abby', sport: 'basket', date: '',
+    id: 1, name: 'Abby', sport: 'basket', date: '', issueKey: '',
   },
   {
-    id: 2, name: 'Brooke', sport: 'foot', date: '',
+    id: 2, name: 'Brooke', sport: 'foot', date: '', issueKey: '',
   },
   {
-    id: 3, name: 'Courtenay', sport: 'volley', date: '',
+    id: 3, name: 'Courtenay', sport: 'volley', date: '', issueKey: '',
   },
   {
-    id: 4, name: 'David', sport: 'rugby', date: '',
+    id: 4, name: 'David', sport: 'rugby', date: '', issueKey: '',
   },
 ];
 
@@ -133,6 +118,7 @@ export default Vue.extend({
     Draggable,
     FontAwesomeIcon,
     DateSelector,
+    IssueSelector,
   },
   data: () => ({
     list,
@@ -142,7 +128,7 @@ export default Vue.extend({
     addWorklog() {
       list.push(
         {
-          id: 0, name: '', sport: '', date: '',
+          id: 0, name: '', sport: '', date: '', issueKey: '',
         },
       );
     },
@@ -207,14 +193,6 @@ table td:nth-child(4), table th:nth-child(4) {
 table td:nth-child(5), table th:nth-child(5) {
   width: 220px; padding-left: 3px; padding-right: 3px;
 }
-.issueField {
-  display: flex;
-}
-.issueField input[name="issueKey"] {
-  width: 80px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
 .minutesField input {
   width: 50px;
 }
@@ -222,20 +200,6 @@ table td:nth-child(5), table th:nth-child(5) {
   min-width: 300px;
   min-height: 15px;
   width: 300px;
-}
-.resolvedIssueName {
-  white-space: nowrap;
-  display: block;
-  padding: 5px;
-  background: rgba(0, 0, 0, 0.05);
-  vertical-align: middle;
-  border-radius: 0;
-  max-width: 200px;
-  overflow: hidden;
-}
-.resolvedIssueLink {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
 }
 .messageField textarea {
   min-width: 300px;

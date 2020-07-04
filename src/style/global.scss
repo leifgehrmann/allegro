@@ -11,7 +11,8 @@ body {
 body.window-unfocused button,
 body.window-unfocused select,
 body.window-unfocused input,
-body.window-unfocused textarea {
+body.window-unfocused textarea,
+body.window-unfocused .inputComponentPiece {
   opacity: 0.5;
 }
 
