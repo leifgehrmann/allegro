@@ -171,7 +171,8 @@ table td:nth-child(1), table th:nth-child(1) {
   text-align: center;
 }
 table td:nth-child(2), table th:nth-child(2) {
-  width: 195px; padding-left: 3px; padding-right: 3px;
+  white-space: nowrap;
+  width: 180px; padding-left: 3px; padding-right: 3px;
 }
 table td:nth-child(3), table th:nth-child(3) {
   width: 60px; padding-left: 3px; padding-right: 3px;
@@ -217,6 +218,7 @@ table td:nth-child(5), table th:nth-child(5) {
 }
 .messageField textarea {
   min-width: 300px;
+  max-width: 300px;
   min-height: 15px;
   width: 300px;
 }
