@@ -8,6 +8,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #333234;
+    color: #FFFFFF;
+  }
+}
+
 body.window-unfocused button,
 body.window-unfocused select,
 body.window-unfocused input,
@@ -23,6 +30,23 @@ button, select, input, textarea {
   padding: 5px;
   border-radius: 5px;
   outline: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  button, select, input, textarea {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #FFFFFF;
+  }
+}
+
+.inputComponentPiece {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .inputComponentPiece {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
 }
 
 input, textarea {

@@ -102,7 +102,6 @@ export default Vue.extend({
   white-space: nowrap;
   display: block;
   padding: 5px;
-  background: rgba(0, 0, 0, 0.05);
   vertical-align: middle;
   border-radius: 0;
   max-width: 200px;

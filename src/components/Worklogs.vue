@@ -174,6 +174,14 @@ export default Vue.extend({
   background: #FFFFFF;
   border-bottom: 1px solid #EEEEEE;
 }
+
+@media (prefers-color-scheme: dark) {
+  .worklogs tr {
+    background: #333234;
+    border-bottom: 1px solid #444444;
+  }
+}
+
 .worklogs tr.worklogs-add-row {
   border-bottom: none;
 }
@@ -192,6 +200,13 @@ export default Vue.extend({
   user-select: none;
   z-index: 1;
 }
+
+@media (prefers-color-scheme: dark) {
+  .worklogs th {
+    background: #444444;
+  }
+}
+
 .worklogs td {
   padding: 5px;
 }

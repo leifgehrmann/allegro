@@ -31,6 +31,14 @@ export default Vue.extend({
   padding: 5px;
   box-sizing: border-box;
 }
+
+@media (prefers-color-scheme: dark) {
+  .footer {
+    border-top: 1px solid #555555;
+    background-color: #444444;
+  }
+}
+
 .footer .align-left {
   float: left;
 }

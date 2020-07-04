@@ -74,6 +74,12 @@ export default Vue.extend({
   flex-direction: column;
 }
 
+@media (prefers-color-scheme: dark) {
+  .modal {
+    background: #333234;
+  }
+}
+
 .modal-header,
 .modal-footer {
   padding: 15px;
@@ -89,6 +95,16 @@ export default Vue.extend({
 .modal-footer {
   border-top: 1px solid #eeeeee;
   justify-content: flex-end;
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal-header {
+    border-bottom: 1px solid #444444;
+  }
+
+  .modal-footer {
+    border-top: 1px solid #444444;
+  }
 }
 
 .modal-body {
