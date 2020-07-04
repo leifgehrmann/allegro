@@ -35,6 +35,7 @@
 import { Vue } from 'vue-property-decorator';
 import { remote } from 'electron';
 import jetpack from 'fs-jetpack';
+import { v4 as uuidv4 } from 'uuid';
 import Worklogs from '@/components/Worklogs.vue';
 import Footer from '@/components/Footer.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
@@ -68,6 +69,7 @@ let preferences: Preferences = {
 
 const worklogs: Worklog[] = [
   {
+    uuid: uuidv4(),
     date: '2020-07-03',
     issueKey: 'TEST-123',
     issueKeyIsValid: true,
@@ -83,6 +85,7 @@ const worklogs: Worklog[] = [
 const store = new Store();
 
 preferences = { ...preferences, ...store.get('preferences') };
+worklogs.push(...store.get('worklogs') ?? []);
 
 export default Vue.extend({
   name: 'App',
@@ -101,7 +104,12 @@ export default Vue.extend({
   computed: {
     totalMinutes(): string {
       const total = this.worklogs.reduce(
-        (accumulator, worklog) => accumulator + parseFloat(worklog.minutes ?? '0'),
+        (accumulator, worklog) => {
+          if (worklog.minutes !== '') {
+            return accumulator + parseFloat(worklog.minutes ?? '0');
+          }
+          return accumulator;
+        },
         0,
       );
       if (total === 0) {
@@ -120,6 +128,14 @@ export default Vue.extend({
     savePreferences(newPreferences: Preferences) {
       this.preferences = newPreferences;
       store.set('preferences', this.preferences);
+    },
+  },
+  watch: {
+    worklogs: {
+      handler() {
+        store.set('worklogs', this.worklogs);
+      },
+      deep: true,
     },
   },
 });

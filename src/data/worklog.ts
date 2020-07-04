@@ -1,4 +1,5 @@
 export default interface Worklog {
+  uuid: string;
   date: string;
   issueKey: string;
   issueKeyIsValid: boolean;

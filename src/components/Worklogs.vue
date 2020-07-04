@@ -11,7 +11,7 @@
       <th scope="col">Actions</th>
     </tr>
     <draggable v-model="worklogs" tag="tbody" handle=".handle">
-      <tr v-for="item in worklogs" :key="item.name">
+      <tr v-for="item in worklogs" :key="item.uuid">
         <td
           class="handle"
         >
@@ -72,6 +72,7 @@
           <button
             name="delete"
             title="Delete worklog"
+            @click="deleteWorklog(item.uuid)"
           >
             <font-awesome-icon icon="trash"/> Delete
           </button>
@@ -96,6 +97,7 @@
 <script lang="ts">
 import { Vue } from 'vue-property-decorator';
 import Draggable from 'vuedraggable';
+import { v4 as uuidv4 } from 'uuid';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faGripLines, faPlus, faTrash, faExternalLinkAlt,
@@ -121,7 +123,7 @@ export default Vue.extend({
   },
   props: {
     worklogs: {
-      type: Array,
+      type: Array as () => Worklog[],
       default: (): Worklog[] => [],
     },
   },
@@ -132,17 +134,22 @@ export default Vue.extend({
     addWorklog() {
       this.worklogs.push(
         {
+          uuid: uuidv4(),
           date: '',
           issueKey: '',
           issueKeyIsValid: false,
           issueUrl: '',
           issueTitle: '',
-          minutes: undefined,
+          minutes: '',
           message: '',
           projectAccounts: [''],
           issueAccount: '',
         },
       );
+    },
+    deleteWorklog(uuid: string) {
+      const index = this.worklogs.findIndex((worklog) => worklog.uuid === uuid);
+      this.worklogs.splice(index, 1);
     },
   },
 });
