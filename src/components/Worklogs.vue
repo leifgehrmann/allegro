@@ -12,7 +12,9 @@
     </tr>
     <draggable v-model="list" tag="tbody" handle=".handle">
       <tr v-for="item in list" :key="item.name">
-        <td scope="row" class="handle">
+        <td
+          class="handle"
+        >
           <font-awesome-icon icon="grip-lines"/>
         </td>
         <td>
@@ -27,15 +29,26 @@
         <td>
           <div class="issueField">
             <label>
-              <input name="issueKey" type="text" placeholder="Key" v-model="item.id">
+              <input name="issueKey" type="text" placeholder="ABC-123" v-model="item.id">
             </label>
-            <span class="resolvedIssueName">Hello World this is a resolved issue name</span>
+            <span
+              class="resolvedIssueName"
+              :title="'Hello World this is a resolved issue name' + item.sport"
+            >
+              {{ item.sport }}
+            </span>
+            <button
+              class="resolvedIssueLink"
+              :title="`Open ${item.id} in JIRA`"
+            >
+              <font-awesome-icon icon="external-link-alt"/>
+            </button>
           </div>
         </td>
         <td>
           <div class="minutesField">
             <label>
-              <input type="number" min="0">
+              <input type="number" min="0" placeholder="0">
             </label>
           </div>
         </td>
@@ -64,7 +77,14 @@
             </select>
           </label>
         </td>
-        <td><button name="delete"><font-awesome-icon icon="trash"/> Delete</button></td>
+        <td>
+          <button
+            name="delete"
+            title="Delete worklog"
+          >
+            <font-awesome-icon icon="trash"/> Delete
+          </button>
+        </td>
       </tr>
     </draggable>
     <tr class="worklogs-add-row">
@@ -72,6 +92,7 @@
       <td colspan="100">
         <button
           name="add"
+          title="Add new worklog row"
           @click="addWorklog"
         >
           <font-awesome-icon icon="plus"/> Add Worklog
@@ -86,7 +107,7 @@ import { Vue } from 'vue-property-decorator';
 import Draggable from 'vuedraggable';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-  faGripLines, faPlus, faChevronLeft, faChevronRight, faTrash,
+  faGripLines, faPlus, faChevronLeft, faChevronRight, faTrash, faExternalLinkAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -96,6 +117,7 @@ library.add(faTrash);
 library.add(faChevronLeft);
 library.add(faChevronRight);
 library.add(faTrash);
+library.add(faExternalLinkAlt);
 
 const list = [
   { id: 1, name: 'Abby', sport: 'basket' },
@@ -161,6 +183,7 @@ export default Vue.extend({
   top: 0;
   position: sticky;
   user-select: none;
+  z-index: 1;
 }
 .worklogs td {
   padding: 5px;
@@ -203,6 +226,8 @@ table td:nth-child(5), table th:nth-child(5) {
 }
 .issueField input[name="issueKey"] {
   width: 80px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 .minutesField input {
   width: 50px;
@@ -215,6 +240,16 @@ table td:nth-child(5), table th:nth-child(5) {
 .resolvedIssueName {
   white-space: nowrap;
   display: block;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.05);
+  vertical-align: middle;
+  border-radius: 0;
+  max-width: 200px;
+  overflow: hidden;
+}
+.resolvedIssueLink {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 .messageField textarea {
   min-width: 300px;

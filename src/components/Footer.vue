@@ -25,9 +25,10 @@ export default Vue.extend({
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: #EEEEEE;
-  height: 37px;
-  padding: 7px;
+  border-top: 1px solid #EEEEEE;
+  background-color: #F7F7F7;
+  height: 35px;
+  padding: 5px;
   box-sizing: border-box;
 }
 .footer .align-left {

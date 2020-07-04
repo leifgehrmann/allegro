@@ -7,12 +7,17 @@
       <template v-slot:left>
         <button
           @click="showModal">
-          <img src="./assets/jira-connected.svg" alt="JIRA"> OK
-          <img src="./assets/tempo-connected.svg" alt="Tempo"> OK
+          <font-awesome-icon icon="cog"/>
+          Settings
         </button>
+        (<font-awesome-icon :icon="['fab', 'jira']"/> JIRA: OK,
+        <font-awesome-icon :icon="['far', 'check-circle']"/> Tempo: OK)
       </template>
       <template v-slot:right>
-        <button id="submit-submitEntries">Submit Worklogs</button>
+        <button id="submit-submitEntries">
+          <font-awesome-icon icon="rocket"/>
+          Submit Worklogs (450m)
+        </button>
       </template>
     </Footer>
     <PreferencesModal
@@ -34,6 +39,16 @@ import PreferencesModal from '@/components/PreferencesModal.vue';
 import '@/style/global.scss';
 import Preferences from '@/data/preferences';
 import Store from 'electron-store';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCog, faRocket } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
+import { faJira } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+library.add(faCog);
+library.add(faCheckCircle);
+library.add(faJira);
+library.add(faRocket);
 
 let manifest = 'N/A';
 
@@ -58,6 +73,7 @@ export default Vue.extend({
     Worklogs,
     Footer,
     PreferencesModal,
+    FontAwesomeIcon,
   },
   data: () => ({
     isPreferencesModalVisible: false,
@@ -82,7 +98,7 @@ export default Vue.extend({
 <style scoped>
 .content {
   width: 100%;
-  height: calc(100vh - 37px);
+  height: calc(100vh - 35px);
   margin-bottom: 37px;
   overflow: scroll;
 }
