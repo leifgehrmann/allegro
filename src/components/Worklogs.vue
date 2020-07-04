@@ -12,11 +12,15 @@
     </tr>
     <draggable v-model="list" tag="tbody" handle=".handle">
       <tr v-for="item in list" :key="item.name">
-        <td scope="row" class="handle">Drag</td>
+        <td scope="row" class="handle">
+          <font-awesome-icon icon="grip-lines"/>
+        </td>
         <td>
           <div class="dateField">
             <label>
-              <input type="date">
+              <input name="date" type="date">
+              <button name="date-minus"><font-awesome-icon icon="chevron-left"/></button>
+              <button name="date-plus"><font-awesome-icon icon="chevron-right"/></button>
             </label>
           </div>
         </td>
@@ -60,11 +64,19 @@
             </select>
           </label>
         </td>
-        <td><button>Delete</button></td>
+        <td><button name="delete"><font-awesome-icon icon="trash"/> Delete</button></td>
       </tr>
     </draggable>
     <tr class="worklogs-add-row">
-      <td colspan="100"><button>Add Worklog</button></td>
+      <td></td>
+      <td colspan="100">
+        <button
+          name="add"
+          @click="addWorklog"
+        >
+          <font-awesome-icon icon="plus"/> Add Worklog
+        </button>
+      </td>
     </tr>
   </table>
 </template>
@@ -72,22 +84,44 @@
 <script>
 import { Vue } from 'vue-property-decorator';
 import Draggable from 'vuedraggable';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faGripLines, faPlus, faChevronLeft, faChevronRight, faTrash,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+library.add(faGripLines);
+library.add(faPlus);
+library.add(faTrash);
+library.add(faChevronLeft);
+library.add(faChevronRight);
+library.add(faTrash);
+
+const list = [
+  { id: 1, name: 'Abby', sport: 'basket' },
+  { id: 2, name: 'Brooke', sport: 'foot' },
+  { id: 3, name: 'Courtenay', sport: 'volley' },
+  { id: 4, name: 'David', sport: 'rugby' },
+];
 
 export default Vue.extend({
   name: 'Worklogs',
   components: {
     Draggable,
+    FontAwesomeIcon,
   },
   data() {
     return {
-      list: [
-        { id: 1, name: 'Abby', sport: 'basket' },
-        { id: 2, name: 'Brooke', sport: 'foot' },
-        { id: 3, name: 'Courtenay', sport: 'volley' },
-        { id: 4, name: 'David', sport: 'rugby' },
-      ],
+      list,
       dragging: false,
     };
+  },
+  methods: {
+    addWorklog() {
+      list.push(
+        { id: 0, name: '', sport: '' },
+      );
+    },
   },
 });
 </script>
@@ -132,10 +166,12 @@ export default Vue.extend({
   padding: 5px;
 }
 table td:nth-child(1), table th:nth-child(1) {
-  width: 30px; padding-left: 3px; padding-right: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
 }
 table td:nth-child(2), table th:nth-child(2) {
-  width: 135px; padding-left: 3px; padding-right: 3px;
+  width: 195px; padding-left: 3px; padding-right: 3px;
 }
 table td:nth-child(3), table th:nth-child(3) {
   width: 60px; padding-left: 3px; padding-right: 3px;
@@ -148,6 +184,18 @@ table td:nth-child(5), table th:nth-child(5) {
 }
 .dateField input {
   width: 135px;
+}
+.dateField [name=date] {
+  width: 135px;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+.dateField [name=date-minus] {
+  border-radius: 0;
+}
+.dateField [name=date-plus] {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
 }
 .issueField {
   display: flex;
@@ -166,5 +214,20 @@ table td:nth-child(5), table th:nth-child(5) {
 .resolvedIssueName {
   white-space: nowrap;
   display: block;
+}
+.messageField textarea {
+  min-width: 300px;
+  min-height: 15px;
+  width: 300px;
+}
+
+button[name=delete] {
+  background: rgba(255, 0, 0, 0.2);
+  white-space: nowrap;
+}
+
+button[name=add] {
+  background: rgba(0, 128, 255, 0.2);
+  white-space: nowrap;
 }
 </style>
