@@ -18,13 +18,7 @@
           <font-awesome-icon icon="grip-lines"/>
         </td>
         <td>
-          <div class="dateField">
-            <label>
-              <input name="date" type="date">
-              <button name="date-minus"><font-awesome-icon icon="chevron-left"/></button>
-              <button name="date-plus"><font-awesome-icon icon="chevron-right"/></button>
-            </label>
-          </div>
+          <DateSelector :value.sync="item.date"/>
         </td>
         <td>
           <div class="issueField">
@@ -107,23 +101,30 @@ import { Vue } from 'vue-property-decorator';
 import Draggable from 'vuedraggable';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-  faGripLines, faPlus, faChevronLeft, faChevronRight, faTrash, faExternalLinkAlt,
+  faGripLines, faPlus, faTrash, faExternalLinkAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import DateSelector from '@/components/DateSelector.vue';
 
 library.add(faGripLines);
 library.add(faPlus);
 library.add(faTrash);
-library.add(faChevronLeft);
-library.add(faChevronRight);
 library.add(faTrash);
 library.add(faExternalLinkAlt);
 
 const list = [
-  { id: 1, name: 'Abby', sport: 'basket' },
-  { id: 2, name: 'Brooke', sport: 'foot' },
-  { id: 3, name: 'Courtenay', sport: 'volley' },
-  { id: 4, name: 'David', sport: 'rugby' },
+  {
+    id: 1, name: 'Abby', sport: 'basket', date: '',
+  },
+  {
+    id: 2, name: 'Brooke', sport: 'foot', date: '',
+  },
+  {
+    id: 3, name: 'Courtenay', sport: 'volley', date: '',
+  },
+  {
+    id: 4, name: 'David', sport: 'rugby', date: '',
+  },
 ];
 
 export default Vue.extend({
@@ -131,17 +132,18 @@ export default Vue.extend({
   components: {
     Draggable,
     FontAwesomeIcon,
+    DateSelector,
   },
-  data() {
-    return {
-      list,
-      dragging: false,
-    };
-  },
+  data: () => ({
+    list,
+    dragging: false,
+  }),
   methods: {
     addWorklog() {
       list.push(
-        { id: 0, name: '', sport: '' },
+        {
+          id: 0, name: '', sport: '', date: '',
+        },
       );
     },
   },
@@ -194,7 +196,6 @@ table td:nth-child(1), table th:nth-child(1) {
   text-align: center;
 }
 table td:nth-child(2), table th:nth-child(2) {
-  white-space: nowrap;
   width: 180px; padding-left: 3px; padding-right: 3px;
 }
 table td:nth-child(3), table th:nth-child(3) {
@@ -205,21 +206,6 @@ table td:nth-child(4), table th:nth-child(4) {
 }
 table td:nth-child(5), table th:nth-child(5) {
   width: 220px; padding-left: 3px; padding-right: 3px;
-}
-.dateField input {
-  width: 135px;
-}
-.dateField [name=date] {
-  width: 135px;
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-}
-.dateField [name=date-minus] {
-  border-radius: 0;
-}
-.dateField [name=date-plus] {
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
 }
 .issueField {
   display: flex;
