@@ -11,11 +11,11 @@ body {
 body.window-unfocused button,
 body.window-unfocused select,
 body.window-unfocused input,
-body.window-unfocused .textarea {
+body.window-unfocused textarea {
   opacity: 0.5;
 }
 
-button {
+button, select, input, textarea {
   background-color: rgba(0, 0, 0, 0.05);
   border: none;
   margin: 0;
@@ -47,15 +47,16 @@ button.icon-labeled-horizontal {
 }
 input, textarea {
   border: none;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   padding: 5px;
   outline: none;
   font-family: sans-serif;
 }
-input[type="date"] {
-  padding: 5px;
-  border-radius: 0;
+
+input[type=date] {
+  height: 15px;
 }
-input:focus, textarea:focus {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+
+textarea {
+  position: relative;
+  top: 1px;
 }
