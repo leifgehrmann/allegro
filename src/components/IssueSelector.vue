@@ -1,7 +1,8 @@
+import {shell} from "electron";
 <template>
   <div
     class="issueField"
-    :class="{ 'isValidIssueKey': valid }"
+    :class="{ issueKeyIsValid }"
   >
     <label>
       <input
@@ -15,14 +16,15 @@
     <span
       class="resolvedIssueTitle inputComponentPiece"
       :title="issueTitle"
-      v-if="valid"
+      v-if="issueKeyIsValid"
     >
               {{ issueTitle }}
             </span>
     <button
       class="resolvedIssueLink"
       :title="`Open ${mountedIssueKey} in JIRA`"
-      v-if="valid"
+      v-if="issueKeyIsValid"
+      @click="openUrl"
     >
       <font-awesome-icon icon="external-link-alt"/>
     </button>
@@ -34,6 +36,7 @@ import { Vue } from 'vue-property-decorator';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { shell } from 'electron';
 
 library.add(faExternalLinkAlt);
 
@@ -52,11 +55,15 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    issueUrl: {
+      type: String,
+      default: '',
+    },
     issueTitle: {
       type: String,
       default: '',
     },
-    valid: {
+    issueKeyIsValid: {
       type: Boolean,
       default: false,
     },
@@ -74,6 +81,9 @@ export default Vue.extend({
     FontAwesomeIcon,
   },
   methods: {
+    openUrl() {
+      shell.openExternal(this.issueUrl);
+    },
   },
   mounted() {
     this.mountedIssueKey = this.issueKey;
@@ -102,7 +112,7 @@ export default Vue.extend({
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
-.isValidIssueKey input[name="issueKey"] {
+.issueKeyIsValid input[name="issueKey"] {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }

@@ -10,8 +10,8 @@
       <th scope="col">Category</th>
       <th scope="col">Actions</th>
     </tr>
-    <draggable v-model="list" tag="tbody" handle=".handle">
-      <tr v-for="item in list" :key="item.name">
+    <draggable v-model="worklogs" tag="tbody" handle=".handle">
+      <tr v-for="item in worklogs" :key="item.name">
         <td
           class="handle"
         >
@@ -21,19 +21,32 @@
           <DateSelector :value.sync="item.date"/>
         </td>
         <td>
-          <IssueSelector :issue-key.sync="item.issueKey" />
+          <IssueSelector
+            :issue-key.sync="item.issueKey"
+            :issue-key-is-valid="item.issueKeyIsValid"
+            :issue-url="item.issueUrl"
+            :issue-title="item.issueTitle"
+          />
         </td>
         <td>
           <div class="minutesField">
             <label>
-              <input type="number" min="0" placeholder="0">
+              <input
+                type="number"
+                min="0"
+                placeholder="0"
+                v-model="item.minutes"
+              >
             </label>
           </div>
         </td>
         <td>
           <div class="messageField">
             <label>
-              <textarea rows="1" v-model="item.sport"/>
+              <textarea
+                rows="1"
+                v-model="item.message"
+              />
             </label>
           </div>
         </td>
@@ -80,7 +93,7 @@
   </table>
 </template>
 
-<script>
+<script lang="ts">
 import { Vue } from 'vue-property-decorator';
 import Draggable from 'vuedraggable';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -88,6 +101,7 @@ import {
   faGripLines, faPlus, faTrash, faExternalLinkAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Worklog from '@/data/worklog';
 import DateSelector from '@/components/DateSelector.vue';
 import IssueSelector from '@/components/IssueSelector.vue';
 
@@ -97,21 +111,6 @@ library.add(faTrash);
 library.add(faTrash);
 library.add(faExternalLinkAlt);
 
-const list = [
-  {
-    id: 1, name: 'Abby', sport: 'basket', date: '', issueKey: '',
-  },
-  {
-    id: 2, name: 'Brooke', sport: 'foot', date: '', issueKey: '',
-  },
-  {
-    id: 3, name: 'Courtenay', sport: 'volley', date: '', issueKey: '',
-  },
-  {
-    id: 4, name: 'David', sport: 'rugby', date: '', issueKey: '',
-  },
-];
-
 export default Vue.extend({
   name: 'Worklogs',
   components: {
@@ -120,15 +119,28 @@ export default Vue.extend({
     DateSelector,
     IssueSelector,
   },
+  props: {
+    worklogs: {
+      type: Array,
+      default: (): Worklog[] => [],
+    },
+  },
   data: () => ({
-    list,
     dragging: false,
   }),
   methods: {
     addWorklog() {
-      list.push(
+      this.worklogs.push(
         {
-          id: 0, name: '', sport: '', date: '', issueKey: '',
+          date: '',
+          issueKey: '',
+          issueKeyIsValid: false,
+          issueUrl: '',
+          issueTitle: '',
+          minutes: undefined,
+          message: '',
+          projectAccounts: [''],
+          issueAccount: '',
         },
       );
     },

@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <div class="content">
-      <Worklogs/>
+      <Worklogs
+        :worklogs="worklogs"
+      />
     </div>
     <Footer>
       <template v-slot:left>
@@ -44,6 +46,7 @@ import { faCog, faRocket } from '@fortawesome/free-solid-svg-icons';
 import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { faJira } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Worklog from '@/data/worklog';
 
 library.add(faCog);
 library.add(faCheckCircle);
@@ -63,6 +66,20 @@ let preferences: Preferences = {
   tempoToken: '',
 };
 
+const worklogs: Worklog[] = [
+  {
+    date: '2020-07-03',
+    issueKey: 'TEST-123',
+    issueKeyIsValid: true,
+    issueUrl: 'https://test.atlassian.net/browser/TEST-123',
+    issueTitle: 'This test issue is valid',
+    minutes: 123,
+    message: 'Hey, just want to leave a message saying, hi!',
+    projectAccounts: [''],
+    issueAccount: '',
+  },
+];
+
 const store = new Store();
 
 preferences = { ...preferences, ...store.get('preferences') };
@@ -79,6 +96,7 @@ export default Vue.extend({
     isPreferencesModalVisible: false,
     manifest,
     preferences,
+    worklogs,
   }),
   methods: {
     showModal() {
