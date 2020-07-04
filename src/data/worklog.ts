@@ -4,7 +4,7 @@ export default interface Worklog {
   issueKeyIsValid: boolean;
   issueUrl: string;
   issueTitle: string;
-  minutes: number|undefined;
+  minutes: string;
   message: string;
   projectAccounts: string[];
   issueAccount: string;

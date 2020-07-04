@@ -18,7 +18,7 @@
       <template v-slot:right>
         <button id="submit-submitEntries">
           <font-awesome-icon icon="rocket"/>
-          Submit Worklogs (450m)
+          Submit Worklogs {{totalMinutes}}
         </button>
       </template>
     </Footer>
@@ -73,7 +73,7 @@ const worklogs: Worklog[] = [
     issueKeyIsValid: true,
     issueUrl: 'https://test.atlassian.net/browser/TEST-123',
     issueTitle: 'This test issue is valid',
-    minutes: 123,
+    minutes: '123',
     message: 'Hey, just want to leave a message saying, hi!',
     projectAccounts: [''],
     issueAccount: '',
@@ -98,6 +98,18 @@ export default Vue.extend({
     preferences,
     worklogs,
   }),
+  computed: {
+    totalMinutes(): string {
+      const total = this.worklogs.reduce(
+        (accumulator, worklog) => accumulator + parseFloat(worklog.minutes ?? '0'),
+        0,
+      );
+      if (total === 0) {
+        return '';
+      }
+      return `(${total}m)`;
+    },
+  },
   methods: {
     showModal() {
       this.isPreferencesModalVisible = true;
