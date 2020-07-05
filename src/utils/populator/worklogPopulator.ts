@@ -1,6 +1,6 @@
 import Worklog from '@/data/worklog';
-import JiraIpcRenderer from '@/utils/jiraIpcRenderer';
-import IndexedCache from '@/utils/indexedCache';
+import JiraIpcRenderer from '@/utils/ipc/jiraIpcRenderer';
+import IndexedCache from '@/utils/cache/indexedCache';
 import Preferences from '@/data/preferences';
 import { JiraApiIssueResponse } from '@/data/jiraApiResponseTypes';
 

@@ -5,9 +5,9 @@ import {
 import promiseIpc from 'electron-promise-ipc';
 import { PromiseIpcMain } from 'electron-promise-ipc/build/mainProcess';
 import createMainWindow from '@/backgroundMainWindow';
-import initializePreferencesIpcMain from '@/utils/preferencesIpcMain';
-import initialiseJiraIpcMain from '@/utils/jiraIpcMain';
-import initialiseTempoIpcMain from '@/utils/tempoIpcMain';
+import initializePreferencesIpcMain from '@/utils/ipc/preferencesIpcMain';
+import initialiseJiraIpcMain from '@/utils/ipc/jiraIpcMain';
+import initialiseTempoIpcMain from '@/utils/ipc/tempoIpcMain';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 

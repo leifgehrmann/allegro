@@ -1,7 +1,7 @@
 import Preferences from '@/data/preferences';
-import ObjectCache from '@/utils/objectCache';
+import ObjectCache from '@/utils/cache/objectCache';
 import { WorkAttributeResponse } from 'tempo-client/lib/responseTypes';
-import TempoIpcRenderer from '@/utils/tempoIpcRenderer';
+import TempoIpcRenderer from '@/utils/ipc/tempoIpcRenderer';
 
 export default class WorkAttributePopulator {
   private readonly preferences: Preferences;

@@ -48,12 +48,12 @@ import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { faJira } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Worklog from '@/data/worklog';
-import WorklogPopulator from '@/utils/worklogPopulator';
-import IndexedCache from '@/utils/indexedCache';
+import WorklogPopulator from '@/utils/populator/worklogPopulator';
+import IndexedCache from '@/utils/cache/indexedCache';
 import { JiraApiIssueResponse } from '@/data/jiraApiResponseTypes';
-import ObjectCache from '@/utils/objectCache';
+import ObjectCache from '@/utils/cache/objectCache';
 import { WorkAttributeResponse } from 'tempo-client/lib/responseTypes';
-import WorkAttributePopulator from '@/utils/workAttributePopulator';
+import WorkAttributePopulator from '@/utils/populator/workAttributePopulator';
 
 library.add(faCog);
 library.add(faCheckCircle);
