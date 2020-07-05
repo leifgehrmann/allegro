@@ -5,15 +5,15 @@ import {
 import promiseIpc from 'electron-promise-ipc';
 import { PromiseIpcMain } from 'electron-promise-ipc/build/mainProcess';
 import createMainWindow from '@/backgroundMainWindow';
-import initialiseJiraIpcMain from "@/utils/jiraIpcMain";
-import initializePreferencesIpcMain from "@/utils/preferencesIpcMain";
+import initialiseJiraIpcMain from '@/utils/jiraIpcMain';
+import initializePreferencesIpcMain from '@/utils/preferencesIpcMain';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // Keep a global reference of the window and ipc object, if you don't, the instances will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow | null;
-let ipc: PromiseIpcMain = promiseIpc;
+const ipc: PromiseIpcMain = promiseIpc;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([

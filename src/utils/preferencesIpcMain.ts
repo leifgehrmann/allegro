@@ -28,6 +28,6 @@ export default function initializePreferencesIpcMain(promiseIpcMain: PromiseIpcM
       console.log(jiraResult);
       const tempoResult = await tempo.workAttributes.get();
       console.log(tempoResult);
-    }
+    },
   );
 }

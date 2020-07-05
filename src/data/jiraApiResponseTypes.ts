@@ -9,7 +9,6 @@ export interface JiraApiIssueSuccessResponse {
 }
 
 export interface JiraApiIssueErrorResponse {
-  "errorMessages": string[],
-  "errors": {}
+  'errorMessages': string[],
+  'errors': Record<string, unknown>
 }
-
