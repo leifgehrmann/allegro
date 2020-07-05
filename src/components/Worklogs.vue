@@ -24,6 +24,7 @@
           <font-awesome-icon
             icon="check"
             :style="{ visibility: worklogsValidation[index] ? 'visible' : 'hidden' }"
+            title="This worklog is valid ✨"
           />
         </td>
         <td>
@@ -235,15 +236,18 @@ table td:nth-child(1), table th:nth-child(1) {
   text-align: center;
 }
 table td:nth-child(2), table th:nth-child(2) {
-  width: 180px; padding-left: 3px; padding-right: 3px;
+  text-align: center;
 }
 table td:nth-child(3), table th:nth-child(3) {
-  width: 60px; padding-left: 3px; padding-right: 3px;
+  width: 180px; padding-left: 3px; padding-right: 3px;
 }
 table td:nth-child(4), table th:nth-child(4) {
-  width: 30px; padding-left: 3px; padding-right: 3px;
+  width: 60px; padding-left: 3px; padding-right: 3px;
 }
 table td:nth-child(5), table th:nth-child(5) {
+  width: 30px; padding-left: 3px; padding-right: 3px;
+}
+table td:nth-child(6), table th:nth-child(6) {
   width: 220px; padding-left: 3px; padding-right: 3px;
 }
 .minutesField input {

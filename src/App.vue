@@ -10,7 +10,7 @@
     <Footer>
       <template v-slot:left>
         <button
-          @click="showModal">
+          @click="showPreferencesModal">
           <font-awesome-icon icon="cog"/>
           Settings
         </button>
@@ -18,7 +18,10 @@
         <font-awesome-icon :icon="['far', 'check-circle']"/> Tempo: OK)
       </template>
       <template v-slot:right>
-        <button id="submit-submitEntries">
+        <button
+          id="submit-submitEntries"
+          @click="submitWorklogs"
+        >
           <font-awesome-icon icon="rocket"/>
           Submit Worklogs {{totalMinutes}}
         </button>
@@ -27,8 +30,12 @@
     <PreferencesModal
       :preferences="preferences"
       v-show="isPreferencesModalVisible"
-      @close="closeModal"
+      @close="closePreferencesModal"
       @save="savePreferences"
+    />
+    <ValidationModal
+      v-show="isValidationModalVisible"
+      @close="closeValidationModal"
     />
   </div>
 </template>
@@ -40,6 +47,7 @@ import jetpack from 'fs-jetpack';
 import Worklogs from '@/components/Worklogs.vue';
 import Footer from '@/components/Footer.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
+import ValidationModal from '@/components/ValidationModal.vue';
 import '@/style/global.scss';
 import Preferences from '@/data/preferences';
 import Store from 'electron-store';
@@ -56,6 +64,7 @@ import ObjectCache from '@/utils/cache/objectCache';
 import { AccountLinkByScopeResponse, WorkAttributeResponse } from 'tempo-client/lib/responseTypes';
 import WorkAttributePopulator from '@/utils/populator/workAttributePopulator';
 import ProjectAccountLinksPopulator from '@/utils/populator/projectAccountLinksPopulator';
+import WorklogValidator from '@/utils/validator/worklogValidator';
 
 library.add(faCog);
 library.add(faCheckCircle);
@@ -92,10 +101,12 @@ export default Vue.extend({
     Worklogs,
     Footer,
     PreferencesModal,
+    ValidationModal,
     FontAwesomeIcon,
   },
   data: () => ({
     isPreferencesModalVisible: false,
+    isValidationModalVisible: false,
     manifest,
     preferences,
     worklogs,
@@ -123,11 +134,17 @@ export default Vue.extend({
     },
   },
   methods: {
-    showModal() {
+    showPreferencesModal() {
       this.isPreferencesModalVisible = true;
     },
-    closeModal() {
+    closePreferencesModal() {
       this.isPreferencesModalVisible = false;
+    },
+    showValidationModal() {
+      this.isValidationModalVisible = true;
+    },
+    closeValidationModal() {
+      this.isValidationModalVisible = false;
     },
     savePreferences(newPreferences: Preferences) {
       this.preferences = newPreferences;
@@ -162,6 +179,16 @@ export default Vue.extend({
         this.projectsAccountLinksCache,
       );
       await ProjectsAccountLinksPopulator.populate();
+    },
+    submitWorklogs() {
+      // First validate
+      const validator = new WorklogValidator(this.workAttributes);
+      const hasInvalidWorklogs = this.worklogs.some((worklog) => !validator.validate(worklog));
+      if (hasInvalidWorklogs) {
+        this.showValidationModal();
+      }
+
+      // Then send
     },
   },
   watch: {
