@@ -5,6 +5,7 @@ import { WorklogResponse } from 'tempo-client/lib/responseTypes';
 
 export default class WorklogSubmitter {
   private readonly tempoIpc: TempoIpcRenderer;
+
   private readonly authorAccountId: string;
 
   constructor(preferences: Preferences, authorAccountId: string) {
@@ -16,7 +17,7 @@ export default class WorklogSubmitter {
   submitWorklog(worklog: Worklog): Promise<WorklogResponse> {
     const seconds = Math.round(parseFloat(worklog.minutes) * 60);
     const attributes = Object.entries(worklog.workAttributes)
-      .map((entry) => ({key: entry[0], value: entry[1]}));
+      .map((entry) => ({ key: entry[0], value: entry[1] }));
 
     return this.tempoIpc.postWorklog({
       remainingEstimateSeconds: 0, // Todo: Remove when fix is made node-tempo-client
@@ -24,10 +25,10 @@ export default class WorklogSubmitter {
       billableSeconds: seconds,
       issueKey: worklog.issueKey,
       startDate: worklog.date,
-      startTime: "12:00:00", // Todo: Is timezone a concern? Hopefully date has us covered.
+      startTime: '12:00:00', // Todo: Is timezone a concern? Hopefully date has us covered.
       timeSpentSeconds: seconds,
       description: worklog.message,
       attributes,
-    })
+    });
   }
 }

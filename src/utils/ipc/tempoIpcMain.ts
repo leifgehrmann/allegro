@@ -7,7 +7,7 @@ import {
   WorkAttributeResponse,
   WorklogResponse,
 } from 'tempo-client/lib/responseTypes';
-import {Worklog} from 'tempo-client/lib/requestTypes';
+import { Worklog } from 'tempo-client/lib/requestTypes';
 
 function createTempoClient(preferences: Preferences): TempoApi {
   // Todo: ObjectCache the client to avoid recreating the instance for every request
