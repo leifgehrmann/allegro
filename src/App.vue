@@ -59,12 +59,16 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Worklog from '@/data/worklog';
 import WorklogPopulator from '@/utils/populator/worklogPopulator';
 import IndexedCache from '@/utils/cache/indexedCache';
-import { JiraApiIssueResponse } from '@/data/jiraApiResponseTypes';
+import {
+  JiraApiCurrentUserSuccessResponse,
+  JiraApiIssueResponse,
+} from '@/data/jiraApiResponseTypes';
 import ObjectCache from '@/utils/cache/objectCache';
 import { AccountLinkByScopeResponse, WorkAttributeResponse } from 'tempo-client/lib/responseTypes';
 import WorkAttributePopulator from '@/utils/populator/workAttributePopulator';
 import ProjectAccountLinksPopulator from '@/utils/populator/projectAccountLinksPopulator';
 import WorklogValidator from '@/utils/validator/worklogValidator';
+import CurrentUserPopulator from '@/utils/populator/currentUserPopulator';
 
 library.add(faCog);
 library.add(faCheckCircle);
@@ -110,6 +114,7 @@ export default Vue.extend({
     isSubmittingWorklogs: false,
     manifest,
     preferences,
+    currentUser: null as JiraApiCurrentUserSuccessResponse|null,
     worklogs,
     projectsAccountLinks,
     workAttributes,
@@ -150,6 +155,7 @@ export default Vue.extend({
     savePreferences(newPreferences: Preferences) {
       this.preferences = newPreferences;
       store.set('preferences', this.preferences);
+      this.loadUser();
       this.clearCacheAndPopulate();
     },
     async clearCacheAndPopulate() {
@@ -181,11 +187,20 @@ export default Vue.extend({
       );
       await ProjectsAccountLinksPopulator.populate();
     },
+    async loadUser() {
+      const currentUserPopulator = new CurrentUserPopulator(this.preferences);
+      this.currentUser = await currentUserPopulator.get();
+    },
     submitWorklogs() {
       // First validate
       const validator = new WorklogValidator(this.workAttributes);
       const hasInvalidWorklogs = this.worklogs.some((worklog) => !validator.validate(worklog));
       if (hasInvalidWorklogs) {
+        this.showValidationModal();
+      }
+
+      if (this.currentUser === null) {
+        // Todo: Show proper error message saying the user is not logged in
         this.showValidationModal();
       }
 
@@ -208,6 +223,7 @@ export default Vue.extend({
   },
   mounted(): void {
     worklogs.push(...store.get('worklogs') ?? []);
+    this.loadUser();
     this.populate();
   },
 });

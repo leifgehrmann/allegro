@@ -20,4 +20,10 @@ export default class JiraIpcRenderer {
       issueKey,
     }) as Promise<JiraApi.JsonResponse>;
   }
+
+  async getCurrentUser(): Promise<JiraApi.JsonResponse> {
+    return await PromiseIpc.send('jiraGetCurrentUser', {
+      preferences: this.preferences,
+    }) as Promise<JiraApi.JsonResponse>;
+  }
 }

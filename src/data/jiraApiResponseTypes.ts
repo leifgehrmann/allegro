@@ -8,7 +8,11 @@ export interface JiraApiIssueSuccessResponse {
   }
 }
 
+export interface JiraApiCurrentUserSuccessResponse {
+  accountId: string;
+}
+
 export interface JiraApiIssueErrorResponse {
-  'errorMessages': string[],
-  'errors': Record<string, unknown>
+  errorMessages: string[],
+  errors: Record<string, unknown>
 }

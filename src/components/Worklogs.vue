@@ -80,6 +80,7 @@
     </draggable>
     <tr class="worklogs-add-row">
       <td />
+      <td />
       <td colspan="100">
         <button
           name="add"
@@ -233,9 +234,6 @@ export default Vue.extend({
 table td:nth-child(1), table th:nth-child(1) {
   padding-left: 10px;
   padding-right: 10px;
-  text-align: center;
-}
-table td:nth-child(2), table th:nth-child(2) {
   text-align: center;
 }
 table td:nth-child(3), table th:nth-child(3) {
