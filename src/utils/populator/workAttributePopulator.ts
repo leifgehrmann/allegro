@@ -32,6 +32,7 @@ export default class WorkAttributePopulator {
       return workAttributes;
     } catch (e) {
       // Todo: Don't silently error
+      this.cache.set([]);
       return [];
     }
   }

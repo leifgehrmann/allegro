@@ -52,8 +52,9 @@ import WorklogPopulator from '@/utils/populator/worklogPopulator';
 import IndexedCache from '@/utils/cache/indexedCache';
 import { JiraApiIssueResponse } from '@/data/jiraApiResponseTypes';
 import ObjectCache from '@/utils/cache/objectCache';
-import { WorkAttributeResponse } from 'tempo-client/lib/responseTypes';
+import { AccountLinkByScopeResponse, WorkAttributeResponse } from 'tempo-client/lib/responseTypes';
 import WorkAttributePopulator from '@/utils/populator/workAttributePopulator';
+import ProjectAccountLinksPopulator from '@/utils/populator/projectAccountLinksPopulator';
 
 library.add(faCog);
 library.add(faCheckCircle);
@@ -88,9 +89,11 @@ const worklogs: Worklog[] = [
   },
 ];
 const workAttributes: WorkAttributeResponse[] = [];
+const projectsAccountLinks: Record<string, AccountLinkByScopeResponse[]> = {};
 
 const store = new Store();
 const issueCache: IndexedCache<JiraApiIssueResponse> = new IndexedCache('jiraIssues', store);
+const projectsAccountLinksCache: IndexedCache<AccountLinkByScopeResponse[]> = new IndexedCache('tempoProjectsAccountLinks', store);
 const workAttributesCache: ObjectCache<WorkAttributeResponse[]> = new ObjectCache('tempoWorkAttributes', store);
 
 preferences = { ...preferences, ...store.get('preferences') };
@@ -108,8 +111,10 @@ export default Vue.extend({
     manifest,
     preferences,
     worklogs,
+    projectsAccountLinks,
     workAttributes,
     issueCache,
+    projectsAccountLinksCache,
     workAttributesCache,
   }),
   computed: {
@@ -143,7 +148,10 @@ export default Vue.extend({
     },
     async clearCacheAndPopulate() {
       issueCache.invalidate();
+      this.workAttributes = [];
+      this.projectsAccountLinks = {};
       workAttributesCache.invalidate();
+      projectsAccountLinksCache.invalidate();
       this.populate();
     },
     async populate(): Promise<void> {
@@ -158,8 +166,19 @@ export default Vue.extend({
       handler() {
         // Todo: Defer to reduce massive I/O ops
         store.set('worklogs', this.worklogs);
-        const populator = new WorklogPopulator(this.worklogs, this.preferences, issueCache);
-        populator.populate();
+        const worklogPopulator = new WorklogPopulator(
+          this.worklogs,
+          this.preferences,
+          this.issueCache,
+        );
+        worklogPopulator.populate();
+        const ProjectsAccountLinksPopulator = new ProjectAccountLinksPopulator(
+          this.worklogs,
+          this.projectsAccountLinks,
+          this.preferences,
+          this.projectsAccountLinksCache,
+        );
+        ProjectsAccountLinksPopulator.populate();
       },
       deep: true,
     },
