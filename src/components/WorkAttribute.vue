@@ -41,8 +41,6 @@ export default Vue.extend({
         required: false,
         self: '',
         type: 'DEFAULT',
-        values: [],
-        // Todo: Remove 'values' when bug fix is made in node-tempo-client, as property is optional
       }),
     },
     projectAccountLinks: {

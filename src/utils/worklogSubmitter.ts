@@ -20,7 +20,6 @@ export default class WorklogSubmitter {
       .map((entry) => ({ key: entry[0], value: entry[1] }));
 
     return this.tempoIpc.postWorklog({
-      remainingEstimateSeconds: 0, // Todo: Remove when fix is made node-tempo-client
       authorAccountId: this.authorAccountId,
       billableSeconds: seconds,
       issueKey: worklog.issueKey,
