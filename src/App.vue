@@ -140,6 +140,8 @@ export default Vue.extend({
       this.projectsAccountLinks = {};
       workAttributesCache.invalidate();
       projectsAccountLinksCache.invalidate();
+      // Todo: Force clear the Worklogs metadata, since the title and account will be set even when
+      // the cache is cleared.
       this.populate();
     },
     async populate(): Promise<void> {
@@ -147,6 +149,19 @@ export default Vue.extend({
         this.preferences,
         workAttributesCache,
       ).populate();
+      const worklogPopulator = new WorklogPopulator(
+        this.worklogs,
+        this.preferences,
+        this.issueCache,
+      );
+      await worklogPopulator.populate();
+      const ProjectsAccountLinksPopulator = new ProjectAccountLinksPopulator(
+        this.worklogs,
+        this.projectsAccountLinks,
+        this.preferences,
+        this.projectsAccountLinksCache,
+      );
+      await ProjectsAccountLinksPopulator.populate();
     },
   },
   watch: {
@@ -154,19 +169,7 @@ export default Vue.extend({
       handler() {
         // Todo: Defer to reduce massive I/O ops
         store.set('worklogs', this.worklogs);
-        const worklogPopulator = new WorklogPopulator(
-          this.worklogs,
-          this.preferences,
-          this.issueCache,
-        );
-        worklogPopulator.populate();
-        const ProjectsAccountLinksPopulator = new ProjectAccountLinksPopulator(
-          this.worklogs,
-          this.projectsAccountLinks,
-          this.preferences,
-          this.projectsAccountLinksCache,
-        );
-        ProjectsAccountLinksPopulator.populate();
+        this.populate();
       },
       deep: true,
     },
