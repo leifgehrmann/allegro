@@ -12,7 +12,7 @@
       </th>
       <th scope="col">Actions</th>
     </tr>
-    <draggable v-model="worklogs" tag="tbody" handle=".handle">
+    <draggable :list="worklogs" tag="tbody" handle=".handle">
       <tr v-for="item in worklogs" :key="item.uuid">
         <td
           class="handle"
