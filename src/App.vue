@@ -4,6 +4,7 @@
       <Worklogs
         :worklogs="worklogs"
         :work-attributes="workAttributes"
+        :projects-account-links="projectsAccountLinks"
       />
     </div>
     <Footer>
@@ -36,7 +37,6 @@
 import { Vue } from 'vue-property-decorator';
 import { remote } from 'electron';
 import jetpack from 'fs-jetpack';
-import { v4 as uuidv4 } from 'uuid';
 import Worklogs from '@/components/Worklogs.vue';
 import Footer from '@/components/Footer.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
@@ -75,20 +75,7 @@ let preferences: Preferences = {
   tempoToken: '',
 };
 
-const worklogs: Worklog[] = [
-  {
-    uuid: uuidv4(),
-    date: '2020-07-03',
-    issueKey: 'TEST-123',
-    issueKeyIsValid: true,
-    issueUrl: 'https://test.atlassian.net/browser/TEST-123',
-    issueTitle: 'This test issue is valid',
-    minutes: '123',
-    message: 'Hey, just want to leave a message saying, hi!',
-    projectAccounts: [''],
-    issueAccount: '',
-  },
-];
+const worklogs: Worklog[] = [];
 const workAttributes: WorkAttributeResponse[] = [];
 const projectsAccountLinks: Record<string, AccountLinkByScopeResponse[]> = {};
 
@@ -194,7 +181,7 @@ export default Vue.extend({
 <style scoped>
 .content {
   width: 100%;
-  height: calc(100vh - 35px);
+  height: calc(100vh - 37px);
   margin-bottom: 37px;
   overflow: scroll;
 }

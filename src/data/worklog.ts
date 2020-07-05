@@ -9,4 +9,5 @@ export default interface Worklog {
   message: string;
   projectAccounts: string[];
   issueAccount: string;
+  workAttributes: Record<string, string>;
 }

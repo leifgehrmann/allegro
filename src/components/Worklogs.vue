@@ -8,6 +8,7 @@
       <th scope="col">Message</th>
       <th scope="col" v-for="workAttribute in workAttributes" :key="workAttribute.key">
         {{workAttribute.name}}
+        <span v-if="workAttribute.required">*</span>
       </th>
       <th scope="col">Actions</th>
     </tr>
@@ -51,14 +52,12 @@
             </label>
           </div>
         </td>
-        <td scope="col" v-for="workAttribute in workAttributes" :key="workAttribute.key">
-          <label>
-            <select>
-              <option>alpha</option>
-              <option>beta</option>
-              <option>gamm a</option>
-            </select>
-          </label>
+        <td v-for="workAttribute in workAttributes" :key="workAttribute.key">
+          <WorkAttribute
+            :value.sync="item.workAttributes[workAttribute.key]"
+            :work-attribute="workAttribute"
+            :project-account-links="projectsAccountLinks[getProjectFromIssueKey(item.issueKey)]"
+          />
         </td>
         <td>
           <button
@@ -72,7 +71,7 @@
       </tr>
     </draggable>
     <tr class="worklogs-add-row">
-      <td></td>
+      <td />
       <td colspan="100">
         <button
           name="add"
@@ -98,7 +97,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Worklog from '@/data/worklog';
 import DateSelector from '@/components/DateSelector.vue';
 import IssueSelector from '@/components/IssueSelector.vue';
-import { WorkAttributeResponse } from 'tempo-client/lib/responseTypes';
+import WorkAttribute from '@/components/WorkAttribute.vue';
+import { AccountLinkByScopeResponse, WorkAttributeResponse } from 'tempo-client/lib/responseTypes';
 
 library.add(faGripLines);
 library.add(faPlus);
@@ -113,6 +113,7 @@ export default Vue.extend({
     FontAwesomeIcon,
     DateSelector,
     IssueSelector,
+    WorkAttribute,
   },
   props: {
     worklogs: {
@@ -122,6 +123,10 @@ export default Vue.extend({
     workAttributes: {
       type: Array as () => WorkAttributeResponse[],
       default: (): WorkAttributeResponse[] => [],
+    },
+    projectsAccountLinks: {
+      type: Object as () => Record<string, AccountLinkByScopeResponse[]>,
+      default: (): Record<string, AccountLinkByScopeResponse[]> => ({}),
     },
   },
   data: () => ({
@@ -141,12 +146,16 @@ export default Vue.extend({
           message: '',
           projectAccounts: [''],
           issueAccount: '',
+          workAttributes: {},
         },
       );
     },
     deleteWorklog(uuid: string) {
       const index = this.worklogs.findIndex((worklog) => worklog.uuid === uuid);
       this.worklogs.splice(index, 1);
+    },
+    getProjectFromIssueKey(issueKey: string): string {
+      return issueKey.split('-')[0];
     },
   },
 });
@@ -162,8 +171,7 @@ export default Vue.extend({
 .worklogs tr {
   font-weight: inherit;
   text-align: left;
-  padding: 7px;
-  padding-left: 9px;
+  padding: 7px 7px 7px 9px;
   vertical-align: middle;
   top: 0;
   position: sticky;
@@ -188,14 +196,14 @@ export default Vue.extend({
 .worklogs th {
   font-weight: inherit;
   text-align: left;
-  padding: 7px;
-  padding-left: 9px;
+  padding: 7px 7px 7px 9px;
   vertical-align: bottom;
   background: #F7F7F7;
   top: 0;
   position: sticky;
   user-select: none;
   z-index: 1;
+  white-space: nowrap;
 }
 
 @media (prefers-color-scheme: dark) {
