@@ -49,8 +49,11 @@ import { faJira } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Worklog from '@/data/worklog';
 import WorklogPopulator from '@/utils/worklogPopulator';
-import Cache from '@/utils/cache';
+import IndexedCache from '@/utils/indexedCache';
 import { JiraApiIssueResponse } from '@/data/jiraApiResponseTypes';
+import ObjectCache from '@/utils/objectCache';
+import { WorkAttributeResponse } from 'tempo-client/lib/responseTypes';
+import WorkAttributePopulator from '@/utils/workAttributePopulator';
 
 library.add(faCog);
 library.add(faCheckCircle);
@@ -84,12 +87,13 @@ const worklogs: Worklog[] = [
     issueAccount: '',
   },
 ];
+const workAttributes: WorkAttributeResponse[] = [];
 
 const store = new Store();
-const issueCache: Cache<JiraApiIssueResponse> = new Cache('jiraIssues', store);
+const issueCache: IndexedCache<JiraApiIssueResponse> = new IndexedCache('jiraIssues', store);
+const workAttributesCache: ObjectCache<WorkAttributeResponse[]> = new ObjectCache('tempoWorkAttributes', store);
 
 preferences = { ...preferences, ...store.get('preferences') };
-worklogs.push(...store.get('worklogs') ?? []);
 
 export default Vue.extend({
   name: 'App',
@@ -104,6 +108,9 @@ export default Vue.extend({
     manifest,
     preferences,
     worklogs,
+    workAttributes,
+    issueCache,
+    workAttributesCache,
   }),
   computed: {
     totalMinutes(): string {
@@ -132,6 +139,18 @@ export default Vue.extend({
     savePreferences(newPreferences: Preferences) {
       this.preferences = newPreferences;
       store.set('preferences', this.preferences);
+      this.clearCacheAndPopulate();
+    },
+    async clearCacheAndPopulate() {
+      issueCache.invalidate();
+      workAttributesCache.invalidate();
+      this.populate();
+    },
+    async populate(): Promise<void> {
+      this.workAttributes = await new WorkAttributePopulator(
+        this.preferences,
+        workAttributesCache,
+      ).populate();
     },
   },
   watch: {
@@ -144,6 +163,10 @@ export default Vue.extend({
       },
       deep: true,
     },
+  },
+  mounted(): void {
+    worklogs.push(...store.get('worklogs') ?? []);
+    this.populate();
   },
 });
 </script>

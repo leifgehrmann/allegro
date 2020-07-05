@@ -1,11 +1,11 @@
 import Store from 'electron-store';
 
-export default class Cache<T> {
+export default class ObjectCache<T> {
   private readonly name: string;
 
-  private readonly store: Store<{[key: string]: {[key: string]: T}}>;
+  private readonly store: Store<{[key: string]: T}>;
 
-  private cache: {[key: string]: T};
+  private cache: T|null;
 
   constructor(name: string, store: Store) {
     this.name = name;
@@ -13,33 +13,32 @@ export default class Cache<T> {
     this.cache = this.loadCacheFromStore();
   }
 
-  get(key: string): T|null {
-    if (key in this.cache) {
-      return this.cache[key];
-    }
-    return null;
+  get(): T|null {
+    return this.cache;
   }
 
-  set(key: string, value: T): void {
-    this.cache[key] = value;
+  set(value: T): void {
+    this.cache = value;
     this.persistCacheInStore();
   }
 
   invalidate(): void {
-    this.cache = {};
+    this.cache = null;
     this.invalidateCacheInStore();
   }
 
-  private loadCacheFromStore(): {[key: string]: T} {
+  private loadCacheFromStore(): T|null {
     const storeCache = this.store.get(this.name);
     if (typeof storeCache !== 'object') {
-      return {};
+      return null;
     }
     return storeCache;
   }
 
   private persistCacheInStore() {
-    this.store.set(this.name, this.cache);
+    if (this.cache !== null) {
+      this.store.set(this.name, this.cache);
+    }
   }
 
   private invalidateCacheInStore(): void {

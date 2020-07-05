@@ -5,8 +5,9 @@ import {
 import promiseIpc from 'electron-promise-ipc';
 import { PromiseIpcMain } from 'electron-promise-ipc/build/mainProcess';
 import createMainWindow from '@/backgroundMainWindow';
-import initialiseJiraIpcMain from '@/utils/jiraIpcMain';
 import initializePreferencesIpcMain from '@/utils/preferencesIpcMain';
+import initialiseJiraIpcMain from '@/utils/jiraIpcMain';
+import initialiseTempoIpcMain from '@/utils/tempoIpcMain';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -39,6 +40,7 @@ app.on('ready', async () => {
   }
   initializePreferencesIpcMain(ipc);
   initialiseJiraIpcMain(ipc);
+  initialiseTempoIpcMain(ipc);
   win = createMainWindow();
   win.on('closed', () => {
     win = null;

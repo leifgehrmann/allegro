@@ -1,6 +1,6 @@
 import Worklog from '@/data/worklog';
 import JiraIpcRenderer from '@/utils/jiraIpcRenderer';
-import Cache from '@/utils/cache';
+import IndexedCache from '@/utils/indexedCache';
 import Preferences from '@/data/preferences';
 import { JiraApiIssueResponse } from '@/data/jiraApiResponseTypes';
 
@@ -11,12 +11,12 @@ export default class WorklogPopulator {
 
   private readonly jiraIpc: JiraIpcRenderer;
 
-  private readonly issueCache: Cache<JiraApiIssueResponse>;
+  private readonly issueCache: IndexedCache<JiraApiIssueResponse>;
 
   constructor(
     worklogs: Worklog[],
     preferences: Preferences,
-    issueCache: Cache<JiraApiIssueResponse>,
+    issueCache: IndexedCache<JiraApiIssueResponse>,
   ) {
     this.worklogs = worklogs;
     this.preferences = preferences;

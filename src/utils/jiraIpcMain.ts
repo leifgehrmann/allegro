@@ -18,14 +18,6 @@ export default function initialiseJiraIpcMain(promiseIpcMain: PromiseIpcMain): v
   promiseIpcMain.on('jiraGetIssue', async (data: unknown): Promise<JiraApi.JsonResponse> => {
     const dataParsed = data as {preferences: Preferences, issueKey: string};
     const jiraClient = createJiraClient(dataParsed.preferences);
-
-    // const tempo = new TempoApi({
-    //   protocol: 'https',
-    //   host: 'api.tempo.io',
-    //   bearerToken: preferences.tempoToken,
-    //   apiVersion: '3',
-    // });
-
     return jiraClient.findIssue(dataParsed.issueKey);
   });
 }
