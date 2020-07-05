@@ -3,8 +3,9 @@ import Preferences from '@/data/preferences';
 import {
   AccountLinkByScopeResponse,
   ResultSetResponse,
-  WorkAttributeResponse,
+  WorkAttributeResponse, WorklogResponse,
 } from 'tempo-client/lib/responseTypes';
+import { Worklog } from 'tempo-client/lib/requestTypes';
 
 export default class TempoIpcRenderer {
   private preferences: Preferences = {
@@ -31,5 +32,14 @@ export default class TempoIpcRenderer {
       preferences: this.preferences,
       projectKey,
     }) as Promise<ResultSetResponse<AccountLinkByScopeResponse>>;
+  }
+
+  async postWorklog(
+    worklog: Worklog,
+  ): Promise<WorklogResponse> {
+    return await PromiseIpc.send('tempoPostWorklog', {
+      preferences: this.preferences,
+      worklog,
+    }) as Promise<WorklogResponse>;
   }
 }

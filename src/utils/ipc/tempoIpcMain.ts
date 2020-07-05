@@ -5,7 +5,9 @@ import {
   AccountLinkByScopeResponse,
   ResultSetResponse,
   WorkAttributeResponse,
+  WorklogResponse,
 } from 'tempo-client/lib/responseTypes';
+import {Worklog} from 'tempo-client/lib/requestTypes';
 
 function createTempoClient(preferences: Preferences): TempoApi {
   // Todo: ObjectCache the client to avoid recreating the instance for every request
@@ -33,6 +35,15 @@ export default function initialiseTempoIpcMain(promiseIpcMain: PromiseIpcMain): 
       const dataParsed = data as { preferences: Preferences, projectKey: string };
       const tempoClient = createTempoClient(dataParsed.preferences);
       return tempoClient.accountLinks.getForProject(dataParsed.projectKey);
+    },
+  );
+
+  promiseIpcMain.on(
+    'tempoPostWorklog',
+    async (data: unknown): Promise<WorklogResponse> => {
+      const dataParsed = data as { preferences: Preferences, worklog: Worklog };
+      const tempoClient = createTempoClient(dataParsed.preferences);
+      return tempoClient.worklogs.post(dataParsed.worklog);
     },
   );
 }

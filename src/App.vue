@@ -107,6 +107,7 @@ export default Vue.extend({
   data: () => ({
     isPreferencesModalVisible: false,
     isValidationModalVisible: false,
+    isSubmittingWorklogs: false,
     manifest,
     preferences,
     worklogs,
@@ -189,6 +190,10 @@ export default Vue.extend({
       }
 
       // Then send
+      this.isSubmittingWorklogs = true;
+    },
+    cancelSubmitWorklogs() {
+      this.isSubmittingWorklogs = true;
     },
   },
   watch: {
