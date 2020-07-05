@@ -3,6 +3,7 @@
     <div class="content">
       <Worklogs
         :worklogs="worklogs"
+        :work-attributes="workAttributes"
       />
     </div>
     <Footer>

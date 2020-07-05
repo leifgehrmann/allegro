@@ -1,13 +1,14 @@
 <template>
   <table class="worklogs">
     <tr>
-      <th scope="col"></th>
+      <th scope="col" />
       <th scope="col">Date</th>
       <th scope="col">Issue</th>
       <th scope="col">Minutes</th>
       <th scope="col">Message</th>
-      <th scope="col">Account</th>
-      <th scope="col">Category</th>
+      <th scope="col" v-for="workAttribute in workAttributes" :key="workAttribute.key">
+        {{workAttribute.name}}
+      </th>
       <th scope="col">Actions</th>
     </tr>
     <draggable v-model="worklogs" tag="tbody" handle=".handle">
@@ -50,21 +51,12 @@
             </label>
           </div>
         </td>
-        <td>
+        <td scope="col" v-for="workAttribute in workAttributes" :key="workAttribute.key">
           <label>
             <select>
               <option>alpha</option>
               <option>beta</option>
-              <option>gamma</option>
-            </select>
-          </label>
-        </td>
-        <td>
-          <label>
-            <select>
-              <option>alpha</option>
-              <option>beta</option>
-              <option>gamma</option>
+              <option>gamm a</option>
             </select>
           </label>
         </td>
@@ -106,6 +98,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Worklog from '@/data/worklog';
 import DateSelector from '@/components/DateSelector.vue';
 import IssueSelector from '@/components/IssueSelector.vue';
+import { WorkAttributeResponse } from 'tempo-client/lib/responseTypes';
 
 library.add(faGripLines);
 library.add(faPlus);
@@ -125,6 +118,10 @@ export default Vue.extend({
     worklogs: {
       type: Array as () => Worklog[],
       default: (): Worklog[] => [],
+    },
+    workAttributes: {
+      type: Array as () => WorkAttributeResponse[],
+      default: (): WorkAttributeResponse[] => [],
     },
   },
   data: () => ({
