@@ -1,6 +1,8 @@
 import Worklog from '@/data/worklog';
 import JiraIpcRenderer from '@/utils/jiraIpcRenderer';
+import Cache from '@/utils/cache';
 import Preferences from '@/data/preferences';
+import { JiraApiIssueResponse } from '@/data/jiraApiResponseTypes';
 
 export default class WorklogPopulator {
   private readonly worklogs: Worklog[];
@@ -9,31 +11,50 @@ export default class WorklogPopulator {
 
   private readonly jiraIpc: JiraIpcRenderer;
 
-  constructor(worklogs: Worklog[], preferences: Preferences) {
+  private readonly issueCache: Cache<JiraApiIssueResponse>;
+
+  constructor(
+    worklogs: Worklog[],
+    preferences: Preferences,
+    issueCache: Cache<JiraApiIssueResponse>,
+  ) {
     this.worklogs = worklogs;
     this.preferences = preferences;
     this.jiraIpc = new JiraIpcRenderer();
     this.jiraIpc.setPreferences(preferences);
+    this.issueCache = issueCache;
   }
 
   async populate(): Promise<void> {
     await WorklogPopulator.asyncForEach(this.worklogs, async (worklog, index) => {
-      try {
-        const jiraIssue = await this.jiraIpc.getIssue(worklog.issueKey);
-        console.log(jiraIssue);
-        if (jiraIssue.fields?.summary !== undefined) {
+      if (worklog.issueKey !== '') {
+        const jiraIssue = await this.getIssue(worklog.issueKey);
+        if (jiraIssue.key === worklog.issueKey) {
           this.worklogs[index].issueKeyIsValid = true;
           this.worklogs[index].issueTitle = jiraIssue.fields.summary;
           this.worklogs[index].issueUrl = this.generateUrlForIssueKey(worklog.issueKey);
-        } else {
-          this.worklogs[index].issueKeyIsValid = false;
-          this.worklogs[index].issueTitle = '';
+          return;
         }
-      } catch (e) {
-        this.worklogs[index].issueKeyIsValid = false;
-        this.worklogs[index].issueTitle = '';
       }
+      this.worklogs[index].issueKeyIsValid = false;
+      this.worklogs[index].issueTitle = '';
+      this.worklogs[index].issueUrl = '';
     });
+  }
+
+  private async getIssue(issueKey: string): Promise<JiraApiIssueResponse> {
+    try {
+      const cachedJiraIssue = this.issueCache.get(issueKey);
+      if (cachedJiraIssue !== null) {
+        return cachedJiraIssue;
+      }
+      const jiraIssue = (await this.jiraIpc.getIssue(issueKey)) as JiraApiIssueResponse;
+      this.issueCache.set(issueKey, jiraIssue);
+      return jiraIssue;
+    } catch (error) {
+      this.issueCache.set(issueKey, error.error);
+      return error;
+    }
   }
 
   private generateUrlForIssueKey(issueKey: string): string {

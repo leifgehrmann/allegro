@@ -49,6 +49,8 @@ import { faJira } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Worklog from '@/data/worklog';
 import WorklogPopulator from '@/utils/worklogPopulator';
+import Cache from '@/utils/cache';
+import { JiraApiIssueResponse } from '@/data/jiraApiResponseTypes';
 
 library.add(faCog);
 library.add(faCheckCircle);
@@ -84,6 +86,7 @@ const worklogs: Worklog[] = [
 ];
 
 const store = new Store();
+const issueCache: Cache<JiraApiIssueResponse> = new Cache('jiraIssues', store);
 
 preferences = { ...preferences, ...store.get('preferences') };
 worklogs.push(...store.get('worklogs') ?? []);
@@ -136,7 +139,7 @@ export default Vue.extend({
       handler() {
         // Todo: Defer to reduce massive I/O ops
         store.set('worklogs', this.worklogs);
-        const populator = new WorklogPopulator(this.worklogs, this.preferences);
+        const populator = new WorklogPopulator(this.worklogs, this.preferences, issueCache);
         populator.populate();
       },
       deep: true,
