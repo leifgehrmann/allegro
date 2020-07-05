@@ -2,6 +2,7 @@
   <table class="worklogs">
     <tr>
       <th scope="col" />
+      <th scope="col" />
       <th scope="col">Date</th>
       <th scope="col">Issue</th>
       <th scope="col">Minutes</th>
@@ -13,11 +14,17 @@
       <th scope="col">Actions</th>
     </tr>
     <draggable :list="worklogs" tag="tbody" handle=".handle">
-      <tr v-for="item in worklogs" :key="item.uuid">
+      <tr v-for="(item, index) in worklogs" :key="item.uuid">
         <td
           class="handle"
         >
           <font-awesome-icon icon="grip-lines"/>
+        </td>
+        <td>
+          <font-awesome-icon
+            icon="check"
+            :style="{ visibility: worklogsValidation[index] ? 'visible' : 'hidden' }"
+          />
         </td>
         <td>
           <DateSelector :value.sync="item.date"/>
@@ -63,7 +70,7 @@
           <button
             name="delete"
             title="Delete worklog"
-            @click="deleteWorklog(item.uuid)"
+            @click="deleteWorklog(index)"
           >
             <font-awesome-icon icon="trash"/> Delete
           </button>
@@ -91,7 +98,7 @@ import Draggable from 'vuedraggable';
 import { v4 as uuidv4 } from 'uuid';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-  faGripLines, faPlus, faTrash, faExternalLinkAlt,
+  faGripLines, faCheck, faPlus, faTrash, faExternalLinkAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Worklog from '@/data/worklog';
@@ -99,8 +106,10 @@ import DateSelector from '@/components/DateSelector.vue';
 import IssueSelector from '@/components/IssueSelector.vue';
 import WorkAttribute from '@/components/WorkAttribute.vue';
 import { AccountLinkByScopeResponse, WorkAttributeResponse } from 'tempo-client/lib/responseTypes';
+import WorklogValidator from '@/utils/validator/worklogValidator';
 
 library.add(faGripLines);
+library.add(faCheck);
 library.add(faPlus);
 library.add(faTrash);
 library.add(faTrash);
@@ -132,6 +141,12 @@ export default Vue.extend({
   data: () => ({
     dragging: false,
   }),
+  computed: {
+    worklogsValidation(): boolean[] {
+      const validator = new WorklogValidator(this.workAttributes);
+      return this.worklogs.map((worklog) => validator.validate(worklog));
+    },
+  },
   methods: {
     addWorklog() {
       this.worklogs.push(
@@ -150,8 +165,7 @@ export default Vue.extend({
         },
       );
     },
-    deleteWorklog(uuid: string) {
-      const index = this.worklogs.findIndex((worklog) => worklog.uuid === uuid);
+    deleteWorklog(index: number) {
       this.worklogs.splice(index, 1);
     },
     getProjectFromIssueKey(issueKey: string): string {

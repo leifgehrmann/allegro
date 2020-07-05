@@ -62,6 +62,11 @@ export default Vue.extend({
     mountedValue() {
       this.update();
     },
+    projectAccountLinks() {
+      if (this.workAttributeType === 'ACCOUNT') {
+        this.mountedValue = '';
+      }
+    },
   },
   methods: {
     update() {
