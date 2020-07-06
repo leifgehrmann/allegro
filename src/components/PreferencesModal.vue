@@ -33,9 +33,14 @@
         Test Connections
       </button>
       <button
+        @click="close"
+      >
+        Cancel
+      </button>
+      <button
         @click="save"
       >
-        Save
+        OK
       </button>
     </template>
   </Modal>
