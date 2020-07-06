@@ -15,8 +15,10 @@
           <font-awesome-icon icon="cog"/>
           Settings
         </button>
-        (<font-awesome-icon :icon="['fab', 'jira']"/> JIRA: OK,
-        <font-awesome-icon :icon="['far', 'check-circle']"/> Tempo: OK)
+        <ConnectionStatus
+          :jira-state="jiraConnectionState"
+          :tempo-state="tempoConnectionState"
+        />
       </template>
       <template v-slot:right>
         <button
@@ -61,6 +63,7 @@ import { remote } from 'electron';
 import jetpack from 'fs-jetpack';
 import Worklogs from '@/components/Worklogs.vue';
 import Footer from '@/components/Footer.vue';
+import ConnectionStatus from '@/components/ConnectionStatus.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import ValidationModal from '@/components/ValidationModal.vue';
 import ErrorModal from '@/components/ErrorModal.vue';
@@ -69,8 +72,6 @@ import Preferences from '@/data/preferences';
 import Store from 'electron-store';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCog, faRocket, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
-import { faJira } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Worklog from '@/data/worklog';
 import WorklogPopulator from '@/utils/populator/worklogPopulator';
@@ -86,11 +87,10 @@ import ProjectAccountLinksPopulator from '@/utils/populator/projectAccountLinksP
 import WorklogValidator from '@/utils/validator/worklogValidator';
 import CurrentUserPopulator from '@/utils/populator/currentUserPopulator';
 import WorklogSubmitter from '@/utils/worklogSubmitter';
+import ConnectionState from '@/utils/connectionState';
 
 library.add(faCog);
-library.add(faCheckCircle);
 library.add(faTimes);
-library.add(faJira);
 library.add(faRocket);
 
 let manifest = 'N/A';
@@ -122,12 +122,15 @@ export default Vue.extend({
   components: {
     Worklogs,
     Footer,
+    ConnectionStatus,
     PreferencesModal,
     ValidationModal,
     ErrorModal,
     FontAwesomeIcon,
   },
   data: () => ({
+    jiraConnectionState: 'unknown' as 'unknown'|'connected'|'errored',
+    tempoConnectionState: 'unknown' as 'unknown'|'connected'|'errored',
     isPreferencesModalVisible: false,
     isValidationModalVisible: false,
     isErrorModalVisible: false,
@@ -180,9 +183,20 @@ export default Vue.extend({
     closeErrorModal() {
       this.isErrorModalVisible = false;
     },
+    clearConnectionStatus() {
+      this.jiraConnectionState = 'unknown';
+      this.tempoConnectionState = 'unknown';
+    },
+    async updateConnectionStatus() {
+      const connectionState = new ConnectionState(this.preferences);
+      this.jiraConnectionState = await connectionState.getJiraState();
+      this.tempoConnectionState = await connectionState.getTempoState();
+    },
     savePreferences(newPreferences: Preferences) {
       this.preferences = newPreferences;
       store.set('preferences', this.preferences);
+      this.clearConnectionStatus();
+      this.updateConnectionStatus();
       this.loadUser();
       this.clearCacheAndPopulate();
     },
@@ -271,6 +285,7 @@ export default Vue.extend({
   },
   mounted(): void {
     worklogs.push(...store.get('worklogs') ?? []);
+    this.updateConnectionStatus();
     this.loadUser();
     this.populate();
   },
