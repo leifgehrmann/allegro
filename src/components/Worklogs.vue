@@ -72,6 +72,7 @@
             :work-attribute="workAttribute"
             :projects-account-links="projectsAccountLinks"
             :issue-key="item.issueKey"
+            :issue-tempo-account-id="item.issueTempoAccountId"
             :disabled="disableUi"
           />
         </td>
@@ -173,9 +174,9 @@ export default Vue.extend({
           issueKeyIsValid: false,
           issueUrl: '',
           issueTitle: '',
+          issueTempoAccountId: null,
           minutes: '',
           message: '',
-          projectAccounts: [''],
           issueAccount: '',
           workAttributes: {},
         },

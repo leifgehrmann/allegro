@@ -5,9 +5,9 @@ export default interface Worklog {
   issueKeyIsValid: boolean;
   issueUrl: string;
   issueTitle: string;
+  issueTempoAccountId: number|null;
   minutes: string;
   message: string;
-  projectAccounts: string[];
   issueAccount: string;
   workAttributes: Record<string, string>;
 }

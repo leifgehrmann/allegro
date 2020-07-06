@@ -1,9 +1,15 @@
 export interface JiraApiIssueResponse
   extends JiraApiIssueSuccessResponse, JiraApiIssueErrorResponse {}
 
+export interface JiraApiFieldObjectResponse {
+  id: string;
+  key: string;
+}
+
 export interface JiraApiIssueSuccessResponse {
   key: string;
   fields: {
+    [key: string]: unknown;
     summary: string;
   }
 }

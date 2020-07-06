@@ -26,4 +26,10 @@ export default class JiraIpcRenderer {
       preferences: this.preferences,
     }) as Promise<JiraApi.JsonResponse>;
   }
+
+  async getFields(): Promise<JiraApi.FieldObject[]> {
+    return await PromiseIpc.send('jiraGetFields', {
+      preferences: this.preferences,
+    }) as Promise<JiraApi.FieldObject[]>;
+  }
 }

@@ -26,4 +26,10 @@ export default function initialiseJiraIpcMain(promiseIpcMain: PromiseIpcMain): v
     const jiraClient = createJiraClient(dataParsed.preferences);
     return jiraClient.getCurrentUser();
   });
+
+  promiseIpcMain.on('jiraGetFields', async (data: unknown): Promise<JiraApi.FieldObject[]> => {
+    const dataParsed = data as {preferences: Preferences};
+    const jiraClient = createJiraClient(dataParsed.preferences);
+    return jiraClient.listFields();
+  });
 }

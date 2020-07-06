@@ -77,7 +77,7 @@ import Worklog from '@/data/worklog';
 import WorklogPopulator from '@/utils/populator/worklogPopulator';
 import IndexedCache from '@/utils/cache/indexedCache';
 import {
-  JiraApiCurrentUserSuccessResponse,
+  JiraApiCurrentUserSuccessResponse, JiraApiFieldObjectResponse,
   JiraApiIssueResponse,
 } from '@/data/jiraApiResponseTypes';
 import ObjectCache from '@/utils/cache/objectCache';
@@ -88,6 +88,7 @@ import WorklogValidator from '@/utils/validator/worklogValidator';
 import CurrentUserPopulator from '@/utils/populator/currentUserPopulator';
 import WorklogSubmitter from '@/utils/worklogSubmitter';
 import ConnectionState from '@/utils/connectionState';
+import JiraTempoFieldPopulator from '@/utils/populator/jiraTempoFieldPopulator';
 
 library.add(faCog);
 library.add(faTimes);
@@ -112,6 +113,7 @@ const projectsAccountLinks: Record<string, AccountLinkByScopeResponse[]> = {};
 
 const store = new Store();
 const issueCache: IndexedCache<JiraApiIssueResponse> = new IndexedCache('jiraIssues', store);
+const jiraTempoFieldCache: ObjectCache<JiraApiFieldObjectResponse> = new ObjectCache('jiraTempoField', store);
 const projectsAccountLinksCache: IndexedCache<AccountLinkByScopeResponse[]> = new IndexedCache('tempoProjectsAccountLinks', store);
 const workAttributesCache: ObjectCache<WorkAttributeResponse[]> = new ObjectCache('tempoWorkAttributes', store);
 
@@ -140,9 +142,11 @@ export default Vue.extend({
     preferences,
     currentUser: null as JiraApiCurrentUserSuccessResponse|null,
     worklogs,
+    jiraTempoField: null as JiraApiFieldObjectResponse|null,
     projectsAccountLinks,
     workAttributes,
     issueCache,
+    jiraTempoFieldCache,
     projectsAccountLinksCache,
     workAttributesCache,
   }),
@@ -202,8 +206,10 @@ export default Vue.extend({
     },
     async clearCacheAndPopulate() {
       issueCache.invalidate();
+      this.jiraTempoField = null;
       this.workAttributes = [];
       this.projectsAccountLinks = {};
+      jiraTempoFieldCache.invalidate();
       workAttributesCache.invalidate();
       projectsAccountLinksCache.invalidate();
       // Todo: Force clear the Worklogs metadata, since the title and account will be set even when
@@ -211,9 +217,15 @@ export default Vue.extend({
       this.populate();
     },
     async populate(): Promise<void> {
+      const jiraTempoFieldPopulator = new JiraTempoFieldPopulator(
+        this.preferences,
+        this.jiraTempoFieldCache,
+      );
+      this.jiraTempoField = await jiraTempoFieldPopulator.populate();
       const worklogPopulator = new WorklogPopulator(
         this.worklogs,
         this.preferences,
+        this.jiraTempoField,
         this.issueCache,
       );
       await worklogPopulator.populate();
@@ -234,7 +246,19 @@ export default Vue.extend({
       this.currentUser = await currentUserPopulator.get();
     },
     async submitWorklogs() {
-      // First validate
+      // Clean worklogs
+      this.worklogs.forEach((worklog, worklogIndex) => {
+        Object.entries(worklog.workAttributes).forEach((entry) => {
+          const isValidateAttribute = this.workAttributes.some(
+            (workAttribute) => workAttribute.key === entry[0],
+          );
+          if (!isValidateAttribute) {
+            delete this.worklogs[worklogIndex].workAttributes[entry[0]];
+          }
+        });
+      });
+
+      // Validate
       const validator = new WorklogValidator(this.workAttributes);
       const hasInvalidWorklogs = this.worklogs.some((worklog) => !validator.validate(worklog));
       if (hasInvalidWorklogs) {
@@ -295,8 +319,8 @@ export default Vue.extend({
 <style scoped>
 .content {
   width: 100%;
-  height: calc(100vh - 37px);
-  margin-bottom: 37px;
+  height: calc(100vh - 35px);
+  margin-bottom: 35px;
   overflow: scroll;
 }
 </style>

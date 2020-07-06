@@ -57,6 +57,10 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    issueTempoAccountId: {
+      type: Number,
+      default: null,
+    },
     disabled: {
       type: Boolean,
       default: false,
@@ -64,26 +68,36 @@ export default Vue.extend({
   },
   data: () => ({
     mountedValue: '',
+    projectAccountLinks: [] as AccountLinkByScopeResponse[],
   }),
   computed: {
     workAttributeType(): string {
       return this.workAttribute.type;
-    },
-    projectAccountLinks(): AccountLinkByScopeResponse[] {
-      return this.projectsAccountLinks[
-        this.getProjectFromIssueKey(this.issueKey)
-      ];
     },
   },
   watch: {
     mountedValue() {
       this.update();
     },
-    projectAccountLinks() {
+    issueKey() {
+      this.populateProjectAccountLink();
+    },
+    projectsAccountLinks() {
       if (this.workAttributeType === 'ACCOUNT') {
+        this.populateProjectAccountLink();
         const mountedValueExists = this.projectAccountLinkKeyExists(this.mountedValue);
         if (!mountedValueExists) {
           this.mountedValue = '';
+          this.update();
+        }
+      }
+    },
+    issueTempoAccountId() {
+      if (this.workAttributeType === 'ACCOUNT') {
+        this.populateProjectAccountLink();
+        const accountKey = this.getAccountKeyFromAccountId(this.issueTempoAccountId);
+        if (accountKey !== null) {
+          this.mountedValue = accountKey;
           this.update();
         }
       }
@@ -96,6 +110,15 @@ export default Vue.extend({
     getProjectFromIssueKey(issueKey: string): string {
       return issueKey.split('-')[0];
     },
+    getAccountKeyFromAccountId(accountId: number): string|null {
+      const accountLink = this.projectAccountLinks.find(
+        (projectAccountLink) => projectAccountLink.account.id === accountId,
+      );
+      if (accountLink !== undefined) {
+        return accountLink.account.key;
+      }
+      return null;
+    },
     projectAccountLinkKeyExists(projectAccountLinkKey: string) {
       if (this.projectAccountLinks === undefined) {
         return false;
@@ -104,10 +127,16 @@ export default Vue.extend({
         (projectAccountLink) => projectAccountLink.account.key === projectAccountLinkKey,
       );
     },
+    populateProjectAccountLink() {
+      this.projectAccountLinks = this.projectsAccountLinks[
+        this.getProjectFromIssueKey(this.issueKey)
+      ] ?? [];
+    },
   },
   mounted() {
     this.mountedValue = this.value;
     if (this.workAttributeType === 'ACCOUNT') {
+      this.populateProjectAccountLink();
       const mountedValueExists = this.projectAccountLinkKeyExists(this.mountedValue);
       if (!mountedValueExists) {
         this.mountedValue = '';
