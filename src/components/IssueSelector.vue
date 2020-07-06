@@ -11,6 +11,7 @@ import {shell} from "electron";
         placeholder="ABC-123"
         v-model="mountedIssueKey"
         v-uppercase
+        :disabled="disabled"
       >
     </label>
     <span
@@ -64,6 +65,10 @@ export default Vue.extend({
       default: '',
     },
     issueKeyIsValid: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },

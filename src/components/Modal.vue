@@ -26,7 +26,6 @@
           <slot name="footer">
             <button
               type="button"
-              class="btn-green"
               @click="close"
               aria-label="Close modal"
             >
@@ -88,7 +87,6 @@ export default Vue.extend({
 
 .modal-header {
   border-bottom: 1px solid #eeeeee;
-  color: #4AAE9B;
   justify-content: space-between;
 }
 
@@ -110,23 +108,6 @@ export default Vue.extend({
 .modal-body {
   position: relative;
   padding: 20px 10px;
-}
-
-.btn-close {
-  border: none;
-  font-size: 10px;
-  padding: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  color: #4AAE9B;
-  background: transparent;
-}
-
-.btn-green {
-  color: white;
-  background: #4AAE9B;
-  border: 1px solid #4AAE9B;
-  border-radius: 2px;
 }
 
 .modal-fade-enter,

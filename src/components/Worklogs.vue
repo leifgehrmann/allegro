@@ -16,7 +16,7 @@
     <draggable :list="worklogs" tag="tbody" handle=".handle">
       <tr v-for="(item, index) in worklogs" :key="item.uuid">
         <td
-          class="handle"
+          :class="{ handle: !disableUi }"
         >
           <font-awesome-icon icon="grip-lines"/>
         </td>
@@ -28,7 +28,10 @@
           />
         </td>
         <td>
-          <DateSelector :value.sync="item.date"/>
+          <DateSelector
+            :value.sync="item.date"
+            :disabled="disableUi"
+          />
         </td>
         <td>
           <IssueSelector
@@ -36,6 +39,7 @@
             :issue-key-is-valid="item.issueKeyIsValid"
             :issue-url="item.issueUrl"
             :issue-title="item.issueTitle"
+            :disabled="disableUi"
           />
         </td>
         <td>
@@ -46,6 +50,7 @@
                 min="0"
                 placeholder="0"
                 v-model="item.minutes"
+                :disabled="disableUi"
               >
             </label>
           </div>
@@ -56,6 +61,7 @@
               <textarea
                 rows="1"
                 v-model="item.message"
+                :disabled="disableUi"
               />
             </label>
           </div>
@@ -66,6 +72,7 @@
             :work-attribute="workAttribute"
             :projects-account-links="projectsAccountLinks"
             :issue-key="item.issueKey"
+            :disabled="disableUi"
           />
         </td>
         <td>
@@ -73,6 +80,7 @@
             name="delete"
             title="Delete worklog"
             @click="deleteWorklog(index)"
+            :disabled="disableUi"
           >
             <font-awesome-icon icon="trash"/> Delete
           </button>
@@ -87,6 +95,7 @@
           name="add"
           title="Add new worklog row"
           @click="addWorklog"
+          :disabled="disableUi"
         >
           <font-awesome-icon icon="plus"/> Add Worklog
         </button>
@@ -139,6 +148,10 @@ export default Vue.extend({
     projectsAccountLinks: {
       type: Object as () => Record<string, AccountLinkByScopeResponse[]>,
       default: (): Record<string, AccountLinkByScopeResponse[]> => ({}),
+    },
+    disableUi: {
+      type: Boolean,
+      default: true,
     },
   },
   data: () => ({

@@ -1,7 +1,10 @@
 <template>
   <div>
     <label v-if="workAttributeType==='ACCOUNT'">
-        <select v-model="mountedValue">
+        <select
+          v-model="mountedValue"
+          :disabled="disabled"
+        >
           <option
             v-for="projectAccountLink in projectAccountLinks"
             :key="projectAccountLink.account.key"
@@ -12,7 +15,10 @@
         </select>
     </label>
     <label v-if="workAttributeType==='STATIC_LIST'">
-      <select v-model="mountedValue">
+      <select
+        v-model="mountedValue"
+        :disabled="disabled"
+      >
         <option value="" />
         <option v-for="value in workAttribute.values" :key="value" :value="value">
           {{value}}
@@ -50,6 +56,10 @@ export default Vue.extend({
     issueKey: {
       type: String,
       default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data: () => ({

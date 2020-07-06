@@ -1,9 +1,26 @@
 <template>
   <div class="dateField">
     <label>
-      <input name="date" type="date" v-model="mountedValue">
-      <button name="date-minus" @click="minus"><font-awesome-icon icon="chevron-left"/></button>
-      <button name="date-plus" @click="plus"><font-awesome-icon icon="chevron-right"/></button>
+      <input
+        name="date"
+        type="date"
+        v-model="mountedValue"
+        :disabled="disabled"
+      >
+      <button
+        name="date-minus"
+        @click="minus"
+        :disabled="disabled"
+      >
+        <font-awesome-icon icon="chevron-left" />
+      </button>
+      <button
+        name="date-plus"
+        @click="plus"
+        :disabled="disabled"
+      >
+        <font-awesome-icon icon="chevron-right" />
+      </button>
     </label>
   </div>
 </template>
@@ -33,6 +50,10 @@ export default Vue.extend({
     value: {
       type: String,
       default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data: () => ({

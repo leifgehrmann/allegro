@@ -5,6 +5,7 @@
         :worklogs="worklogs"
         :work-attributes="workAttributes"
         :projects-account-links="projectsAccountLinks"
+        :disable-ui="isSubmittingWorklogs"
       />
     </div>
     <Footer>
@@ -46,6 +47,11 @@
       v-show="isValidationModalVisible"
       @close="closeValidationModal"
     />
+    <ErrorModal
+      :error-message="errorModalMessage"
+      v-show="isErrorModalVisible"
+      @close="closeErrorModal"
+    />
   </div>
 </template>
 
@@ -57,6 +63,7 @@ import Worklogs from '@/components/Worklogs.vue';
 import Footer from '@/components/Footer.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import ValidationModal from '@/components/ValidationModal.vue';
+import ErrorModal from '@/components/ErrorModal.vue';
 import '@/style/global.scss';
 import Preferences from '@/data/preferences';
 import Store from 'electron-store';
@@ -117,12 +124,15 @@ export default Vue.extend({
     Footer,
     PreferencesModal,
     ValidationModal,
+    ErrorModal,
     FontAwesomeIcon,
   },
   data: () => ({
     isPreferencesModalVisible: false,
     isValidationModalVisible: false,
+    isErrorModalVisible: false,
     isSubmittingWorklogs: false,
+    errorModalMessage: '',
     manifest,
     preferences,
     currentUser: null as JiraApiCurrentUserSuccessResponse|null,
@@ -162,6 +172,13 @@ export default Vue.extend({
     },
     closeValidationModal() {
       this.isValidationModalVisible = false;
+    },
+    showErrorModal(message: string) {
+      this.errorModalMessage = message;
+      this.isErrorModalVisible = true;
+    },
+    closeErrorModal() {
+      this.isErrorModalVisible = false;
     },
     savePreferences(newPreferences: Preferences) {
       this.preferences = newPreferences;
@@ -212,15 +229,15 @@ export default Vue.extend({
       }
 
       if (this.currentUser === null) {
-        // Todo: Show proper error message saying the user is not logged in
-        this.showValidationModal();
+        this.showErrorModal('JIRA User not found. Please check settings.');
         return;
       }
+      const currentUserAccountId = this.currentUser.accountId;
 
       // Then send
       this.isSubmittingWorklogs = true;
 
-      const submitter = new WorklogSubmitter(this.preferences, this.currentUser.accountId);
+      const submitter = new WorklogSubmitter(this.preferences, currentUserAccountId);
       while (this.worklogs.length > 0) {
         const currentWorklog = this.worklogs[0];
         try {
@@ -232,7 +249,7 @@ export default Vue.extend({
           this.worklogs.splice(0, 1);
         } catch (error) {
           console.log(error);
-          // Todo: Show a modal saying something went wrong
+          this.showErrorModal('An error occurred while submitting worklogs. Please try again.');
           break;
         }
       }
