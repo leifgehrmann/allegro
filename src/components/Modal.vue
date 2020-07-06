@@ -88,6 +88,7 @@ export default Vue.extend({
 .modal-header {
   border-bottom: 1px solid #eeeeee;
   justify-content: space-between;
+  font-weight: bold;
 }
 
 .modal-footer {
