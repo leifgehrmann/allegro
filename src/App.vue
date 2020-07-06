@@ -169,10 +169,6 @@ export default Vue.extend({
       this.populate();
     },
     async populate(): Promise<void> {
-      this.workAttributes = await new WorkAttributePopulator(
-        this.preferences,
-        workAttributesCache,
-      ).populate();
       const worklogPopulator = new WorklogPopulator(
         this.worklogs,
         this.preferences,
@@ -186,6 +182,10 @@ export default Vue.extend({
         this.projectsAccountLinksCache,
       );
       await ProjectsAccountLinksPopulator.populate();
+      this.workAttributes = await new WorkAttributePopulator(
+        this.preferences,
+        workAttributesCache,
+      ).populate();
     },
     async loadUser() {
       const currentUserPopulator = new CurrentUserPopulator(this.preferences);

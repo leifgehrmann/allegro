@@ -64,7 +64,8 @@
           <WorkAttribute
             :value.sync="item.workAttributes[workAttribute.key]"
             :work-attribute="workAttribute"
-            :project-account-links="projectsAccountLinks[getProjectFromIssueKey(item.issueKey)]"
+            :projects-account-links="projectsAccountLinks"
+            :issue-key="item.issueKey"
           />
         </td>
         <td>
@@ -169,9 +170,6 @@ export default Vue.extend({
     },
     deleteWorklog(index: number) {
       this.worklogs.splice(index, 1);
-    },
-    getProjectFromIssueKey(issueKey: string): string {
-      return issueKey.split('-')[0];
     },
   },
 });

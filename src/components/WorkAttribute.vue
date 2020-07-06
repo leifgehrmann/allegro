@@ -43,9 +43,13 @@ export default Vue.extend({
         type: 'DEFAULT',
       }),
     },
-    projectAccountLinks: {
-      type: Array as () => AccountLinkByScopeResponse[],
-      default: (): AccountLinkByScopeResponse[] => [],
+    projectsAccountLinks: {
+      type: Object as () => Record<string, AccountLinkByScopeResponse[]>,
+      default: (): Record<string, AccountLinkByScopeResponse[]> => ({}),
+    },
+    issueKey: {
+      type: String,
+      default: '',
     },
   },
   data: () => ({
@@ -55,6 +59,11 @@ export default Vue.extend({
     workAttributeType(): string {
       return this.workAttribute.type;
     },
+    projectAccountLinks(): AccountLinkByScopeResponse[] {
+      return this.projectsAccountLinks[
+        this.getProjectFromIssueKey(this.issueKey)
+      ];
+    },
   },
   watch: {
     mountedValue() {
@@ -62,7 +71,11 @@ export default Vue.extend({
     },
     projectAccountLinks() {
       if (this.workAttributeType === 'ACCOUNT') {
-        this.mountedValue = '';
+        const mountedValueExists = this.projectAccountLinkKeyExists(this.mountedValue);
+        if (!mountedValueExists) {
+          this.mountedValue = '';
+          this.update();
+        }
       }
     },
   },
@@ -70,9 +83,27 @@ export default Vue.extend({
     update() {
       this.$emit('update:value', this.mountedValue);
     },
+    getProjectFromIssueKey(issueKey: string): string {
+      return issueKey.split('-')[0];
+    },
+    projectAccountLinkKeyExists(projectAccountLinkKey: string) {
+      if (this.projectAccountLinks === undefined) {
+        return false;
+      }
+      return this.projectAccountLinks.some(
+        (projectAccountLink) => projectAccountLink.account.key === projectAccountLinkKey,
+      );
+    },
   },
   mounted() {
     this.mountedValue = this.value;
+    if (this.workAttributeType === 'ACCOUNT') {
+      const mountedValueExists = this.projectAccountLinkKeyExists(this.mountedValue);
+      if (!mountedValueExists) {
+        this.mountedValue = '';
+        this.update();
+      }
+    }
   },
 });
 </script>
