@@ -21,9 +21,18 @@
         <button
           id="submit-submitEntries"
           @click="submitWorklogs"
+          v-if="!isSubmittingWorklogs"
         >
           <font-awesome-icon icon="rocket"/>
           Submit Worklogs {{totalMinutes}}
+        </button>
+        <button
+          id="submit-cancelSubmission"
+          @click="cancelSubmitWorklogs"
+          v-if="isSubmittingWorklogs"
+        >
+          <font-awesome-icon icon="times"/>
+          Cancel Submitting
         </button>
       </template>
     </Footer>
@@ -52,7 +61,7 @@ import '@/style/global.scss';
 import Preferences from '@/data/preferences';
 import Store from 'electron-store';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCog, faRocket } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faRocket, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { faJira } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -69,9 +78,11 @@ import WorkAttributePopulator from '@/utils/populator/workAttributePopulator';
 import ProjectAccountLinksPopulator from '@/utils/populator/projectAccountLinksPopulator';
 import WorklogValidator from '@/utils/validator/worklogValidator';
 import CurrentUserPopulator from '@/utils/populator/currentUserPopulator';
+import WorklogSubmitter from '@/utils/worklogSubmitter';
 
 library.add(faCog);
 library.add(faCheckCircle);
+library.add(faTimes);
 library.add(faJira);
 library.add(faRocket);
 
@@ -191,24 +202,44 @@ export default Vue.extend({
       const currentUserPopulator = new CurrentUserPopulator(this.preferences);
       this.currentUser = await currentUserPopulator.get();
     },
-    submitWorklogs() {
+    async submitWorklogs() {
       // First validate
       const validator = new WorklogValidator(this.workAttributes);
       const hasInvalidWorklogs = this.worklogs.some((worklog) => !validator.validate(worklog));
       if (hasInvalidWorklogs) {
         this.showValidationModal();
+        return;
       }
 
       if (this.currentUser === null) {
         // Todo: Show proper error message saying the user is not logged in
         this.showValidationModal();
+        return;
       }
 
       // Then send
       this.isSubmittingWorklogs = true;
+
+      const submitter = new WorklogSubmitter(this.preferences, this.currentUser.accountId);
+      while (this.worklogs.length > 0) {
+        const currentWorklog = this.worklogs[0];
+        try {
+          // We deliberately submit the worklogs one at a time for now. We could look into
+          // parallelization when we are more comfortable doing so.
+          // eslint-disable-next-line no-await-in-loop
+          const result = await submitter.submitWorklog(currentWorklog);
+          console.log(result);
+          this.worklogs.splice(0, 1);
+        } catch (error) {
+          console.log(error);
+          // Todo: Show a modal saying something went wrong
+          break;
+        }
+      }
+      this.isSubmittingWorklogs = false;
     },
     cancelSubmitWorklogs() {
-      this.isSubmittingWorklogs = true;
+      this.isSubmittingWorklogs = false;
     },
   },
   watch: {
