@@ -6,8 +6,10 @@ Submit worklogs to Tempo.io in batches
 
 ## Project setup
 ```
-npm install
+npm ci
 ```
+
+(`npm install` will install newer versions of `electron` and `spectron` which don't work seem to work for some reason)
 
 ### Compiles and hot-reloads for development
 ```
