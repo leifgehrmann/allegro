@@ -17,7 +17,7 @@ export default class WorklogValidator {
       return false;
     }
 
-    if (parseFloat(worklog.minutes) <= 0 || isNaN(parseFloat(worklog.minutes))) {
+    if (parseFloat(worklog.minutes) <= 0 || Number.isNaN(parseFloat(worklog.minutes))) {
       return false;
     }
 
