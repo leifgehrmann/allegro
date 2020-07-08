@@ -12,12 +12,14 @@ import {shell} from "electron";
         v-model="mountedIssueKey"
         v-uppercase
         :disabled="disabled"
+        ref="issueKey"
       >
     </label>
     <span
       class="resolvedIssueTitle inputComponentPiece"
       :title="issueTitle"
       v-if="issueKeyIsValid"
+      @click="focusOnIssueKey"
     >
               {{ issueTitle }}
             </span>
@@ -88,6 +90,11 @@ export default Vue.extend({
   methods: {
     openUrl() {
       shell.openExternal(this.issueUrl);
+    },
+    focusOnIssueKey() {
+      const issueKey = this.$refs.issueKey as HTMLInputElement;
+      issueKey.focus();
+      issueKey.select();
     },
   },
   mounted() {
