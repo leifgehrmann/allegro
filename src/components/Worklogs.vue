@@ -166,10 +166,16 @@ export default Vue.extend({
   },
   methods: {
     addWorklog() {
+      // Get the last worklog entries date
+      let date = '';
+      if (this.worklogs.length !== 0) {
+        date = this.worklogs[this.worklogs.length - 1].date;
+      }
+
       this.worklogs.push(
         {
           uuid: uuidv4(),
-          date: '',
+          date,
           issueKey: '',
           issueKeyIsValid: false,
           issueUrl: '',
