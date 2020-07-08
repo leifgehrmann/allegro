@@ -86,24 +86,12 @@ export default Vue.extend({
 }
 
 .modal-header {
-  border-bottom: 1px solid #eeeeee;
   justify-content: space-between;
   font-weight: bold;
 }
 
 .modal-footer {
-  border-top: 1px solid #eeeeee;
   justify-content: flex-end;
-}
-
-@media (prefers-color-scheme: dark) {
-  .modal-header {
-    border-bottom: 1px solid #444444;
-  }
-
-  .modal-footer {
-    border-top: 1px solid #444444;
-  }
 }
 
 .modal-body {

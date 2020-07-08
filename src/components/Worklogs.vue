@@ -16,6 +16,7 @@
     <draggable :list="worklogs" tag="tbody" handle=".handle">
       <tr v-for="(item, index) in worklogs" :key="item.uuid">
         <td
+          title="Click and drag to reorder"
           :class="{ handle: !disableUi }"
         >
           <font-awesome-icon icon="grip-lines"/>
@@ -211,13 +212,11 @@ export default Vue.extend({
   position: sticky;
   user-select: none;
   background: #FFFFFF;
-  border-bottom: 1px solid #EEEEEE;
 }
 
 @media (prefers-color-scheme: dark) {
   .worklogs tr {
     background: #333234;
-    border-bottom: 1px solid #444444;
   }
 }
 
@@ -249,22 +248,26 @@ export default Vue.extend({
 .worklogs td {
   padding: 5px;
 }
-table td:nth-child(1), table th:nth-child(1) {
+table td:nth-child(1), table th:nth-child(1), table td:nth-child(2), table th:nth-child(2) {
+  width: 13px; min-width: 13px;
   padding-left: 10px;
   padding-right: 10px;
   text-align: center;
 }
 table td:nth-child(3), table th:nth-child(3) {
-  width: 180px; padding-left: 3px; padding-right: 3px;
+  width: 182px; min-width: 182px; padding-left: 3px; padding-right: 3px;
 }
 table td:nth-child(4), table th:nth-child(4) {
-  width: 60px; padding-left: 3px; padding-right: 3px;
+  width: 325px; min-width: 325px; padding-left: 3px; padding-right: 3px;
 }
 table td:nth-child(5), table th:nth-child(5) {
-  width: 30px; padding-left: 3px; padding-right: 3px;
+  width: 60px; min-width: 60px; padding-left: 3px; padding-right: 3px;
 }
 table td:nth-child(6), table th:nth-child(6) {
-  width: 220px; padding-left: 3px; padding-right: 3px;
+  width: 310px; min-width: 310px; padding-left: 3px; padding-right: 3px;
+}
+table td:nth-last-child(1), table th:nth-last-child(6) {
+  width: 64px; min-width: 64px; padding-left: 3px; padding-right: 3px;
 }
 .minutesField input {
   width: 50px;

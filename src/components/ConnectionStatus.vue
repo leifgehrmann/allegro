@@ -1,7 +1,7 @@
 <template>
-  <span>
-    (<font-awesome-icon :icon="['fab', 'jira']"/> JIRA: {{jiraStateLabel}},
-    <font-awesome-icon :icon="['far', 'check-circle']"/> Tempo: {{tempoStateLabel}})
+  <span class="connectionStatus">
+    <font-awesome-icon :icon="['fab', 'jira']"/> JIRA: {{jiraStateLabel}}
+    <font-awesome-icon :icon="['far', 'check-circle']"/> Tempo: {{tempoStateLabel}}
   </span>
 </template>
 
@@ -54,5 +54,8 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
+span.connectionStatus {
+  display: inline-block;
+  margin-left: 5px;
+}
 </style>
