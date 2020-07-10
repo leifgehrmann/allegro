@@ -2,7 +2,6 @@
   <table class="worklogs">
     <tr>
       <th scope="col" />
-      <th scope="col" />
       <th scope="col">Date</th>
       <th scope="col">Issue</th>
       <th scope="col">Minutes</th>
@@ -16,15 +15,16 @@
     <draggable :list="worklogs" tag="tbody" handle=".handle">
       <tr v-for="(item, index) in worklogs" :key="item.uuid">
         <td
-          title="Click and drag to reorder"
           :class="{ handle: !disableUi }"
         >
-          <font-awesome-icon icon="grip-lines"/>
-        </td>
-        <td>
+          <font-awesome-icon
+            icon="grip-lines"
+            v-if="!worklogsValidation[index]"
+            title="Click and drag to reorder"
+          />
           <font-awesome-icon
             icon="check"
-            :style="{ visibility: worklogsValidation[index] ? 'visible' : 'hidden' }"
+            v-if="worklogsValidation[index]"
             title="This worklog is valid ✨"
           />
         </td>
@@ -84,7 +84,7 @@
             @click="deleteWorklog(index)"
             :disabled="disableUi"
           >
-            <font-awesome-icon icon="trash"/> Delete
+            <font-awesome-icon icon="trash"/>
           </button>
         </td>
       </tr>
@@ -229,7 +229,7 @@ export default Vue.extend({
 .worklogs th {
   font-weight: inherit;
   text-align: left;
-  padding: 7px 7px 7px 9px;
+  padding: 7px 3px 7px 3px;
   vertical-align: bottom;
   background: #F7F7F7;
   top: 0;
@@ -246,42 +246,37 @@ export default Vue.extend({
 }
 
 .worklogs td {
-  padding: 5px;
+  padding: 5px 3px;
 }
-table td:nth-child(1), table th:nth-child(1), table td:nth-child(2), table th:nth-child(2) {
+table td:nth-child(1), table th:nth-child(1) {
+  white-space: nowrap;
   width: 13px; min-width: 13px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 8px;
+  padding-right: 3px;
   text-align: center;
 }
+table td:nth-child(2), table th:nth-child(2) {
+  width: 128px; min-width: 128px;
+}
 table td:nth-child(3), table th:nth-child(3) {
-  width: 182px; min-width: 182px; padding-left: 3px; padding-right: 3px;
+  width: 325px; min-width: 325px;
 }
 table td:nth-child(4), table th:nth-child(4) {
-  width: 325px; min-width: 325px; padding-left: 3px; padding-right: 3px;
+  width: 60px; min-width: 60px;
 }
 table td:nth-child(5), table th:nth-child(5) {
-  width: 60px; min-width: 60px; padding-left: 3px; padding-right: 3px;
+  width: 260px; min-width: 260px;
 }
-table td:nth-child(6), table th:nth-child(6) {
-  width: 310px; min-width: 310px; padding-left: 3px; padding-right: 3px;
-}
-table td:nth-last-child(1), table th:nth-last-child(6) {
-  width: 64px; min-width: 64px; padding-left: 3px; padding-right: 3px;
+table td:nth-last-child(1), table th:nth-last-child(1) {
+  width: 100%;
 }
 .minutesField input {
   width: 50px;
 }
 .messageField textarea {
-  min-width: 300px;
+  min-width: 250px;
   min-height: 15px;
-  width: 300px;
-}
-.messageField textarea {
-  min-width: 300px;
-  max-width: 300px;
-  min-height: 15px;
-  width: 300px;
+  width: 250px;
 }
 
 button[name=delete] {
