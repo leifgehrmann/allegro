@@ -7,41 +7,15 @@
         v-model="mountedValue"
         :disabled="disabled"
       >
-      <button
-        name="date-minus"
-        @click="minus"
-        :disabled="disabled"
-      >
-        <font-awesome-icon icon="chevron-left" />
-      </button>
-      <button
-        name="date-plus"
-        @click="plus"
-        :disabled="disabled"
-      >
-        <font-awesome-icon icon="chevron-right" />
-      </button>
     </label>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
-library.add(faChevronLeft);
-library.add(faChevronRight);
 
 function formatDate(date: Date): string {
   return (date).toISOString().split('T')[0];
-}
-
-function addDaysToDate(date: Date, days: number): Date {
-  const newDate = new Date(date);
-  newDate.setDate(newDate.getDate() + days);
-  return newDate;
 }
 
 export default Vue.extend({
@@ -64,18 +38,9 @@ export default Vue.extend({
       this.update();
     },
   },
-  components: {
-    FontAwesomeIcon,
-  },
   methods: {
     update() {
       this.$emit('update:value', this.mountedValue);
-    },
-    minus() {
-      this.mountedValue = formatDate(addDaysToDate(new Date(this.mountedValue), -1));
-    },
-    plus() {
-      this.mountedValue = formatDate(addDaysToDate(new Date(this.mountedValue), 1));
     },
   },
   mounted() {
@@ -93,18 +58,6 @@ export default Vue.extend({
   white-space: nowrap;
 }
 .dateField input {
-  width: 135px;
-}
-.dateField [name=date] {
-  width: 135px;
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-}
-.dateField [name=date-minus] {
-  border-radius: 0;
-}
-.dateField [name=date-plus] {
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
+  width: 118px;
 }
 </style>
