@@ -1,7 +1,14 @@
 <template>
   <div>
     <label v-if="workAttributeType==='ACCOUNT'">
-        <select
+<!--      <v-select-->
+<!--        :options="projectAccountLinkDropdownArray"-->
+<!--        :reduce="option => option.value"-->
+<!--        v-model="mountedValue"-->
+<!--        :disabled="disabled"-->
+<!--        :name="workAttribute.name">-->
+<!--      </v-select>-->
+        <!--<select
           v-model="mountedValue"
           :disabled="disabled"
         >
@@ -12,7 +19,7 @@
           >
             {{projectAccountLink.account.name}} ({{projectAccountLink.account.key}})
           </option>
-        </select>
+        </select>-->
     </label>
     <label v-if="workAttributeType==='STATIC_LIST'">
       <select
@@ -69,6 +76,8 @@ export default Vue.extend({
   data: () => ({
     mountedValue: '',
     projectAccountLinks: [] as AccountLinkByScopeResponse[],
+    projectAccountLinkDropdownArray: [] as {value: string, label: string}[],
+    workAttributeDropdownArray: [] as {value: string, label: string}[],
   }),
   computed: {
     workAttributeType(): string {
@@ -84,6 +93,16 @@ export default Vue.extend({
     },
     projectsAccountLinks() {
       if (this.workAttributeType === 'ACCOUNT') {
+        this.populateProjectAccountLink();
+        const mountedValueExists = this.projectAccountLinkKeyExists(this.mountedValue);
+        if (!mountedValueExists) {
+          this.mountedValue = '';
+          this.update();
+        }
+      }
+    },
+    workAttribute() {
+      if (this.workAttributeType === 'STATIC_LIST') {
         this.populateProjectAccountLink();
         const mountedValueExists = this.projectAccountLinkKeyExists(this.mountedValue);
         if (!mountedValueExists) {
@@ -131,6 +150,26 @@ export default Vue.extend({
       this.projectAccountLinks = this.projectsAccountLinks[
         this.getProjectFromIssueKey(this.issueKey)
       ] ?? [];
+      this.projectAccountLinkDropdownArray = this.projectAccountLinks.map(
+        (projectAccountLink) => ({
+          value: projectAccountLink.account.key,
+          label: `${projectAccountLink.account.name} (${projectAccountLink.account.key})`,
+        }),
+      ).sort((selectOptionA, selectOptionB) => {
+        const labelA = selectOptionA.label.toLowerCase();
+        const labelB = selectOptionB.label.toLowerCase();
+        if (labelA < labelB) {
+          return -1;
+        }
+        if (labelA > labelB) {
+          return 1;
+        }
+        return 0;
+      });
+      this.projectAccountLinkDropdownArray.unshift({
+        value: '',
+        label: '',
+      });
     },
   },
   mounted() {
