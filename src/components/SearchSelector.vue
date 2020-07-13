@@ -1,15 +1,17 @@
 <template>
   <div
-    v-click-outside="focusout"
+    v-click-outside="focusoutWithoutSelect"
   >
     <popper
-      trigger="click"
+      trigger="hover"
       :visible-arrow="false"
       :force-show="searching"
       :options="{
         placement: 'bottom-start',
         'boundaries-selector': 'v-application'
       }"
+      :delay-on-mouse-over="100000000"
+      :delay-on-mouse-out="100000000"
     >
       <div
         slot="reference"
@@ -20,30 +22,23 @@
             class="search-input"
             type="text"
             placeholder=""
-            @focusin="focusin"
+            :disabled="disabled"
+            @click="click"
             @keydown.enter="enter"
             @keydown.down="down"
             @keydown.up="up"
-            @keydown.tab="focusout"
+            @keydown.tab="focusoutWithoutSelect"
             @input="updateSearch"
           >
         </label>
         <button
-          class="clear-icon"
-          v-if="!searching"
-        >
-          <font-awesome-icon
-            icon="times"
-            @click="clearValue"
-          />
-        </button>
-        <button
           class="dropdown-icon"
-          v-if="!searching"
+          tabindex="-1"
+          :disabled="disabled"
         >
           <font-awesome-icon
             icon="chevron-down"
-            @click="focusin"
+            @click="toggleSearch"
           />
         </button>
       </div>
@@ -53,10 +48,10 @@
             <li
               v-for="(option, index) in matches"
               :key="index"
-              :class="{ 'search-result-list-item-selected': index === current }"
+              :class="{ 'search-result-list-item-selected': index === searchIndex }"
               class="search-results-list-item"
-              @click="selectOptionFromList(option, index)"
-              @mousemove="current = index"
+              @click="selectOption(option)"
+              @mousemove="searchIndex = index"
             >
               <span v-if="option.label === ''">-</span>
               {{ option.label }}
@@ -87,7 +82,7 @@ interface SelectOption {
 }
 
 export default Vue.extend({
-  name: 'SearchSelector2',
+  name: 'SearchSelector',
   directives: {
     clickOutside: vClickOutside.directive,
   },
@@ -104,11 +99,39 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data() {
-    return {
-      searching: false,
-    };
+  data: () => ({
+    searching: false,
+    searchTerm: '',
+    searchIndex: 0,
+  }),
+  computed: {
+    matches(): SelectOption[] {
+      return this.options.filter(
+        (option) => option.label.toLowerCase().indexOf(this.searchTerm.toLowerCase()) !== -1,
+      );
+    },
+    valueLabel(): string {
+      const selectedOption = this.options.find((option) => option.value === this.value);
+      return selectedOption?.label ?? '';
+    },
+    valueMatchIndex(): number|null {
+      return this.options.findIndex((option) => option.value === this.value) ?? null;
+    },
+  },
+  watch: {
+    value(): void {
+      if (!this.searching) {
+        this.displaySelectedValue();
+      }
+    },
+    disabled(): void {
+      this.searching = false;
+    },
   },
   methods: {
     getSearchInputField(): HTMLInputElement {
@@ -117,55 +140,115 @@ export default Vue.extend({
     },
     getCurrentSearchResultListItem(): HTMLLIElement|null {
       const elements = this.$el.getElementsByClassName('search-results-list-item');
-      return elements.item(0) as HTMLLIElement;
+      return elements.item(this.searchIndex) as HTMLLIElement;
+    },
+    scrollToCurrentListItem(): void {
+      const currentListItem = this.getCurrentSearchResultListItem();
+      if (currentListItem !== null) {
+        currentListItem.scrollIntoView({ block: 'nearest', inline: 'start' });
+      }
+    },
+    click() {
+      this.focusin();
+    },
+    searchIndexInRange(): boolean {
+      return this.searchIndex >= 0 && this.searchIndex < this.matches.length;
     },
     focusin() {
-      /* Do Nothing */
+      this.searchIndex = this.valueMatchIndex ?? 0;
+      this.searching = true;
+      this.displaySearchTerm();
+      this.selectInputFieldContents();
+      this.scrollToCurrentListItem();
     },
     focusout() {
-      /* Do Nothing */
+      this.searching = false;
+      this.displaySelectedValue();
+      this.selectInputFieldContents();
+    },
+    focusoutWithoutSelect() {
+      this.searching = false;
+      this.displaySelectedValue();
+    },
+    toggleSearch() {
+      if (this.searching) {
+        this.focusout();
+      } else {
+        this.focusin();
+      }
+    },
+    displaySelectedValue() {
+      const inputField = this.getSearchInputField();
+      inputField.value = this.valueLabel;
+    },
+    displaySearchTerm() {
+      const inputField = this.getSearchInputField();
+      inputField.value = this.searchTerm;
+    },
+    selectInputFieldContents() {
+      const inputField = this.getSearchInputField();
+      inputField.setSelectionRange(0, inputField.value.length);
     },
     enter() {
-      /* Do Nothing */
+      if (!this.searching) {
+        this.focusin();
+      } else if (this.searchIndexInRange()) {
+        this.selectOption(this.matches[this.searchIndex]);
+      } else {
+        this.toggleSearch();
+      }
     },
-    up() {
-      /* Do Nothing */
+    up(event: Event) {
+      if (!this.searching) {
+        this.focusin();
+      } else if (this.searchIndex > 0) {
+        this.searchIndex -= 1;
+        this.scrollToCurrentListItem();
+        event.preventDefault();
+      }
     },
-    down() {
-      /* Do Nothing */
+    down(event: Event) {
+      if (!this.searching) {
+        this.focusin();
+      } else if (this.searchIndex < this.matches.length - 1) {
+        this.searchIndex += 1;
+        this.scrollToCurrentListItem();
+        event.preventDefault();
+      }
     },
     updateSearch() {
-      /* Do Nothing */
+      this.searching = true;
+      this.searchTerm = this.getSearchInputField()?.value;
+      this.searchIndex = Math.min(this.searchIndex, this.matches.length - 1);
     },
-    clearValue() {
-      /* Do Nothing */
+    selectOption(option: SelectOption): void {
+      this.searching = false;
+      this.$emit('update:value', option.value);
+      this.displaySelectedValue();
+      this.selectInputFieldContents();
     },
+  },
+  mounted(): void {
+    this.focusout();
   },
 });
 </script>
 
 <style scoped>
   .container {
-    border-radius: 4px;
-    background: #FFFFFF;
     position: relative;
     padding: 0;
+    white-space: nowrap;
   }
 
   .search-input {
-    max-width: 270px;
-    border-radius: 4px;
-    padding-left: 7px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   .dropdown-icon {
-    display: inline-block;
-    position: absolute;
-    right: 7px;
-    top: 7px;
-    cursor: pointer;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
 
   .search-results-container {
@@ -179,7 +262,7 @@ export default Vue.extend({
     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
     0 8px 10px 1px rgba(0, 0, 0, 0.14),
     0 3px 14px 2px rgba(0, 0, 0, 0.12);
-    border-radius: 4px;
+    border-radius: 5px;
     position: absolute;
     top: 5px;
     z-index: 10;
@@ -205,25 +288,11 @@ export default Vue.extend({
     text-decoration: none;
   }
 
-  .svg-inline--fa {
-    width: 16px;
-    height: 16px;
-    opacity: 0.8;
-  }
-
   .svg-inline--fa.fa-times-circle {
     cursor: pointer;
   }
 
   @media (prefers-color-scheme: dark) {
-    .search-input {
-      color: #FFFFFF;
-    }
-
-    .container {
-      background: #212121;
-    }
-
     .search-results {
       background: #212121;
     }
@@ -244,7 +313,7 @@ export default Vue.extend({
     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
     0 8px 10px 1px rgba(0, 0, 0, 0.14),
     0 3px 14px 2px rgba(0, 0, 0, 0.12);
-    border-radius: 4px;
+    border-radius: 5px;
     position: absolute;
     top: 5px;
     z-index: 20;
@@ -254,7 +323,7 @@ export default Vue.extend({
 
   .popper .search-results ul {
     list-style: none;
-    padding: 4px 0;
+    padding: 0 0;
   }
 
   .popper .search-results ul li {
@@ -271,12 +340,6 @@ export default Vue.extend({
     text-decoration: none;
   }
 
-  .svg-inline--fa {
-    width: 16px;
-    height: 16px;
-    opacity: 0.8;
-  }
-
   .svg-inline--fa.fa-times-circle {
     cursor: pointer;
   }
@@ -284,7 +347,7 @@ export default Vue.extend({
   @media (prefers-color-scheme: dark) {
 
     .popper .search-results {
-      background: #212121;
+      background: #333234;
     }
 
     .popper .search-result-list-item-selected {
