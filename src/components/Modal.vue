@@ -71,6 +71,8 @@ export default Vue.extend({
   overflow-x: auto;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 5px 400px 20px rgba(0, 0, 0, 0.2),
+    0 5px 30px 10px rgba(0, 0, 0, 0.2);
 }
 
 @media (prefers-color-scheme: dark) {

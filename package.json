@@ -25,9 +25,11 @@
     "jira-client": "^6.17.0",
     "tempo-client": "^3.1.1",
     "uuid": "^8.2.0",
+    "v-click-outside": "latest",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-cli-plugin-electron-builder": "^2.0.0-rc.4",
+    "vue-popperjs": "latest",
     "vue-property-decorator": "^8.4.2",
     "vuedraggable": "^2.23.2"
   },
