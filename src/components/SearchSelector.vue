@@ -124,6 +124,11 @@ export default Vue.extend({
     },
   },
   watch: {
+    options(): void {
+      if (!this.searching) {
+        this.displaySelectedValue();
+      }
+    },
     value(): void {
       if (!this.searching) {
         this.displaySelectedValue();
