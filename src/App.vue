@@ -42,6 +42,7 @@
     <PreferencesModal
       :preferences="preferences"
       v-show="isPreferencesModalVisible"
+      @resetCache="clearCacheAndPopulate"
       @close="closePreferencesModal"
       @save="savePreferences"
     />

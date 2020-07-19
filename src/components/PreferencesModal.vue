@@ -30,10 +30,13 @@
         @click="testJiraConnection"
       >
         Test JIRA
+      </button>
+      <transition name="slide-fade">
         <font-awesome-icon icon="circle-notch" v-if="testJiraState==='testing'" spin/>
         <font-awesome-icon icon="check" v-if="testJiraState==='success'"/>
         <font-awesome-icon icon="times" v-if="testJiraState==='failed'"/>
-      </button>
+      </transition>
+      <hr>
       <br>
       <label for="tempoToken">Tempo API Token</label>
       <input id="tempoToken" type="text" v-model="testPreferences.tempoToken">
@@ -43,10 +46,22 @@
         @click="testTempoConnection"
       >
         Test Tempo
+      </button>
+      <transition name="slide-fade">
         <font-awesome-icon icon="circle-notch" v-if="testTempoState==='testing'" spin/>
         <font-awesome-icon icon="check" v-if="testTempoState==='success'"/>
         <font-awesome-icon icon="times" v-if="testTempoState==='failed'"/>
+      </transition>
+      <hr>
+      <label/>
+      <button
+        @click="resetCache"
+      >
+        Reset Cache
       </button>
+      <transition name="slide-fade">
+        <font-awesome-icon icon="check" v-if="resettedCache"/>
+      </transition>
     </template>
     <template v-slot:footer>
       <button
@@ -99,6 +114,8 @@ export default Vue.extend({
     } as Preferences,
     testJiraState: 'untested' as 'untested'|'testing'|'failed'|'success',
     testTempoState: 'untested' as 'untested'|'testing'|'failed'|'success',
+    resettedCache: false,
+    indicatorTimeout: 3000,
   }),
   components: {
     Modal,
@@ -120,6 +137,13 @@ export default Vue.extend({
     initialize() {
       this.testPreferences = { ...this.preferences };
     },
+    resetCache() {
+      this.$emit('resetCache');
+      this.resettedCache = true;
+      setTimeout(() => {
+        this.resettedCache = false;
+      }, this.indicatorTimeout);
+    },
     close() {
       this.$emit('close');
     },
@@ -127,30 +151,45 @@ export default Vue.extend({
       this.$emit('save', { ...this.testPreferences });
       this.close();
     },
-    testJiraConnection() {
+    async testJiraConnection() {
       this.testJiraState = 'testing';
       const jiraIpcRenderer = new JiraIpcRenderer();
       jiraIpcRenderer.setPreferences(this.testPreferences);
-      jiraIpcRenderer.getCurrentUser()
-        .then(() => { this.testJiraState = 'success'; })
-        .catch(() => { this.testJiraState = 'failed'; });
+      try {
+        await jiraIpcRenderer.getCurrentUser();
+        this.testJiraState = 'success';
+      } catch (error) {
+        this.testJiraState = 'failed';
+      }
+      setTimeout(() => {
+        this.testJiraState = 'untested';
+      }, this.indicatorTimeout);
     },
-    testTempoConnection() {
+    async testTempoConnection() {
       this.testTempoState = 'testing';
       const tempoIpcRenderer = new TempoIpcRenderer();
       tempoIpcRenderer.setPreferences(this.testPreferences);
-      tempoIpcRenderer.getWorkAttributes()
-        .then(() => { this.testTempoState = 'success'; })
-        .catch(() => { this.testTempoState = 'failed'; });
+      try {
+        await tempoIpcRenderer.getWorkAttributes();
+        this.testTempoState = 'success';
+      } catch (error) {
+        this.testTempoState = 'failed';
+      }
+      setTimeout(() => {
+        this.testTempoState = 'untested';
+      }, this.indicatorTimeout);
     },
   },
 });
 </script>
 
 <style scoped>
+hr {
+  border: 1px solid rgba(0,0,0,0.1);
+}
 label {
   display: inline-block;
-  width: 140px;
+  width: 110px;
   text-align: right;
   margin: 5px;
 }
@@ -161,5 +200,15 @@ input {
 }
 button {
   margin: 5px;
+}
+.slide-fade-enter-active {
+  transition: all;
+}
+.slide-fade-leave-active {
+  transition: all .3s ease;
+}
+.slide-fade-enter, .slide-fade-leave-to {
+  transform: translateX(5px);
+  opacity: 0;
 }
 </style>
