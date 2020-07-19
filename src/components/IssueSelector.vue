@@ -82,6 +82,7 @@ export default Vue.extend({
     mountedIssueKey() {
       this.mountedIssueKey = this.mountedIssueKey.toUpperCase();
       this.$emit('update:issueKey', this.mountedIssueKey);
+      this.$emit('update:issueKeyIsValid', false);
     },
   },
   components: {

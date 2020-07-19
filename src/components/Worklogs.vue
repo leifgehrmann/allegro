@@ -37,7 +37,7 @@
         <td>
           <IssueSelector
             :issue-key.sync="item.issueKey"
-            :issue-key-is-valid="item.issueKeyIsValid"
+            :issue-key-is-valid.sync="item.issueKeyIsValid"
             :issue-url="item.issueUrl"
             :issue-title="item.issueTitle"
             :disabled="disableUi"
