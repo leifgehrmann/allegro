@@ -55,11 +55,11 @@ input, textarea {
   font-family: sans-serif;
 }
 
+textarea {
+  margin-bottom: -3px;
+}
+
 input[type=date] {
   height: 15px;
 }
 
-textarea {
-  position: relative;
-  top: 1px;
-}
