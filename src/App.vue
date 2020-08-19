@@ -1,14 +1,6 @@
 <template>
   <div id="app">
-    <div class="content">
-      <Worklogs
-        :worklogs="worklogs"
-        :work-attributes="workAttributes"
-        :projects-account-links="projectsAccountLinks"
-        :disable-ui="isSubmittingWorklogs"
-      />
-    </div>
-    <Footer>
+    <Toolbar>
       <template v-slot:left>
         <button
           @click="showPreferencesModal">
@@ -38,7 +30,15 @@
           Cancel Submitting
         </button>
       </template>
-    </Footer>
+    </Toolbar>
+    <div class="content">
+      <Worklogs
+        :worklogs="worklogs"
+        :work-attributes="workAttributes"
+        :projects-account-links="projectsAccountLinks"
+        :disable-ui="isSubmittingWorklogs"
+      />
+    </div>
     <PreferencesModal
       :preferences="preferences"
       v-show="isPreferencesModalVisible"
@@ -63,7 +63,7 @@ import { Vue } from 'vue-property-decorator';
 import { remote } from 'electron';
 import jetpack from 'fs-jetpack';
 import Worklogs from '@/components/Worklogs.vue';
-import Footer from '@/components/Footer.vue';
+import Toolbar from '@/components/Toolbar.vue';
 import ConnectionStatus from '@/components/ConnectionStatus.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import ValidationModal from '@/components/ValidationModal.vue';
@@ -124,7 +124,7 @@ export default Vue.extend({
   name: 'App',
   components: {
     Worklogs,
-    Footer,
+    Toolbar,
     ConnectionStatus,
     PreferencesModal,
     ValidationModal,
@@ -318,10 +318,10 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+
 .content {
   width: 100%;
   height: calc(100vh - 35px);
-  margin-bottom: 35px;
   overflow: scroll;
 }
 </style>

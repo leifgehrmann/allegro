@@ -2,6 +2,7 @@
   <table class="worklogs">
     <tr>
       <th scope="col" />
+      <th scope="col" />
       <th scope="col">Date</th>
       <th scope="col">Issue</th>
       <th scope="col">Minutes</th>
@@ -15,8 +16,10 @@
     <draggable :list="worklogs" tag="tbody" handle=".handle">
       <tr v-for="(item, index) in worklogs" :key="item.uuid">
         <td
+          class="worklog-drag"
           :class="{ handle: !disableUi }"
         >
+          <button>
           <font-awesome-icon
             icon="grip-lines"
             v-if="!worklogsValidation[index]"
@@ -27,14 +30,29 @@
             v-if="worklogsValidation[index]"
             title="This worklog is valid ✨"
           />
+          </button>
         </td>
-        <td>
+        <td
+          class="worklog-select"
+        >
+          <button>
+          <font-awesome-icon
+            icon="check"
+            title="Select"
+          />
+          </button>
+        </td>
+        <td
+          class="worklog-date"
+        >
           <DateSelector
             :value.sync="item.date"
             :disabled="disableUi"
           />
         </td>
-        <td>
+        <td
+          class="worklog-issue"
+        >
           <IssueSelector
             :issue-key.sync="item.issueKey"
             :issue-key-is-valid.sync="item.issueKeyIsValid"
@@ -43,7 +61,9 @@
             :disabled="disableUi"
           />
         </td>
-        <td>
+        <td
+          class="worklog-minutes"
+        >
           <div class="minutesField">
             <label>
               <input
@@ -56,7 +76,9 @@
             </label>
           </div>
         </td>
-        <td>
+        <td
+          class="worklog-message"
+        >
           <div class="messageField">
             <label>
               <textarea
@@ -114,6 +136,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faGripLines, faCheck, faPlus, faTrash, faExternalLinkAlt,
 } from '@fortawesome/free-solid-svg-icons';
+import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Worklog from '@/data/worklog';
 import DateSelector from '@/components/DateSelector.vue';
@@ -123,6 +146,7 @@ import { AccountLinkByScopeResponse, WorkAttributeResponse } from 'tempo-client/
 import WorklogValidator from '@/utils/validator/worklogValidator';
 
 library.add(faGripLines);
+library.add(faSquare);
 library.add(faCheck);
 library.add(faPlus);
 library.add(faTrash);
@@ -206,8 +230,7 @@ export default Vue.extend({
 .worklogs tr {
   font-weight: inherit;
   text-align: left;
-  padding: 7px 7px 7px 9px;
-  vertical-align: middle;
+  vertical-align: top;
   top: 0;
   position: sticky;
   user-select: none;
@@ -246,25 +269,25 @@ export default Vue.extend({
 }
 
 .worklogs td {
-  padding: 5px 3px;
+  padding: 5px 3px 0 3px;
 }
-table td:nth-child(1), table th:nth-child(1) {
+table td.worklog-drag, table th.worklog-drag {
   white-space: nowrap;
   width: 13px; min-width: 13px;
   padding-left: 8px;
   padding-right: 3px;
   text-align: center;
 }
-table td:nth-child(2), table th:nth-child(2) {
+table td.worklog-date, table th.worklog-date {
   width: 128px; min-width: 128px;
 }
-table td:nth-child(3), table th:nth-child(3) {
+table td.worklog-issue, table th.worklog-issue {
   width: 325px; min-width: 325px;
 }
-table td:nth-child(4), table th:nth-child(4) {
+table td.worklog-minutes, table th.worklog-minutes {
   width: 60px; min-width: 60px;
 }
-table td:nth-child(5), table th:nth-child(5) {
+table td.worklog-message, table th.worklog-message {
   width: 260px; min-width: 260px;
 }
 table td:nth-last-child(1), table th:nth-last-child(1) {
