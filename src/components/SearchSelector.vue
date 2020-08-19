@@ -137,9 +137,6 @@ export default Vue.extend({
     disabled(): void {
       this.searching = false;
     },
-    searching(): void {
-      console.log('hmmm', this.searching);
-    },
   },
   methods: {
     getSearchInputField(): HTMLInputElement {
@@ -156,8 +153,7 @@ export default Vue.extend({
         currentListItem.scrollIntoView({ block: 'nearest', inline: 'start' });
       }
     },
-    click(e: Event) {
-      console.log('click', e);
+    click() {
       this.focusin();
     },
     searchIndexInRange(): boolean {
@@ -165,7 +161,6 @@ export default Vue.extend({
     },
     focusin() {
       this.searchIndex = this.valueMatchIndex ?? 0;
-      console.log('focusin');
       this.searching = true;
       this.displaySearchTerm();
       this.selectInputFieldContents();
@@ -184,7 +179,6 @@ export default Vue.extend({
       if (this.searching) {
         this.focusout();
       } else {
-        console.log('toggle search');
         this.focusin();
       }
     },
@@ -228,13 +222,11 @@ export default Vue.extend({
       }
     },
     updateSearch() {
-      console.log('updating search');
       this.searching = true;
       this.searchTerm = this.getSearchInputField()?.value;
       this.searchIndex = Math.min(this.searchIndex, this.matches.length - 1);
     },
     selectOption(option: SelectOption): void {
-      console.log('hello');
       this.searching = false;
       this.$emit('update:value', option.value);
       this.displaySelectedValue();
