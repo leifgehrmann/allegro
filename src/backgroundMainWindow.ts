@@ -7,6 +7,7 @@ export default function createMainWindow(): BrowserWindow {
   const win: BrowserWindow | null = createWindowFromState('main', {
     width: 800,
     height: 600,
+    minWidth: 500,
     backgroundColor: '#FFFFFF',
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone

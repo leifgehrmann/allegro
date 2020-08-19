@@ -2,43 +2,59 @@
   <div id="app">
     <Toolbar>
       <template v-slot:left>
+        <Whitespace
+          width="29px"
+        />
         <IconButton
           icon="check"
           label="Select"
         />
-        <IconButton
-          icon="plus"
-          label="Add Worklog"
+        <Whitespace
+          width="29px"
         />
         <IconButton
           icon="plus"
-          label="Import"
+          label="Add new worklog"
+          variant="primary"
         />
         <IconButton
-          icon="plus"
-          label="Bulk Edit"
+          icon="file-import"
+          label="Import worklogs from CSV file"
+          variant="primary"
+        />
+        <Whitespace
+          width="29px"
         />
         <IconButton
-          icon="plus"
-          label="Merge"
+          icon="pen"
+          label="Bulk edit selected worklogs"
+          :disabled="true"
+        />
+        <IconButton
+          icon="layer-group"
+          label="Merge selected worklogs"
           :disabled="true"
         />
         <IconButton
           icon="trash"
-          label="Delete"
+          label="Delete selected worklogs"
           :disabled="true"
+          variant="danger"
         />
       </template>
       <template v-slot:right>
         <IconButton
           icon="cog"
-          @click="showPreferencesModal"
+          @click.native="showPreferencesModal"
           label="Settings"
         />
         <ConnectionStatus
           v-if="jiraConnectionState !== 'connected' || tempoConnectionState !== 'connected'"
           :jira-state="jiraConnectionState"
           :tempo-state="tempoConnectionState"
+        />
+        <Whitespace
+          width="4px"
         />
         <button
           id="submit-submitEntries"
@@ -99,7 +115,14 @@ import '@/style/global.scss';
 import Preferences from '@/data/preferences';
 import Store from 'electron-store';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCog, faRocket, faTimes } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCog,
+  faRocket,
+  faTimes,
+  faFileImport,
+  faPen,
+  faLayerGroup,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Worklog from '@/data/worklog';
 import WorklogPopulator from '@/utils/populator/worklogPopulator';
@@ -118,10 +141,14 @@ import WorklogSubmitter from '@/utils/worklogSubmitter';
 import ConnectionState from '@/utils/connectionState';
 import JiraTempoFieldPopulator from '@/utils/populator/jiraTempoFieldPopulator';
 import IconButton from '@/components/IconButton.vue';
+import Whitespace from '@/components/Whitespace.vue';
 
 library.add(faCog);
 library.add(faTimes);
 library.add(faRocket);
+library.add(faFileImport);
+library.add(faPen);
+library.add(faLayerGroup);
 
 let manifest = 'N/A';
 
@@ -159,6 +186,7 @@ export default Vue.extend({
     ErrorModal,
     FontAwesomeIcon,
     IconButton,
+    Whitespace,
   },
   data: () => ({
     jiraConnectionState: 'unknown' as 'unknown'|'connected'|'errored',

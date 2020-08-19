@@ -26,6 +26,7 @@ export default Vue.extend({
   height: 35px;
   padding: 5px;
   box-sizing: border-box;
+  user-select: none;
 }
 
 @media (prefers-color-scheme: dark) {

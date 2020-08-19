@@ -99,14 +99,14 @@
           />
         </td>
         <td>
-          <button
+          <IconButton
+            icon="trash"
             name="delete"
-            title="Delete worklog"
-            @click="deleteWorklog(index)"
+            label="Delete worklog"
+            label-hover-placement="left"
+            @click.native="deleteWorklog(index)"
             :disabled="disableUi"
-          >
-            <font-awesome-icon icon="trash"/>
-          </button>
+          />
         </td>
       </tr>
     </draggable>

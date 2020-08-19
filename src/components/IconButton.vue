@@ -14,14 +14,18 @@
       <div class="popper popper-icon-button">
         {{ label }}
       </div>
-      <button
-        :disabled="disabled"
+      <span
         slot="reference"
       >
-        <FontAwesomeIcon
-          :icon="icon"
-        />
-      </button>
+        <button
+          :disabled="disabled"
+          :class="`button-${variant}`"
+        >
+          <FontAwesomeIcon
+            :icon="icon"
+          />
+        </button>
+      </span>
     </popper>
   </span>
 </template>
@@ -53,11 +57,26 @@ export default Vue.extend({
     icon: {
       default: () => ({}),
     },
+    variant: {
+      type: String,
+      default: 'secondary',
+    },
   },
 });
 </script>
 
 <style scoped>
+button {
+  width: 25px;
+}
+
+.button-primary {
+  background: rgba(0, 128, 255, 0.2);
+}
+
+.button-danger {
+  background: rgba(255, 0, 0, 0.2);
+}
 
 </style>
 
