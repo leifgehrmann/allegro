@@ -2,17 +2,44 @@
   <div id="app">
     <Toolbar>
       <template v-slot:left>
-        <button
-          @click="showPreferencesModal">
-          <font-awesome-icon icon="cog"/>
-          Settings
-        </button>
-        <ConnectionStatus
-          :jira-state="jiraConnectionState"
-          :tempo-state="tempoConnectionState"
+        <IconButton
+          icon="check"
+          label="Select"
+        />
+        <IconButton
+          icon="plus"
+          label="Add Worklog"
+        />
+        <IconButton
+          icon="plus"
+          label="Import"
+        />
+        <IconButton
+          icon="plus"
+          label="Bulk Edit"
+        />
+        <IconButton
+          icon="plus"
+          label="Merge"
+          :disabled="true"
+        />
+        <IconButton
+          icon="trash"
+          label="Delete"
+          :disabled="true"
         />
       </template>
       <template v-slot:right>
+        <IconButton
+          icon="cog"
+          @click="showPreferencesModal"
+          label="Settings"
+        />
+        <ConnectionStatus
+          v-if="jiraConnectionState !== 'connected' || tempoConnectionState !== 'connected'"
+          :jira-state="jiraConnectionState"
+          :tempo-state="tempoConnectionState"
+        />
         <button
           id="submit-submitEntries"
           @click="submitWorklogs"
@@ -90,6 +117,7 @@ import CurrentUserPopulator from '@/utils/populator/currentUserPopulator';
 import WorklogSubmitter from '@/utils/worklogSubmitter';
 import ConnectionState from '@/utils/connectionState';
 import JiraTempoFieldPopulator from '@/utils/populator/jiraTempoFieldPopulator';
+import IconButton from '@/components/IconButton.vue';
 
 library.add(faCog);
 library.add(faTimes);
@@ -130,6 +158,7 @@ export default Vue.extend({
     ValidationModal,
     ErrorModal,
     FontAwesomeIcon,
+    IconButton,
   },
   data: () => ({
     jiraConnectionState: 'unknown' as 'unknown'|'connected'|'errored',

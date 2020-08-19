@@ -19,28 +19,27 @@
           class="worklog-drag"
           :class="{ handle: !disableUi }"
         >
-          <button>
-          <font-awesome-icon
-            icon="grip-lines"
+          <IconButton
             v-if="!worklogsValidation[index]"
-            title="Click and drag to reorder"
+            icon="grip-lines"
+            label="Click and drag to reorder"
+            label-hover-placement="right"
           />
-          <font-awesome-icon
-            icon="check"
+          <IconButton
             v-if="worklogsValidation[index]"
-            title="This worklog is valid ✨"
+            icon="check"
+            label="This worklog is valid ✨"
+            label-hover-placement="right"
           />
-          </button>
         </td>
         <td
           class="worklog-select"
         >
-          <button>
-          <font-awesome-icon
+          <IconButton
             icon="check"
-            title="Select"
+            label="Select"
+            label-hover-placement="right"
           />
-          </button>
         </td>
         <td
           class="worklog-date"
@@ -144,6 +143,7 @@ import IssueSelector from '@/components/IssueSelector.vue';
 import WorkAttribute from '@/components/WorkAttribute.vue';
 import { AccountLinkByScopeResponse, WorkAttributeResponse } from 'tempo-client/lib/responseTypes';
 import WorklogValidator from '@/utils/validator/worklogValidator';
+import IconButton from '@/components/IconButton.vue';
 
 library.add(faGripLines);
 library.add(faSquare);
@@ -158,6 +158,7 @@ export default Vue.extend({
   components: {
     Draggable,
     FontAwesomeIcon,
+    IconButton,
     DateSelector,
     IssueSelector,
     WorkAttribute,
@@ -269,8 +270,17 @@ export default Vue.extend({
 }
 
 .worklogs td {
-  padding: 5px 3px 0 3px;
+  padding: 2px;
 }
+
+.worklogs tr:first-child td {
+  padding-top: 4px;
+}
+
+.worklogs tr:last-child td {
+  padding-bottom: 4px;
+}
+
 table td.worklog-drag, table th.worklog-drag {
   white-space: nowrap;
   width: 13px; min-width: 13px;
