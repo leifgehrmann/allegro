@@ -42,6 +42,7 @@
           icon="layer-group"
           label="Merge selected worklogs"
           v-if="selectedWorklogsTotal > 0"
+          @click.native="showMergeWorklogsModal"
           :disabled="isSubmittingWorklogs"
         />
         <IconButton
@@ -91,6 +92,12 @@
         :disable-ui="isSubmittingWorklogs"
       />
     </div>
+    <MergeWorklogsModal
+      :worklogs="worklogs"
+      v-show="isMergeWorklogsModalVisible"
+      @close="closeMergeWorklogsModal"
+      @merge="mergeSelectedWorklogsIntoWorklog"
+    />
     <PreferencesModal
       :preferences="preferences"
       v-show="isPreferencesModalVisible"
@@ -117,6 +124,7 @@ import jetpack from 'fs-jetpack';
 import Worklogs from '@/components/Worklogs.vue';
 import Toolbar from '@/components/Toolbar.vue';
 import ConnectionStatus from '@/components/ConnectionStatus.vue';
+import MergeWorklogsModal from '@/components/MergeWorklogsModal.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import ValidationModal from '@/components/ValidationModal.vue';
 import ErrorModal from '@/components/ErrorModal.vue';
@@ -196,6 +204,7 @@ export default Vue.extend({
     Worklogs,
     Toolbar,
     ConnectionStatus,
+    MergeWorklogsModal,
     PreferencesModal,
     ValidationModal,
     ErrorModal,
@@ -207,6 +216,7 @@ export default Vue.extend({
   data: () => ({
     jiraConnectionState: 'unknown' as 'unknown'|'connected'|'errored',
     tempoConnectionState: 'unknown' as 'unknown'|'connected'|'errored',
+    isMergeWorklogsModalVisible: false,
     isPreferencesModalVisible: false,
     isValidationModalVisible: false,
     isErrorModalVisible: false,
@@ -248,6 +258,12 @@ export default Vue.extend({
     },
   },
   methods: {
+    showMergeWorklogsModal() {
+      this.isMergeWorklogsModalVisible = true;
+    },
+    closeMergeWorklogsModal() {
+      this.isMergeWorklogsModalVisible = false;
+    },
     showPreferencesModal() {
       this.isPreferencesModalVisible = true;
     },
@@ -324,6 +340,23 @@ export default Vue.extend({
     async loadUser() {
       const currentUserPopulator = new CurrentUserPopulator(this.preferences);
       this.currentUser = await currentUserPopulator.get();
+    },
+    mergeSelectedWorklogsIntoWorklog(selectedWorklogIndexToMergeInto: number) {
+      // 1. Sum up all the minutes
+      const totalMergedMinutes = this.worklogs.reduce((accumulator, worklog) => {
+        const parsedMinutes = parseFloat(worklog.minutes);
+        if (worklog.selected && (parsedMinutes >= 0 && !Number.isNaN(parsedMinutes))) {
+          return accumulator + parsedMinutes;
+        }
+        return accumulator;
+      }, 0);
+
+      // 2. Set the minutes against the selected worklog to merge into
+      this.worklogs[selectedWorklogIndexToMergeInto].minutes = `${totalMergedMinutes}`;
+
+      // 3. Remove all worklogs except for the selected worklog to merge into
+      this.worklogs[selectedWorklogIndexToMergeInto].selected = false;
+      this.deleteSelectedWorklogs();
     },
     toggleSelectionOfAllWorklogs() {
       const newSelectedValue = !(this.selectedWorklogsTotal > 0);
