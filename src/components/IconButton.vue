@@ -1,33 +1,31 @@
 <template>
-  <span>
+  <div style="display: inline-block">
     <popper
       trigger="hover"
       :visible-arrow="true"
       :options="{
-        placement: labelHoverPlacement,
-        'boundaries-selector': 'v-application'
+        placement: labelPlacement,
       }"
-      :delay-on-mouse-over="300"
+      :delay-on-mouse-over="1000"
       :delay-on-mouse-out="0"
       :append-to-body="true"
     >
       <div class="popper popper-icon-button">
         {{ label }}
       </div>
-      <span
+      <button
+        :disabled="disabled"
+        :class="`button-${variant}`"
         slot="reference"
       >
-        <button
-          :disabled="disabled"
-          :class="`button-${variant}`"
-        >
-          <FontAwesomeIcon
-            :icon="icon"
-          />
-        </button>
-      </span>
+        <FontAwesomeIcon
+          v-if="icon !== ''"
+          :icon="icon"
+        />
+        <div v-if="icon === ''" style="visibility: hidden">-</div>
+      </button>
     </popper>
-  </span>
+  </div>
 </template>
 
 <script lang="ts">
@@ -46,7 +44,7 @@ export default Vue.extend({
       type: String,
       default: '',
     },
-    labelHoverPlacement: {
+    labelPlacement: {
       type: String,
       default: 'bottom-start',
     },
@@ -68,6 +66,7 @@ export default Vue.extend({
 <style scoped>
 button {
   width: 25px;
+  display: inline-block;
 }
 
 .button-primary {
@@ -76,6 +75,9 @@ button {
 
 .button-danger {
   background: rgba(255, 0, 0, 0.2);
+}
+.button-link {
+  background: none;
 }
 
 </style>

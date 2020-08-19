@@ -3,43 +3,54 @@
     <Toolbar>
       <template v-slot:left>
         <Whitespace
-          width="29px"
+          width="14px"
         />
-        <IconButton
-          icon="check"
+        <CheckBox
+          :checked="selectedWorklogsTotal > 0"
+          :partial="selectedWorklogsTotal > 0 && selectedWorklogsTotal !== worklogs.length"
+          :disabled="isSubmittingWorklogs"
           label="Select"
+          @click.native="toggleSelectionOfAllWorklogs"
         />
         <Whitespace
-          width="29px"
+          width="25px"
         />
         <IconButton
           icon="plus"
           label="Add new worklog"
           variant="primary"
+          @click.native="addNewWorklog"
+          :disabled="isSubmittingWorklogs"
         />
         <IconButton
           icon="file-import"
           label="Import worklogs from CSV file"
           variant="primary"
+          :disabled="isSubmittingWorklogs"
         />
         <Whitespace
-          width="29px"
+          width="25px"
+          v-if="selectedWorklogsTotal > 0"
         />
         <IconButton
           icon="pen"
           label="Bulk edit selected worklogs"
-          :disabled="true"
+          v-if="selectedWorklogsTotal > 0"
+          :disabled="isSubmittingWorklogs"
         />
         <IconButton
           icon="layer-group"
           label="Merge selected worklogs"
-          :disabled="true"
+          v-if="selectedWorklogsTotal > 0"
+          :disabled="isSubmittingWorklogs"
         />
         <IconButton
           icon="trash"
           label="Delete selected worklogs"
-          :disabled="true"
           variant="danger"
+          v-if="selectedWorklogsTotal > 0"
+          @click.native="deleteSelectedWorklogs"
+          :disabled="isSubmittingWorklogs"
         />
       </template>
       <template v-slot:right>
@@ -47,14 +58,12 @@
           icon="cog"
           @click.native="showPreferencesModal"
           label="Settings"
+          :disabled="isSubmittingWorklogs"
         />
         <ConnectionStatus
           v-if="jiraConnectionState !== 'connected' || tempoConnectionState !== 'connected'"
           :jira-state="jiraConnectionState"
           :tempo-state="tempoConnectionState"
-        />
-        <Whitespace
-          width="4px"
         />
         <button
           id="submit-submitEntries"
@@ -122,6 +131,8 @@ import {
   faFileImport,
   faPen,
   faLayerGroup,
+  faTrash,
+  faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Worklog from '@/data/worklog';
@@ -142,6 +153,8 @@ import ConnectionState from '@/utils/connectionState';
 import JiraTempoFieldPopulator from '@/utils/populator/jiraTempoFieldPopulator';
 import IconButton from '@/components/IconButton.vue';
 import Whitespace from '@/components/Whitespace.vue';
+import CheckBox from '@/components/CheckBox.vue';
+import { v4 as uuidv4 } from 'uuid';
 
 library.add(faCog);
 library.add(faTimes);
@@ -149,6 +162,8 @@ library.add(faRocket);
 library.add(faFileImport);
 library.add(faPen);
 library.add(faLayerGroup);
+library.add(faTrash);
+library.add(faPlus);
 
 let manifest = 'N/A';
 
@@ -186,6 +201,7 @@ export default Vue.extend({
     ErrorModal,
     FontAwesomeIcon,
     IconButton,
+    CheckBox,
     Whitespace,
   },
   data: () => ({
@@ -209,6 +225,12 @@ export default Vue.extend({
     workAttributesCache,
   }),
   computed: {
+    selectedWorklogsTotal(): number {
+      return this.worklogs.reduce(
+        (sumSelected, worklog) => (worklog.selected ? sumSelected + 1 : sumSelected),
+        0,
+      );
+    },
     totalMinutes(): string {
       const total = this.worklogs.reduce(
         (accumulator, worklog) => {
@@ -303,6 +325,39 @@ export default Vue.extend({
       const currentUserPopulator = new CurrentUserPopulator(this.preferences);
       this.currentUser = await currentUserPopulator.get();
     },
+    toggleSelectionOfAllWorklogs() {
+      const newSelectedValue = !(this.selectedWorklogsTotal > 0);
+      this.worklogs.forEach((worklog, index) => {
+        this.worklogs[index].selected = newSelectedValue;
+      });
+    },
+    addNewWorklog(): void {
+      // Get the last worklog entries date
+      let date = '';
+      if (this.worklogs.length !== 0) {
+        date = this.worklogs[this.worklogs.length - 1].date;
+      }
+
+      this.worklogs.push(
+        {
+          uuid: uuidv4(),
+          selected: false,
+          date,
+          issueKey: '',
+          issueKeyIsValid: false,
+          issueUrl: '',
+          issueTitle: '',
+          issueTempoAccountId: null,
+          minutes: '',
+          message: '',
+          issueAccount: '',
+          workAttributes: {},
+        },
+      );
+    },
+    deleteSelectedWorklogs(): void {
+      this.worklogs = this.worklogs.filter((worklog) => (!worklog.selected));
+    },
     async submitWorklogs() {
       // Clean worklogs
       this.worklogs.forEach((worklog, worklogIndex) => {
@@ -378,7 +433,7 @@ export default Vue.extend({
 
 .content {
   width: 100%;
-  height: calc(100vh - 35px);
+  height: calc(100vh - 57px);
   overflow: scroll;
 }
 </style>

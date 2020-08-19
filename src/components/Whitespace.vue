@@ -1,9 +1,9 @@
 <template>
-  <span
+  <div
     class="whitespace"
     :style="{width}"
   >
-  </span>
+  </div>
 </template>
 
 <script lang="ts">
