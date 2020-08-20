@@ -3,7 +3,7 @@
     @close="close"
   >
     <template v-slot:header>
-      Select Worklog
+      Select worklog to merge
     </template>
     <template v-slot:body>
       <p>

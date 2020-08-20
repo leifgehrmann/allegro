@@ -36,6 +36,7 @@
           icon="pen"
           label="Bulk edit selected worklogs"
           v-if="selectedWorklogsTotal > 0"
+          @click.native="showBulkEditWorklogsModal"
           :disabled="isSubmittingWorklogs"
         />
         <IconButton
@@ -58,7 +59,7 @@
         <IconButton
           icon="cog"
           @click.native="showPreferencesModal"
-          label="Settings"
+          label="Preferences"
           :disabled="isSubmittingWorklogs"
         />
         <ConnectionStatus
@@ -98,6 +99,12 @@
       @close="closeMergeWorklogsModal"
       @merge="mergeSelectedWorklogsIntoWorklog"
     />
+    <BulkEditWorklogsModal
+      :worklogs="worklogs"
+      v-show="isBulkEditWorklogsModalVisible"
+      @close="closeBulkEditWorklogsModal"
+      @bulkEdit="bulkEditSelectedWorklogs"
+    />
     <PreferencesModal
       :preferences="preferences"
       v-show="isPreferencesModalVisible"
@@ -125,6 +132,7 @@ import Worklogs from '@/components/Worklogs.vue';
 import Toolbar from '@/components/Toolbar.vue';
 import ConnectionStatus from '@/components/ConnectionStatus.vue';
 import MergeWorklogsModal from '@/components/MergeWorklogsModal.vue';
+import BulkEditWorklogsModal from '@/components/BulkEditWorklogsModal.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import ValidationModal from '@/components/ValidationModal.vue';
 import ErrorModal from '@/components/ErrorModal.vue';
@@ -205,6 +213,7 @@ export default Vue.extend({
     Toolbar,
     ConnectionStatus,
     MergeWorklogsModal,
+    BulkEditWorklogsModal,
     PreferencesModal,
     ValidationModal,
     ErrorModal,
@@ -217,6 +226,7 @@ export default Vue.extend({
     jiraConnectionState: 'unknown' as 'unknown'|'connected'|'errored',
     tempoConnectionState: 'unknown' as 'unknown'|'connected'|'errored',
     isMergeWorklogsModalVisible: false,
+    isBulkEditWorklogsModalVisible: false,
     isPreferencesModalVisible: false,
     isValidationModalVisible: false,
     isErrorModalVisible: false,
@@ -263,6 +273,12 @@ export default Vue.extend({
     },
     closeMergeWorklogsModal() {
       this.isMergeWorklogsModalVisible = false;
+    },
+    showBulkEditWorklogsModal() {
+      this.isBulkEditWorklogsModalVisible = true;
+    },
+    closeBulkEditWorklogsModal() {
+      this.isBulkEditWorklogsModalVisible = false;
     },
     showPreferencesModal() {
       this.isPreferencesModalVisible = true;
@@ -341,6 +357,13 @@ export default Vue.extend({
       const currentUserPopulator = new CurrentUserPopulator(this.preferences);
       this.currentUser = await currentUserPopulator.get();
     },
+    bulkEditSelectedWorklogs(newDate: string): void {
+      this.worklogs.forEach((worklog, index) => {
+        if (worklog.selected) {
+          this.worklogs[index].date = newDate;
+        }
+      });
+    },
     mergeSelectedWorklogsIntoWorklog(selectedWorklogIndexToMergeInto: number) {
       // 1. Sum up all the minutes
       const totalMergedMinutes = this.worklogs.reduce((accumulator, worklog) => {
@@ -413,7 +436,7 @@ export default Vue.extend({
       }
 
       if (this.currentUser === null) {
-        this.showErrorModal('JIRA User not found. Please check settings.');
+        this.showErrorModal('JIRA User not found. Please check preferences.');
         return;
       }
       const currentUserAccountId = this.currentUser.accountId;
