@@ -518,8 +518,9 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
 .content {
+  padding-bottom: 100px;
+  box-sizing: border-box;
   width: 100%;
   height: calc(100vh - 57px);
   overflow: scroll;

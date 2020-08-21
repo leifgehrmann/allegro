@@ -8,6 +8,7 @@ export default function createMainWindow(): BrowserWindow {
     width: 900,
     height: 600,
     minWidth: 900,
+    minHeight: 200,
     backgroundColor: '#FFFFFF',
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone

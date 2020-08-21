@@ -164,7 +164,9 @@ export default Vue.extend({
       this.searching = true;
       this.displaySearchTerm();
       this.selectInputFieldContents();
-      this.scrollToCurrentListItem();
+      setTimeout(() => {
+        this.scrollToCurrentListItem();
+      }, 100);
     },
     focusout() {
       this.searching = false;
@@ -271,7 +273,7 @@ export default Vue.extend({
     position: absolute;
     top: 5px;
     z-index: 10;
-    max-height: 400px;
+    max-height: 200px;
     overflow-y: scroll;
   }
 
@@ -322,7 +324,8 @@ export default Vue.extend({
     position: absolute;
     top: 5px;
     z-index: 20;
-    max-height: 400px;
+    min-width: 100px;
+    max-height: 200px;
     overflow-y: scroll;
   }
 
