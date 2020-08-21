@@ -81,17 +81,6 @@ button {
   display: inline-block;
 }
 
-.button-primary {
-  background: rgba(0, 128, 255, 0.2);
-}
-
-.button-danger {
-  background: rgba(255, 0, 0, 0.2);
-}
-.button-link {
-  background: none;
-}
-
 </style>
 
 <style>

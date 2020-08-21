@@ -18,14 +18,14 @@
         <IconButton
           icon="plus"
           label="Add new worklog"
-          variant="primary"
+          variant="success"
           @click-button="addNewWorklog"
           :disabled="isSubmittingWorklogs"
         />
         <IconButton
           icon="file-import"
           label="Import worklogs from CSV file"
-          variant="primary"
+          variant="success"
           @click-button="fileImportWorklogs"
           :disabled="isSubmittingWorklogs"
         />
@@ -36,6 +36,7 @@
         <IconButton
           icon="pen"
           label="Bulk edit selected worklogs"
+          variant="primary"
           v-if="selectedWorklogsTotal > 0"
           @click-button="showBulkEditWorklogsModal"
           :disabled="isSubmittingWorklogs"
@@ -43,6 +44,7 @@
         <IconButton
           icon="layer-group"
           label="Merge selected worklogs"
+          variant="primary"
           v-if="selectedWorklogsTotal > 0"
           @click-button="showMergeWorklogsModal"
           :disabled="isSubmittingWorklogs"
@@ -70,6 +72,7 @@
         />
         <button
           id="submit-submitEntries"
+          class="button-primary"
           @click="submitWorklogs"
           v-if="!isSubmittingWorklogs"
         >
@@ -78,6 +81,7 @@
         </button>
         <button
           id="submit-cancelSubmission"
+          class="button-danger"
           @click="cancelSubmitWorklogs"
           v-if="isSubmittingWorklogs"
         >

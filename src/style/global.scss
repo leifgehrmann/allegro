@@ -31,6 +31,19 @@ button, select, input, textarea {
   border-radius: 5px;
 }
 
+.button-success {
+  background: rgba(0, 200, 100, 0.2);
+}
+.button-primary {
+  background: rgba(0, 128, 255, 0.2);
+}
+.button-danger {
+  background: rgba(255, 0, 0, 0.2);
+}
+.button-link {
+  background: none;
+}
+
 button:disabled, select:disabled, input:disabled, textarea:disabled {
   opacity: 0.5;
 }
