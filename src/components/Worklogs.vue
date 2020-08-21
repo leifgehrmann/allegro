@@ -93,6 +93,9 @@
                 rows="1"
                 v-model="item.message"
                 :disabled="disableUi"
+                @change="resizeMessageTextarea"
+                @click="resizeMessageTextarea"
+                @input="resizeMessageTextarea"
               />
             </label>
           </div>
@@ -196,6 +199,13 @@ export default Vue.extend({
     toggleWorklogSelection(index: number, checkBoxIsSelected: boolean) {
       this.worklogs[index].selected = !checkBoxIsSelected;
       this.lastSelectedIndex = index;
+    },
+    resizeMessageTextarea(e: Event) {
+      const textarea = e.target as HTMLTextAreaElement;
+      if (textarea) {
+        textarea.style.height = '';
+        textarea.style.height = `${textarea.scrollHeight - 10}px`;
+      }
     },
   },
 });
