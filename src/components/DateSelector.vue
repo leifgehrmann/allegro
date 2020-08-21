@@ -1,5 +1,5 @@
 <template>
-  <div class="dateField">
+  <span class="dateField">
     <label>
       <input
         name="date"
@@ -8,7 +8,7 @@
         :disabled="disabled"
       >
     </label>
-  </div>
+  </span>
 </template>
 
 <script lang="ts">
@@ -36,6 +36,13 @@ export default Vue.extend({
   watch: {
     mountedValue() {
       this.update();
+    },
+    value() {
+      if (this.value === '') {
+        this.mountedValue = formatDate(new Date());
+      } else {
+        this.mountedValue = this.value;
+      }
     },
   },
   methods: {

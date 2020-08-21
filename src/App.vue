@@ -1,36 +1,87 @@
 <template>
   <div id="app">
-    <div class="content">
-      <Worklogs
-        :worklogs="worklogs"
-        :work-attributes="workAttributes"
-        :projects-account-links="projectsAccountLinks"
-        :disable-ui="isSubmittingWorklogs"
-      />
-    </div>
-    <Footer>
+    <Toolbar>
       <template v-slot:left>
-        <button
-          @click="showPreferencesModal">
-          <font-awesome-icon icon="cog"/>
-          Settings
-        </button>
-        <ConnectionStatus
-          :jira-state="jiraConnectionState"
-          :tempo-state="tempoConnectionState"
+        <Whitespace
+          width="14px"
+        />
+        <CheckBox
+          :checked="selectedWorklogsTotal > 0"
+          :partial="selectedWorklogsTotal > 0 && selectedWorklogsTotal !== worklogs.length"
+          :disabled="isSubmittingWorklogs"
+          label="Select"
+          @toggle="toggleSelectionOfAllWorklogs"
+        />
+        <Whitespace
+          width="25px"
+        />
+        <IconButton
+          icon="plus"
+          label="Add new worklog"
+          variant="success"
+          @click-button="addNewWorklog"
+          :disabled="isSubmittingWorklogs"
+        />
+        <IconButton
+          icon="file-import"
+          label="Import worklogs from CSV file"
+          variant="success"
+          @click-button="fileImportWorklogs"
+          :disabled="isSubmittingWorklogs"
+        />
+        <Whitespace
+          width="25px"
+          v-if="selectedWorklogsTotal > 0"
+        />
+        <IconButton
+          icon="pen"
+          label="Bulk edit selected worklogs"
+          variant="primary"
+          v-if="selectedWorklogsTotal > 0"
+          @click-button="showBulkEditWorklogsModal"
+          :disabled="isSubmittingWorklogs"
+        />
+        <IconButton
+          icon="layer-group"
+          label="Merge selected worklogs"
+          variant="primary"
+          v-if="selectedWorklogsTotal > 0"
+          @click-button="showMergeWorklogsModal"
+          :disabled="isSubmittingWorklogs"
+        />
+        <IconButton
+          icon="trash"
+          label="Delete selected worklogs"
+          variant="danger"
+          v-if="selectedWorklogsTotal > 0"
+          @click-button="deleteSelectedWorklogs"
+          :disabled="isSubmittingWorklogs"
         />
       </template>
       <template v-slot:right>
+        <IconButton
+          icon="cog"
+          @click-button="showPreferencesModal"
+          label="Preferences"
+          :disabled="isSubmittingWorklogs"
+        />
+        <ConnectionStatus
+          v-if="jiraConnectionState !== 'connected' || tempoConnectionState !== 'connected'"
+          :jira-state="jiraConnectionState"
+          :tempo-state="tempoConnectionState"
+        />
         <button
           id="submit-submitEntries"
+          class="button-primary"
           @click="submitWorklogs"
           v-if="!isSubmittingWorklogs"
         >
           <font-awesome-icon icon="rocket"/>
-          Submit Worklogs {{totalMinutes}}
+          Submit Worklogs
         </button>
         <button
           id="submit-cancelSubmission"
+          class="button-danger"
           @click="cancelSubmitWorklogs"
           v-if="isSubmittingWorklogs"
         >
@@ -38,7 +89,46 @@
           Cancel Submitting
         </button>
       </template>
-    </Footer>
+    </Toolbar>
+    <div class="content">
+      <Worklogs
+        v-if="worklogs.length > 0"
+        :worklogs="worklogs"
+        :work-attributes="workAttributes"
+        :projects-account-links="projectsAccountLinks"
+        :disable-ui="isSubmittingWorklogs"
+      />
+      <div
+        class="induction"
+        v-if="worklogs.length === 0"
+      >
+        <img src="Create.svg" draggable="false">
+        <img src="Edit.svg" draggable="false">
+        <img src="Submit.svg" draggable="false">
+      </div>
+      <SummaryStats
+        :worklogs="worklogs"
+      />
+    </div>
+    <FileImportWorklogsModal
+      :settings.sync="fileImportWorklogsSettings"
+      :fileData="fileImportWorklogsData"
+      v-show="isFileImportWorklogsModalVisible"
+      @close="closeFileImportWorklogsModal"
+      @importWorklogs="addWorklogData"
+    />
+    <BulkEditWorklogsModal
+      :worklogs="worklogs"
+      v-show="isBulkEditWorklogsModalVisible"
+      @close="closeBulkEditWorklogsModal"
+      @bulkEdit="bulkEditSelectedWorklogs"
+    />
+    <MergeWorklogsModal
+      :worklogs="worklogs"
+      v-show="isMergeWorklogsModalVisible"
+      @close="closeMergeWorklogsModal"
+      @merge="mergeSelectedWorklogsIntoWorklog"
+    />
     <PreferencesModal
       :preferences="preferences"
       v-show="isPreferencesModalVisible"
@@ -63,8 +153,11 @@ import { Vue } from 'vue-property-decorator';
 import { remote } from 'electron';
 import jetpack from 'fs-jetpack';
 import Worklogs from '@/components/Worklogs.vue';
-import Footer from '@/components/Footer.vue';
+import Toolbar from '@/components/Toolbar.vue';
 import ConnectionStatus from '@/components/ConnectionStatus.vue';
+import FileImportWorklogsModal from '@/components/FileImportWorklogsModal.vue';
+import BulkEditWorklogsModal from '@/components/BulkEditWorklogsModal.vue';
+import MergeWorklogsModal from '@/components/MergeWorklogsModal.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import ValidationModal from '@/components/ValidationModal.vue';
 import ErrorModal from '@/components/ErrorModal.vue';
@@ -72,7 +165,16 @@ import '@/style/global.scss';
 import Preferences from '@/data/preferences';
 import Store from 'electron-store';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCog, faRocket, faTimes } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCog,
+  faRocket,
+  faTimes,
+  faFileImport,
+  faPen,
+  faLayerGroup,
+  faTrash,
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Worklog from '@/data/worklog';
 import WorklogPopulator from '@/utils/populator/worklogPopulator';
@@ -90,10 +192,22 @@ import CurrentUserPopulator from '@/utils/populator/currentUserPopulator';
 import WorklogSubmitter from '@/utils/worklogSubmitter';
 import ConnectionState from '@/utils/connectionState';
 import JiraTempoFieldPopulator from '@/utils/populator/jiraTempoFieldPopulator';
+import IconButton from '@/components/IconButton.vue';
+import Whitespace from '@/components/Whitespace.vue';
+import CheckBox from '@/components/CheckBox.vue';
+import { v4 as uuidv4 } from 'uuid';
+import FileImportIpcRenderer from '@/utils/ipc/fileImportIpcRenderer';
+import FileImportWorklogsSettings from '@/data/fileImportWorklogsSettings';
+import SummaryStats from '@/components/SummaryStats.vue';
 
 library.add(faCog);
 library.add(faTimes);
 library.add(faRocket);
+library.add(faFileImport);
+library.add(faPen);
+library.add(faLayerGroup);
+library.add(faTrash);
+library.add(faPlus);
 
 let manifest = 'N/A';
 
@@ -124,20 +238,32 @@ export default Vue.extend({
   name: 'App',
   components: {
     Worklogs,
-    Footer,
+    SummaryStats,
+    Toolbar,
     ConnectionStatus,
+    FileImportWorklogsModal,
+    BulkEditWorklogsModal,
+    MergeWorklogsModal,
     PreferencesModal,
     ValidationModal,
     ErrorModal,
     FontAwesomeIcon,
+    IconButton,
+    CheckBox,
+    Whitespace,
   },
   data: () => ({
     jiraConnectionState: 'unknown' as 'unknown'|'connected'|'errored',
     tempoConnectionState: 'unknown' as 'unknown'|'connected'|'errored',
+    isFileImportWorklogsModalVisible: false,
+    isBulkEditWorklogsModalVisible: false,
+    isMergeWorklogsModalVisible: false,
     isPreferencesModalVisible: false,
     isValidationModalVisible: false,
     isErrorModalVisible: false,
     isSubmittingWorklogs: false,
+    fileImportWorklogsSettings: {} as FileImportWorklogsSettings,
+    fileImportWorklogsData: '' as string,
     errorModalMessage: '',
     manifest,
     preferences,
@@ -152,23 +278,38 @@ export default Vue.extend({
     workAttributesCache,
   }),
   computed: {
-    totalMinutes(): string {
-      const total = this.worklogs.reduce(
-        (accumulator, worklog) => {
-          if (worklog.minutes !== '') {
-            return accumulator + parseFloat(worklog.minutes ?? '0');
-          }
-          return accumulator;
-        },
+    hasPreferencesSet(): boolean {
+      return this.preferences.tempoToken.length !== 0
+        && this.preferences.jiraHost.length !== 0
+        && this.preferences.jiraUsername.length !== 0
+        && this.preferences.jiraToken.length !== 0;
+    },
+    selectedWorklogsTotal(): number {
+      return this.worklogs.reduce(
+        (sumSelected, worklog) => (worklog.selected ? sumSelected + 1 : sumSelected),
         0,
       );
-      if (total === 0) {
-        return '';
-      }
-      return `(${total}m)`;
     },
   },
   methods: {
+    showFileImportWorklogsModal() {
+      this.isFileImportWorklogsModalVisible = true;
+    },
+    closeFileImportWorklogsModal() {
+      this.isFileImportWorklogsModalVisible = false;
+    },
+    showBulkEditWorklogsModal() {
+      this.isBulkEditWorklogsModalVisible = true;
+    },
+    closeBulkEditWorklogsModal() {
+      this.isBulkEditWorklogsModalVisible = false;
+    },
+    showMergeWorklogsModal() {
+      this.isMergeWorklogsModalVisible = true;
+    },
+    closeMergeWorklogsModal() {
+      this.isMergeWorklogsModalVisible = false;
+    },
     showPreferencesModal() {
       this.isPreferencesModalVisible = true;
     },
@@ -223,13 +364,10 @@ export default Vue.extend({
         this.jiraTempoFieldCache,
       );
       this.jiraTempoField = await jiraTempoFieldPopulator.populate();
-      const worklogPopulator = new WorklogPopulator(
-        this.worklogs,
+      this.workAttributes = await new WorkAttributePopulator(
         this.preferences,
-        this.jiraTempoField,
-        this.issueCache,
-      );
-      await worklogPopulator.populate();
+        workAttributesCache,
+      ).populate();
       const ProjectsAccountLinksPopulator = new ProjectAccountLinksPopulator(
         this.worklogs,
         this.projectsAccountLinks,
@@ -237,14 +375,95 @@ export default Vue.extend({
         this.projectsAccountLinksCache,
       );
       await ProjectsAccountLinksPopulator.populate();
-      this.workAttributes = await new WorkAttributePopulator(
+      const worklogPopulator = new WorklogPopulator(
+        this.worklogs,
         this.preferences,
-        workAttributesCache,
-      ).populate();
+        this.jiraTempoField,
+        this.issueCache,
+      );
+      await worklogPopulator.populate();
     },
     async loadUser() {
       const currentUserPopulator = new CurrentUserPopulator(this.preferences);
       this.currentUser = await currentUserPopulator.get();
+    },
+    bulkEditSelectedWorklogs(newDate: string): void {
+      this.worklogs.forEach((worklog, index) => {
+        if (worklog.selected) {
+          this.worklogs[index].date = newDate;
+        }
+      });
+    },
+    mergeSelectedWorklogsIntoWorklog(selectedWorklogIndexToMergeInto: number) {
+      // 1. Sum up all the minutes
+      const totalMergedMinutes = this.worklogs.reduce((accumulator, worklog) => {
+        const parsedMinutes = parseFloat(worklog.minutes);
+        if (worklog.selected && (parsedMinutes >= 0 && !Number.isNaN(parsedMinutes))) {
+          return accumulator + parsedMinutes;
+        }
+        return accumulator;
+      }, 0);
+
+      // 2. Set the minutes against the selected worklog to merge into
+      this.worklogs[selectedWorklogIndexToMergeInto].minutes = `${totalMergedMinutes}`;
+
+      // 3. Remove all worklogs except for the selected worklog to merge into
+      this.worklogs[selectedWorklogIndexToMergeInto].selected = false;
+      this.deleteSelectedWorklogs();
+    },
+    toggleSelectionOfAllWorklogs() {
+      const newSelectedValue = !(this.selectedWorklogsTotal > 0);
+      this.worklogs.forEach((worklog, index) => {
+        this.worklogs[index].selected = newSelectedValue;
+      });
+    },
+    addWorklog(date = '', issueKey = '', minutes = '', message = ''): void {
+      // Get the last worklog entries date
+      let newDate = date;
+      if (date === '' && this.worklogs.length !== 0) {
+        newDate = this.worklogs[this.worklogs.length - 1].date;
+      }
+
+      this.worklogs.push(
+        {
+          uuid: uuidv4(),
+          selected: false,
+          date: newDate,
+          issueKey,
+          issueKeyIsValid: false,
+          issueUrl: '',
+          issueTitle: '',
+          issueTempoAccountId: null,
+          minutes,
+          message,
+          issueAccount: '',
+          workAttributes: {},
+        },
+      );
+    },
+    addNewWorklog(): void {
+      this.addWorklog();
+    },
+    addWorklogData(
+      newWorklogsData: {date: string, minutes: string, message: string, issueKey: string}[],
+    ): void {
+      newWorklogsData.forEach((newWorklogData) => {
+        this.addWorklog(
+          newWorklogData.date,
+          newWorklogData.issueKey,
+          newWorklogData.minutes,
+          newWorklogData.message,
+        );
+      });
+    },
+    async fileImportWorklogs(): Promise<void> {
+      this.fileImportWorklogsData = await FileImportIpcRenderer.fileSelectAndRead();
+      if (this.fileImportWorklogsData !== '') {
+        this.showFileImportWorklogsModal();
+      }
+    },
+    deleteSelectedWorklogs(): void {
+      this.worklogs = this.worklogs.filter((worklog) => (!worklog.selected));
     },
     async submitWorklogs() {
       // Clean worklogs
@@ -268,7 +487,7 @@ export default Vue.extend({
       }
 
       if (this.currentUser === null) {
-        this.showErrorModal('JIRA User not found. Please check settings.');
+        this.showErrorModal('JIRA User not found. Please check preferences.');
         return;
       }
       const currentUserAccountId = this.currentUser.accountId;
@@ -310,18 +529,30 @@ export default Vue.extend({
   },
   mounted(): void {
     worklogs.push(...store.get('worklogs') ?? []);
-    this.updateConnectionStatus();
-    this.loadUser();
-    this.populate();
+    if (!this.hasPreferencesSet) {
+      this.showPreferencesModal();
+    } else {
+      this.updateConnectionStatus();
+      this.loadUser();
+      this.populate();
+    }
   },
 });
 </script>
 
 <style scoped>
 .content {
+  padding-bottom: 100px;
+  box-sizing: border-box;
   width: 100%;
-  height: calc(100vh - 35px);
-  margin-bottom: 35px;
+  height: calc(100vh - 57px);
   overflow: scroll;
+}
+.induction {
+  user-select: none;
+  padding-top: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
 }
 </style>

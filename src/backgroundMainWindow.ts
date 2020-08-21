@@ -5,8 +5,10 @@ import BrowserWindow = Electron.BrowserWindow;
 export default function createMainWindow(): BrowserWindow {
   // Create the browser window.
   const win: BrowserWindow | null = createWindowFromState('main', {
-    width: 800,
+    width: 900,
     height: 600,
+    minWidth: 900,
+    minHeight: 200,
     backgroundColor: '#FFFFFF',
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone

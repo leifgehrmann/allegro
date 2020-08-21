@@ -6,7 +6,10 @@
       Error
     </template>
     <template v-slot:body>
-      Please make sure every worklog has a <font-awesome-icon icon="check"/> icon before submitting.
+      <p>
+        Please make sure all worklogs have the required fields filled in and
+        a <font-awesome-icon icon="check"/> icon beside them before submitting.
+      </p>
     </template>
     <template v-slot:footer>
       <button @click="close">OK</button>
@@ -38,5 +41,7 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-
+p {
+  max-width: 350px;
+}
 </style>
