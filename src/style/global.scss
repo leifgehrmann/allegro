@@ -63,3 +63,9 @@ input[type=date] {
   height: 15px;
 }
 
+@media (prefers-color-scheme: dark) {
+  ::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+}
+
