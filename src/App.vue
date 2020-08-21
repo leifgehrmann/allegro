@@ -278,6 +278,12 @@ export default Vue.extend({
     workAttributesCache,
   }),
   computed: {
+    hasPreferencesSet(): boolean {
+      return this.preferences.tempoToken.length !== 0
+        && this.preferences.jiraHost.length !== 0
+        && this.preferences.jiraUsername.length !== 0
+        && this.preferences.jiraToken.length !== 0;
+    },
     selectedWorklogsTotal(): number {
       return this.worklogs.reduce(
         (sumSelected, worklog) => (worklog.selected ? sumSelected + 1 : sumSelected),
@@ -523,9 +529,13 @@ export default Vue.extend({
   },
   mounted(): void {
     worklogs.push(...store.get('worklogs') ?? []);
-    this.updateConnectionStatus();
-    this.loadUser();
-    this.populate();
+    if (!this.hasPreferencesSet) {
+      this.showPreferencesModal();
+    } else {
+      this.updateConnectionStatus();
+      this.loadUser();
+      this.populate();
+    }
   },
 });
 </script>
