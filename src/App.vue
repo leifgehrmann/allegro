@@ -88,11 +88,20 @@
     </Toolbar>
     <div class="content">
       <Worklogs
+        v-if="worklogs.length > 0"
         :worklogs="worklogs"
         :work-attributes="workAttributes"
         :projects-account-links="projectsAccountLinks"
         :disable-ui="isSubmittingWorklogs"
       />
+      <div
+        class="induction"
+        v-if="worklogs.length === 0"
+      >
+        <img src="Create.svg" draggable="false">
+        <img src="Edit.svg" draggable="false">
+        <img src="Submit.svg" draggable="false">
+      </div>
       <SummaryStats
         :worklogs="worklogs"
       />
@@ -524,5 +533,12 @@ export default Vue.extend({
   width: 100%;
   height: calc(100vh - 57px);
   overflow: scroll;
+}
+.induction {
+  user-select: none;
+  padding-top: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
 }
 </style>

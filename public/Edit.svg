@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="300px" viewBox="0 0 200 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>Edit</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="100" cy="100" r="100"></circle>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <text font-family="Helvetica" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="18.6899414" y="240">Fill in worklog details, until</tspan>
+        </text>
+        <text font-family="Helvetica" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="30.1069336" y="257">a</tspan>
+        </text>
+        <text font-family="Helvetica" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="64.4658203" y="257">appears for each</tspan>
+        </text>
+        <g transform="translate(43.000000, 246.000000)" fill="#000000" fill-rule="nonzero">
+            <path d="M6.11360156,13.1626406 L0.263601562,7.31264063 C-0.0878554688,6.96118359 -0.0878554688,6.39133594 0.263601562,6.03984375 L1.53636328,4.76704688 C1.88782031,4.41555469 2.45770313,4.41555469 2.80916016,4.76704688 L6.75,8.70785156 L15.1908398,0.267046875 C15.5422969,-0.0844101562 16.1121797,-0.0844101562 16.4636367,0.267046875 L17.7363984,1.53984375 C18.0878555,1.89130078 18.0878555,2.46114844 17.7363984,2.81264063 L7.38639844,13.1626758 C7.03490625,13.5141328 6.46505859,13.5141328 6.11360156,13.1626406 L6.11360156,13.1626406 Z"></path>
+        </g>
+        <g>
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use fill="#00EFFC" xlink:href="#path-1"></use>
+            <g mask="url(#mask-2)">
+                <g transform="translate(14.000000, 20.000000)">
+                    <g transform="translate(0.000000, 30.000000)">
+                        <rect fill="#000000" opacity="0.1" style="mix-blend-mode: darken;" x="44" y="0" width="67" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="47" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="58" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="69" y="4" width="15" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.1" x="113" y="0" width="79" height="13" rx="3"></rect>
+                        <rect stroke="#000000" x="0.5" y="5.5" width="6" height="1"></rect>
+                        <rect stroke="#000000" x="0.5" y="7.5" width="6" height="1"></rect>
+                        <path d="M104.5,4.25 L104.5,4.5 L101.5,4.5 L101.5,4.25 L101.5,4.5 L100.5,4.5 L100.5,9.5 L105.5,9.5 L105.5,4.5 L104.5,4.5 L104.5,4.25 Z M100.5,5.5 L105.5,5.5 L105.5,9.5 L100.5,9.5 L100.5,5.5 Z" stroke="#000000" fill="#D8D8D8"></path>
+                        <path d="M33.7171562,9.8500625 L31.1171562,7.2500625 C30.9609531,7.09385938 30.9609531,6.84059375 31.1171562,6.684375 L31.6828281,6.1186875 C31.8390312,5.96246875 32.0923125,5.96246875 32.2485156,6.1186875 L34,7.87015625 L37.7514844,4.1186875 C37.9076875,3.96248438 38.1609688,3.96248438 38.3171719,4.1186875 L38.8828437,4.684375 C39.0390469,4.84057813 39.0390469,5.09384375 38.8828437,5.2500625 L34.2828437,9.85007813 C34.126625,10.0062813 33.8733594,10.0062813 33.7171563,9.8500625 L33.7171562,9.8500625 Z" fill="#000000" fill-rule="nonzero"></path>
+                        <rect stroke="#000000" x="13.5" y="0.5" width="12" height="12" rx="3"></rect>
+                        <polygon fill="#000000" points="56 4 57 4 56 10 55 10"></polygon>
+                        <polygon fill="#000000" points="67 4 68 4 67 10 66 10"></polygon>
+                        <rect fill="#000000" opacity="0.5" x="117" y="4" width="29" height="6" rx="2"></rect>
+                    </g>
+                    <g transform="translate(0.000000, 45.000000)">
+                        <rect fill="#000000" opacity="0.1" style="mix-blend-mode: darken;" x="44" y="0" width="67" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="47" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="58" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="69" y="4" width="15" height="6" rx="2"></rect>
+                        <rect stroke="#000000" x="0.5" y="7.5" width="6" height="1"></rect>
+                        <path d="M104.5,4.25 L104.5,4.5 L101.5,4.5 L101.5,4.25 L101.5,4.5 L100.5,4.5 L100.5,9.5 L105.5,9.5 L105.5,4.5 L104.5,4.5 L104.5,4.25 Z M100.5,5.5 L105.5,5.5 L105.5,9.5 L100.5,9.5 L100.5,5.5 Z" stroke="#000000" fill="#D8D8D8"></path>
+                        <path d="M33.7171562,9.8500625 L31.1171562,7.2500625 C30.9609531,7.09385938 30.9609531,6.84059375 31.1171562,6.684375 L31.6828281,6.1186875 C31.8390312,5.96246875 32.0923125,5.96246875 32.2485156,6.1186875 L34,7.87015625 L37.7514844,4.1186875 C37.9076875,3.96248438 38.1609688,3.96248438 38.3171719,4.1186875 L38.8828437,4.684375 C39.0390469,4.84057813 39.0390469,5.09384375 38.8828437,5.2500625 L34.2828437,9.85007813 C34.126625,10.0062813 33.8733594,10.0062813 33.7171563,9.8500625 L33.7171562,9.8500625 Z" fill="#000000" fill-rule="nonzero"></path>
+                        <polygon fill="#000000" points="56 4 57 4 56 10 55 10"></polygon>
+                        <polygon fill="#000000" points="67 4 68 4 67 10 66 10"></polygon>
+                        <rect stroke="#000000" x="13.5" y="0.5" width="12" height="12" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.1" x="113" y="0" width="79" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="117" y="4" width="29" height="6" rx="2"></rect>
+                        <rect stroke="#000000" x="0.5" y="5.5" width="6" height="1"></rect>
+                    </g>
+                    <g transform="translate(0.000000, 75.000000)">
+                        <rect fill="#000000" opacity="0.1" style="mix-blend-mode: darken;" x="44" y="0" width="67" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="47" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="58" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="69" y="4" width="15" height="6" rx="2"></rect>
+                        <rect stroke="#000000" x="0.5" y="5.5" width="6" height="1"></rect>
+                        <rect stroke="#000000" x="0.5" y="7.5" width="6" height="1"></rect>
+                        <path d="M104.5,4.25 L104.5,4.5 L101.5,4.5 L101.5,4.25 L101.5,4.5 L100.5,4.5 L100.5,9.5 L105.5,9.5 L105.5,4.5 L104.5,4.5 L104.5,4.25 Z M100.5,5.5 L105.5,5.5 L105.5,9.5 L100.5,9.5 L100.5,5.5 Z" stroke="#000000" fill="#D8D8D8"></path>
+                        <path d="M33.7171562,9.8500625 L31.1171562,7.2500625 C30.9609531,7.09385938 30.9609531,6.84059375 31.1171562,6.684375 L31.6828281,6.1186875 C31.8390312,5.96246875 32.0923125,5.96246875 32.2485156,6.1186875 L34,7.87015625 L37.7514844,4.1186875 C37.9076875,3.96248438 38.1609688,3.96248438 38.3171719,4.1186875 L38.8828437,4.684375 C39.0390469,4.84057813 39.0390469,5.09384375 38.8828437,5.2500625 L34.2828437,9.85007813 C34.126625,10.0062813 33.8733594,10.0062813 33.7171563,9.8500625 L33.7171562,9.8500625 Z" fill="#000000" fill-rule="nonzero"></path>
+                        <polygon fill="#000000" points="56 4 57 4 56 10 55 10"></polygon>
+                        <polygon fill="#000000" points="67 4 68 4 67 10 66 10"></polygon>
+                        <rect stroke="#000000" x="13.5" y="0.5" width="12" height="12" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.1" x="113" y="0" width="79" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="117" y="4" width="29" height="6" rx="2"></rect>
+                    </g>
+                    <g transform="translate(0.000000, 105.000000)">
+                        <rect fill="#000000" opacity="0.1" style="mix-blend-mode: darken;" x="44" y="0" width="67" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="47" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="58" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="69" y="4" width="15" height="6" rx="2"></rect>
+                        <rect stroke="#000000" x="0.5" y="7.5" width="6" height="1"></rect>
+                        <path d="M104.5,4.25 L104.5,4.5 L101.5,4.5 L101.5,4.25 L101.5,4.5 L100.5,4.5 L100.5,9.5 L105.5,9.5 L105.5,4.5 L104.5,4.5 L104.5,4.25 Z M100.5,5.5 L105.5,5.5 L105.5,9.5 L100.5,9.5 L100.5,5.5 Z" stroke="#000000" fill="#D8D8D8"></path>
+                        <path d="M33.7171562,9.8500625 L31.1171562,7.2500625 C30.9609531,7.09385937 30.9609531,6.84059375 31.1171562,6.684375 L31.6828281,6.1186875 C31.8390312,5.96246875 32.0923125,5.96246875 32.2485156,6.1186875 L34,7.87015625 L37.7514844,4.1186875 C37.9076875,3.96248437 38.1609688,3.96248437 38.3171719,4.1186875 L38.8828437,4.684375 C39.0390469,4.84057812 39.0390469,5.09384375 38.8828437,5.2500625 L34.2828437,9.85007812 C34.126625,10.0062812 33.8733594,10.0062812 33.7171563,9.8500625 L33.7171562,9.8500625 Z" fill="#000000" fill-rule="nonzero"></path>
+                        <polygon fill="#000000" points="56 4 57 4 56 10 55 10"></polygon>
+                        <polygon fill="#000000" points="67 4 68 4 67 10 66 10"></polygon>
+                        <rect stroke="#000000" x="13.5" y="0.5" width="12" height="12" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.1" x="113" y="0" width="79" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="117" y="4" width="29" height="6" rx="2"></rect>
+                        <rect stroke="#000000" x="0.5" y="5.5" width="6" height="1"></rect>
+                    </g>
+                    <g transform="translate(0.000000, 135.000000)">
+                        <rect fill="#000000" opacity="0.1" style="mix-blend-mode: darken;" x="44" y="0" width="67" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="47" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="58" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="69" y="4" width="15" height="6" rx="2"></rect>
+                        <rect stroke="#000000" x="0.5" y="5.5" width="6" height="1"></rect>
+                        <rect stroke="#000000" x="0.5" y="7.5" width="6" height="1"></rect>
+                        <path d="M104.5,4.25 L104.5,4.5 L101.5,4.5 L101.5,4.25 L101.5,4.5 L100.5,4.5 L100.5,9.5 L105.5,9.5 L105.5,4.5 L104.5,4.5 L104.5,4.25 Z M100.5,5.5 L105.5,5.5 L105.5,9.5 L100.5,9.5 L100.5,5.5 Z" stroke="#000000" fill="#D8D8D8"></path>
+                        <polygon fill="#000000" points="56 4 57 4 56 10 55 10"></polygon>
+                        <polygon fill="#000000" points="67 4 68 4 67 10 66 10"></polygon>
+                        <rect fill="#000000" opacity="0.1" x="113" y="0" width="48" height="13" rx="3"></rect>
+                        <rect stroke="#000000" x="13.5" y="0.5" width="12" height="12" rx="3"></rect>
+                    </g>
+                    <g transform="translate(0.000000, 165.000000)">
+                        <rect fill="#000000" opacity="0.1" style="mix-blend-mode: darken;" x="44" y="0" width="67" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="47" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="58" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="69" y="4" width="15" height="6" rx="2"></rect>
+                        <rect stroke="#000000" x="0.5" y="5.5" width="6" height="1"></rect>
+                        <rect stroke="#000000" x="0.5" y="7.5" width="6" height="1"></rect>
+                        <path d="M104.5,4.25 L104.5,4.5 L101.5,4.5 L101.5,4.25 L101.5,4.5 L100.5,4.5 L100.5,9.5 L105.5,9.5 L105.5,4.5 L104.5,4.5 L104.5,4.25 Z M100.5,5.5 L105.5,5.5 L105.5,9.5 L100.5,9.5 L100.5,5.5 Z" stroke="#000000" fill="#D8D8D8"></path>
+                        <polygon fill="#000000" points="56 4 57 4 56 10 55 10"></polygon>
+                        <polygon fill="#000000" points="67 4 68 4 67 10 66 10"></polygon>
+                        <rect fill="#000000" opacity="0.1" x="113" y="0" width="48" height="13" rx="3"></rect>
+                        <rect stroke="#000000" x="13.5" y="0.5" width="12" height="12" rx="3"></rect>
+                    </g>
+                    <g transform="translate(0.000000, 60.000000)">
+                        <rect fill="#000000" opacity="0.1" style="mix-blend-mode: darken;" x="44" y="0" width="67" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="47" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="58" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="69" y="4" width="15" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.1" x="113" y="0" width="48" height="13" rx="3"></rect>
+                        <rect stroke="#000000" x="0.5" y="5.5" width="6" height="1"></rect>
+                        <rect stroke="#000000" x="0.5" y="7.5" width="6" height="1"></rect>
+                        <path d="M104.5,4.25 L104.5,4.5 L101.5,4.5 L101.5,4.25 L101.5,4.5 L100.5,4.5 L100.5,9.5 L105.5,9.5 L105.5,4.5 L104.5,4.5 L104.5,4.25 Z M100.5,5.5 L105.5,5.5 L105.5,9.5 L100.5,9.5 L100.5,5.5 Z" stroke="#000000" fill="#D8D8D8"></path>
+                        <path d="M33.7171562,9.8500625 L31.1171562,7.2500625 C30.9609531,7.09385938 30.9609531,6.84059375 31.1171562,6.684375 L31.6828281,6.1186875 C31.8390312,5.96246875 32.0923125,5.96246875 32.2485156,6.1186875 L34,7.87015625 L37.7514844,4.1186875 C37.9076875,3.96248438 38.1609688,3.96248438 38.3171719,4.1186875 L38.8828437,4.684375 C39.0390469,4.84057813 39.0390469,5.09384375 38.8828437,5.2500625 L34.2828437,9.85007813 C34.126625,10.0062813 33.8733594,10.0062813 33.7171563,9.8500625 L33.7171562,9.8500625 Z" fill="#000000" fill-rule="nonzero"></path>
+                        <rect stroke="#000000" x="13.5" y="0.5" width="12" height="12" rx="3"></rect>
+                        <polygon fill="#000000" points="56 4 57 4 56 10 55 10"></polygon>
+                        <polygon fill="#000000" points="67 4 68 4 67 10 66 10"></polygon>
+                        <rect fill="#000000" opacity="0.5" x="117" y="4" width="29" height="6" rx="2"></rect>
+                    </g>
+                    <g transform="translate(0.000000, 90.000000)">
+                        <rect fill="#000000" opacity="0.1" style="mix-blend-mode: darken;" x="44" y="0" width="67" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="47" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="58" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="69" y="4" width="15" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.1" x="113" y="0" width="48" height="13" rx="3"></rect>
+                        <rect stroke="#000000" x="0.5" y="5.5" width="6" height="1"></rect>
+                        <rect stroke="#000000" x="0.5" y="7.5" width="6" height="1"></rect>
+                        <path d="M104.5,4.25 L104.5,4.5 L101.5,4.5 L101.5,4.25 L101.5,4.5 L100.5,4.5 L100.5,9.5 L105.5,9.5 L105.5,4.5 L104.5,4.5 L104.5,4.25 Z M100.5,5.5 L105.5,5.5 L105.5,9.5 L100.5,9.5 L100.5,5.5 Z" stroke="#000000" fill="#D8D8D8"></path>
+                        <rect stroke="#000000" x="13.5" y="0.5" width="12" height="12" rx="3"></rect>
+                        <polygon fill="#000000" points="56 4 57 4 56 10 55 10"></polygon>
+                        <polygon fill="#000000" points="67 4 68 4 67 10 66 10"></polygon>
+                    </g>
+                    <g transform="translate(0.000000, 120.000000)">
+                        <rect fill="#000000" opacity="0.1" style="mix-blend-mode: darken;" x="44" y="0" width="67" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="47" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="58" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="69" y="4" width="15" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.1" x="113" y="0" width="48" height="13" rx="3"></rect>
+                        <rect stroke="#000000" x="0.5" y="5.5" width="6" height="1"></rect>
+                        <rect stroke="#000000" x="0.5" y="7.5" width="6" height="1"></rect>
+                        <path d="M104.5,4.25 L104.5,4.5 L101.5,4.5 L101.5,4.25 L101.5,4.5 L100.5,4.5 L100.5,9.5 L105.5,9.5 L105.5,4.5 L104.5,4.5 L104.5,4.25 Z M100.5,5.5 L105.5,5.5 L105.5,9.5 L100.5,9.5 L100.5,5.5 Z" stroke="#000000" fill="#D8D8D8"></path>
+                        <rect stroke="#000000" x="13.5" y="0.5" width="12" height="12" rx="3"></rect>
+                        <polygon fill="#000000" points="56 4 57 4 56 10 55 10"></polygon>
+                        <polygon fill="#000000" points="67 4 68 4 67 10 66 10"></polygon>
+                    </g>
+                    <g transform="translate(0.000000, 150.000000)">
+                        <rect fill="#000000" opacity="0.1" style="mix-blend-mode: darken;" x="44" y="0" width="67" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="47" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="58" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="69" y="4" width="15" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.1" x="113" y="0" width="48" height="13" rx="3"></rect>
+                        <rect stroke="#000000" x="0.5" y="5.5" width="6" height="1"></rect>
+                        <rect stroke="#000000" x="0.5" y="7.5" width="6" height="1"></rect>
+                        <path d="M104.5,4.25 L104.5,4.5 L101.5,4.5 L101.5,4.25 L101.5,4.5 L100.5,4.5 L100.5,9.5 L105.5,9.5 L105.5,4.5 L104.5,4.5 L104.5,4.25 Z M100.5,5.5 L105.5,5.5 L105.5,9.5 L100.5,9.5 L100.5,5.5 Z" stroke="#000000" fill="#D8D8D8"></path>
+                        <path d="M33.7171562,9.8500625 L31.1171562,7.2500625 C30.9609531,7.09385937 30.9609531,6.84059375 31.1171562,6.684375 L31.6828281,6.1186875 C31.8390312,5.96246875 32.0923125,5.96246875 32.2485156,6.1186875 L34,7.87015625 L37.7514844,4.1186875 C37.9076875,3.96248437 38.1609688,3.96248437 38.3171719,4.1186875 L38.8828437,4.684375 C39.0390469,4.84057812 39.0390469,5.09384375 38.8828437,5.2500625 L34.2828437,9.85007812 C34.126625,10.0062812 33.8733594,10.0062812 33.7171563,9.8500625 L33.7171562,9.8500625 Z" fill="#000000" fill-rule="nonzero"></path>
+                        <rect stroke="#000000" x="13.5" y="0.5" width="12" height="12" rx="3"></rect>
+                        <polygon fill="#000000" points="56 4 57 4 56 10 55 10"></polygon>
+                        <polygon fill="#000000" points="67 4 68 4 67 10 66 10"></polygon>
+                        <rect fill="#000000" opacity="0.5" x="117" y="4" width="29" height="6" rx="2"></rect>
+                    </g>
+                    <g>
+                        <rect fill="#000000" opacity="0.1" style="mix-blend-mode: darken;" x="44" y="0" width="67" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="47" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="58" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="69" y="4" width="15" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.1" x="113" y="0" width="48" height="13" rx="3"></rect>
+                        <rect stroke="#000000" x="0.5" y="5.5" width="6" height="1"></rect>
+                        <rect stroke="#000000" x="0.5" y="7.5" width="6" height="1"></rect>
+                        <path d="M104.5,4.25 L104.5,4.5 L101.5,4.5 L101.5,4.25 L101.5,4.5 L100.5,4.5 L100.5,9.5 L105.5,9.5 L105.5,4.5 L104.5,4.5 L104.5,4.25 Z M100.5,5.5 L105.5,5.5 L105.5,9.5 L100.5,9.5 L100.5,5.5 Z" stroke="#000000" fill="#D8D8D8"></path>
+                        <path d="M33.7171562,9.8500625 L31.1171562,7.2500625 C30.9609531,7.09385938 30.9609531,6.84059375 31.1171562,6.684375 L31.6828281,6.1186875 C31.8390312,5.96246875 32.0923125,5.96246875 32.2485156,6.1186875 L34,7.87015625 L37.7514844,4.1186875 C37.9076875,3.96248438 38.1609688,3.96248438 38.3171719,4.1186875 L38.8828437,4.684375 C39.0390469,4.84057813 39.0390469,5.09384375 38.8828437,5.2500625 L34.2828437,9.85007812 C34.126625,10.0062813 33.8733594,10.0062813 33.7171563,9.8500625 L33.7171562,9.8500625 Z" fill="#000000" fill-rule="nonzero"></path>
+                        <rect stroke="#000000" x="13.5" y="0.5" width="12" height="12" rx="3"></rect>
+                        <polygon fill="#000000" points="56 4 57 4 56 10 55 10"></polygon>
+                        <polygon fill="#000000" points="67 4 68 4 67 10 66 10"></polygon>
+                        <rect fill="#000000" opacity="0.5" x="117" y="4" width="29" height="6" rx="2"></rect>
+                    </g>
+                    <g transform="translate(0.000000, 15.000000)">
+                        <rect fill="#000000" opacity="0.1" style="mix-blend-mode: darken;" x="44" y="0" width="67" height="13" rx="3"></rect>
+                        <rect fill="#000000" opacity="0.5" x="47" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="58" y="4" width="7" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.5" x="69" y="4" width="15" height="6" rx="2"></rect>
+                        <rect fill="#000000" opacity="0.1" x="113" y="0" width="48" height="13" rx="3"></rect>
+                        <rect stroke="#000000" x="0.5" y="5.5" width="6" height="1"></rect>
+                        <rect stroke="#000000" x="0.5" y="7.5" width="6" height="1"></rect>
+                        <path d="M104.5,4.25 L104.5,4.5 L101.5,4.5 L101.5,4.25 L101.5,4.5 L100.5,4.5 L100.5,9.5 L105.5,9.5 L105.5,4.5 L104.5,4.5 L104.5,4.25 Z M100.5,5.5 L105.5,5.5 L105.5,9.5 L100.5,9.5 L100.5,5.5 Z" stroke="#000000" fill="#D8D8D8"></path>
+                        <rect stroke="#000000" x="13.5" y="0.5" width="12" height="12" rx="3"></rect>
+                        <polygon fill="#000000" points="56 4 57 4 56 10 55 10"></polygon>
+                        <polygon fill="#000000" points="67 4 68 4 67 10 66 10"></polygon>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
