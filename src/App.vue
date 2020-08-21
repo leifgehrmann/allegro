@@ -355,13 +355,10 @@ export default Vue.extend({
         this.jiraTempoFieldCache,
       );
       this.jiraTempoField = await jiraTempoFieldPopulator.populate();
-      const worklogPopulator = new WorklogPopulator(
-        this.worklogs,
+      this.workAttributes = await new WorkAttributePopulator(
         this.preferences,
-        this.jiraTempoField,
-        this.issueCache,
-      );
-      await worklogPopulator.populate();
+        workAttributesCache,
+      ).populate();
       const ProjectsAccountLinksPopulator = new ProjectAccountLinksPopulator(
         this.worklogs,
         this.projectsAccountLinks,
@@ -369,10 +366,13 @@ export default Vue.extend({
         this.projectsAccountLinksCache,
       );
       await ProjectsAccountLinksPopulator.populate();
-      this.workAttributes = await new WorkAttributePopulator(
+      const worklogPopulator = new WorklogPopulator(
+        this.worklogs,
         this.preferences,
-        workAttributesCache,
-      ).populate();
+        this.jiraTempoField,
+        this.issueCache,
+      );
+      await worklogPopulator.populate();
     },
     async loadUser() {
       const currentUserPopulator = new CurrentUserPopulator(this.preferences);
