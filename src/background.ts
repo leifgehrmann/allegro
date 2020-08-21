@@ -7,6 +7,7 @@ import { PromiseIpcMain } from 'electron-promise-ipc/build/mainProcess';
 import createMainWindow from '@/backgroundMainWindow';
 import initialiseJiraIpcMain from '@/utils/ipc/jiraIpcMain';
 import initialiseTempoIpcMain from '@/utils/ipc/tempoIpcMain';
+import initialiseFileImportIpcMain from '@/utils/ipc/fileImportIpcMain';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -37,9 +38,11 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString());
     }
   }
+
+  win = createMainWindow();
   initialiseJiraIpcMain(ipc);
   initialiseTempoIpcMain(ipc);
-  win = createMainWindow();
+  initialiseFileImportIpcMain(ipc, win);
   win.on('closed', () => {
     win = null;
   });

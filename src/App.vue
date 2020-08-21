@@ -26,6 +26,7 @@
           icon="file-import"
           label="Import worklogs from CSV file"
           variant="primary"
+          @click-button="fileImportWorklogs"
           :disabled="isSubmittingWorklogs"
         />
         <Whitespace
@@ -93,17 +94,24 @@
         :disable-ui="isSubmittingWorklogs"
       />
     </div>
-    <MergeWorklogsModal
-      :worklogs="worklogs"
-      v-show="isMergeWorklogsModalVisible"
-      @close="closeMergeWorklogsModal"
-      @merge="mergeSelectedWorklogsIntoWorklog"
+    <FileImportWorklogsModal
+      :settings.sync="fileImportWorklogsSettings"
+      :fileData="fileImportWorklogsData"
+      v-show="isFileImportWorklogsModalVisible"
+      @close="closeFileImportWorklogsModal"
+      @importWorklogs="addWorklogData"
     />
     <BulkEditWorklogsModal
       :worklogs="worklogs"
       v-show="isBulkEditWorklogsModalVisible"
       @close="closeBulkEditWorklogsModal"
       @bulkEdit="bulkEditSelectedWorklogs"
+    />
+    <MergeWorklogsModal
+      :worklogs="worklogs"
+      v-show="isMergeWorklogsModalVisible"
+      @close="closeMergeWorklogsModal"
+      @merge="mergeSelectedWorklogsIntoWorklog"
     />
     <PreferencesModal
       :preferences="preferences"
@@ -131,8 +139,9 @@ import jetpack from 'fs-jetpack';
 import Worklogs from '@/components/Worklogs.vue';
 import Toolbar from '@/components/Toolbar.vue';
 import ConnectionStatus from '@/components/ConnectionStatus.vue';
-import MergeWorklogsModal from '@/components/MergeWorklogsModal.vue';
+import FileImportWorklogsModal from '@/components/FileImportWorklogsModal.vue';
 import BulkEditWorklogsModal from '@/components/BulkEditWorklogsModal.vue';
+import MergeWorklogsModal from '@/components/MergeWorklogsModal.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import ValidationModal from '@/components/ValidationModal.vue';
 import ErrorModal from '@/components/ErrorModal.vue';
@@ -171,6 +180,8 @@ import IconButton from '@/components/IconButton.vue';
 import Whitespace from '@/components/Whitespace.vue';
 import CheckBox from '@/components/CheckBox.vue';
 import { v4 as uuidv4 } from 'uuid';
+import FileImportIpcRenderer from '@/utils/ipc/fileImportIpcRenderer';
+import FileImportWorklogsSettings from '@/data/fileImportWorklogsSettings';
 
 library.add(faCog);
 library.add(faTimes);
@@ -212,8 +223,9 @@ export default Vue.extend({
     Worklogs,
     Toolbar,
     ConnectionStatus,
-    MergeWorklogsModal,
+    FileImportWorklogsModal,
     BulkEditWorklogsModal,
+    MergeWorklogsModal,
     PreferencesModal,
     ValidationModal,
     ErrorModal,
@@ -225,12 +237,15 @@ export default Vue.extend({
   data: () => ({
     jiraConnectionState: 'unknown' as 'unknown'|'connected'|'errored',
     tempoConnectionState: 'unknown' as 'unknown'|'connected'|'errored',
-    isMergeWorklogsModalVisible: false,
+    isFileImportWorklogsModalVisible: false,
     isBulkEditWorklogsModalVisible: false,
+    isMergeWorklogsModalVisible: false,
     isPreferencesModalVisible: false,
     isValidationModalVisible: false,
     isErrorModalVisible: false,
     isSubmittingWorklogs: false,
+    fileImportWorklogsSettings: {} as FileImportWorklogsSettings,
+    fileImportWorklogsData: '' as string,
     errorModalMessage: '',
     manifest,
     preferences,
@@ -268,17 +283,23 @@ export default Vue.extend({
     },
   },
   methods: {
-    showMergeWorklogsModal() {
-      this.isMergeWorklogsModalVisible = true;
+    showFileImportWorklogsModal() {
+      this.isFileImportWorklogsModalVisible = true;
     },
-    closeMergeWorklogsModal() {
-      this.isMergeWorklogsModalVisible = false;
+    closeFileImportWorklogsModal() {
+      this.isFileImportWorklogsModalVisible = false;
     },
     showBulkEditWorklogsModal() {
       this.isBulkEditWorklogsModalVisible = true;
     },
     closeBulkEditWorklogsModal() {
       this.isBulkEditWorklogsModalVisible = false;
+    },
+    showMergeWorklogsModal() {
+      this.isMergeWorklogsModalVisible = true;
+    },
+    closeMergeWorklogsModal() {
+      this.isMergeWorklogsModalVisible = false;
     },
     showPreferencesModal() {
       this.isPreferencesModalVisible = true;
@@ -387,29 +408,50 @@ export default Vue.extend({
         this.worklogs[index].selected = newSelectedValue;
       });
     },
-    addNewWorklog(): void {
+    addWorklog(date = '', issueKey = '', minutes = '', message = ''): void {
       // Get the last worklog entries date
-      let date = '';
-      if (this.worklogs.length !== 0) {
-        date = this.worklogs[this.worklogs.length - 1].date;
+      let newDate = date;
+      if (date === '' && this.worklogs.length !== 0) {
+        newDate = this.worklogs[this.worklogs.length - 1].date;
       }
 
       this.worklogs.push(
         {
           uuid: uuidv4(),
           selected: false,
-          date,
-          issueKey: '',
+          date: newDate,
+          issueKey,
           issueKeyIsValid: false,
           issueUrl: '',
           issueTitle: '',
           issueTempoAccountId: null,
-          minutes: '',
-          message: '',
+          minutes,
+          message,
           issueAccount: '',
           workAttributes: {},
         },
       );
+    },
+    addNewWorklog(): void {
+      this.addWorklog();
+    },
+    addWorklogData(
+      newWorklogsData: {date: string, minutes: string, message: string, issueKey: string}[],
+    ): void {
+      newWorklogsData.forEach((newWorklogData) => {
+        this.addWorklog(
+          newWorklogData.date,
+          newWorklogData.issueKey,
+          newWorklogData.minutes,
+          newWorklogData.message,
+        );
+      });
+    },
+    async fileImportWorklogs(): Promise<void> {
+      this.fileImportWorklogsData = await FileImportIpcRenderer.fileSelectAndRead();
+      if (this.fileImportWorklogsData !== '') {
+        this.showFileImportWorklogsModal();
+      }
     },
     deleteSelectedWorklogs(): void {
       this.worklogs = this.worklogs.filter((worklog) => (!worklog.selected));
