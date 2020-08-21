@@ -14,6 +14,8 @@
         {{ label }}
       </div>
       <button
+        @click.exact="clickExact"
+        @click.shift="clickShift"
         :disabled="disabled"
         :class="`button-${variant}`"
         slot="reference"
@@ -58,6 +60,16 @@ export default Vue.extend({
     variant: {
       type: String,
       default: 'secondary',
+    },
+  },
+  methods: {
+    clickExact() {
+      this.$emit('click-button');
+      this.$emit('click-button-exact');
+    },
+    clickShift() {
+      this.$emit('click-button');
+      this.$emit('click-button-shift');
     },
   },
 });

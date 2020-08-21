@@ -4,7 +4,8 @@
     :class="`check-box-${checked ? 'checked': 'unchecked'}`"
   >
     <IconButton
-      @click.native="toggleChecked"
+      @click-button-exact="toggleChecked"
+      @click-button-shift="toggleCheckedShift"
       :icon="icon"
       :disabled="disabled"
       :label="label"
@@ -64,12 +65,21 @@ export default Vue.extend({
     },
   },
   methods: {
-    toggleChecked() {
+    toggleChecked(shift = false) {
       const oldCheckedValue = this.checked;
       if (oldCheckedValue && this.partial) {
         this.$emit('update:partial', false);
       }
       this.$emit('update:checked', !oldCheckedValue);
+      this.$emit('toggle');
+      if (shift) {
+        this.$emit('toggle-shift');
+      } else {
+        this.$emit('toggle-exact');
+      }
+    },
+    toggleCheckedShift() {
+      this.toggleChecked(true);
     },
   },
 });

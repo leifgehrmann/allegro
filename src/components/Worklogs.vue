@@ -33,8 +33,8 @@
             label="Select"
             label-placement="right"
             :checked="item.selected"
-            @click.native.exact="toggleWorklogSelection(index, item.selected)"
-            @click.native.shift="toggleWorklogSelectionWithRange(index, item.selected)"
+            @toggle-exact="toggleWorklogSelection(index, item.selected)"
+            @toggle-shift="toggleWorklogSelectionWithRange(index, item.selected)"
             :disabled="disableUi"
           />
         </td>

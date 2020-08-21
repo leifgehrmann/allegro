@@ -10,7 +10,7 @@
           :partial="selectedWorklogsTotal > 0 && selectedWorklogsTotal !== worklogs.length"
           :disabled="isSubmittingWorklogs"
           label="Select"
-          @click.native="toggleSelectionOfAllWorklogs"
+          @toggle="toggleSelectionOfAllWorklogs"
         />
         <Whitespace
           width="25px"
@@ -19,7 +19,7 @@
           icon="plus"
           label="Add new worklog"
           variant="primary"
-          @click.native="addNewWorklog"
+          @click-button="addNewWorklog"
           :disabled="isSubmittingWorklogs"
         />
         <IconButton
@@ -37,14 +37,14 @@
           icon="pen"
           label="Bulk edit selected worklogs"
           v-if="selectedWorklogsTotal > 0"
-          @click.native="showBulkEditWorklogsModal"
+          @click-button="showBulkEditWorklogsModal"
           :disabled="isSubmittingWorklogs"
         />
         <IconButton
           icon="layer-group"
           label="Merge selected worklogs"
           v-if="selectedWorklogsTotal > 0"
-          @click.native="showMergeWorklogsModal"
+          @click-button="showMergeWorklogsModal"
           :disabled="isSubmittingWorklogs"
         />
         <IconButton
@@ -52,14 +52,14 @@
           label="Delete selected worklogs"
           variant="danger"
           v-if="selectedWorklogsTotal > 0"
-          @click.native="deleteSelectedWorklogs"
+          @click-button="deleteSelectedWorklogs"
           :disabled="isSubmittingWorklogs"
         />
       </template>
       <template v-slot:right>
         <IconButton
           icon="cog"
-          @click.native="showPreferencesModal"
+          @click-button="showPreferencesModal"
           label="Preferences"
           :disabled="isSubmittingWorklogs"
         />
