@@ -24,6 +24,7 @@
             label="Click and drag to reorder"
             label-placement="right"
             variant="link"
+            :disabled="disableUi"
           />
         </td>
         <td

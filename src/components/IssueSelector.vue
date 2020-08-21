@@ -30,6 +30,7 @@ import {shell} from "electron";
       </div>
       <span
         class="resolvedIssueTitle inputComponentPiece"
+        :style="{opacity: disabled ? '0.5' : '1'}"
         v-if="issueKeyIsValid"
         @click="focusOnIssueKey"
         slot="reference"
@@ -39,6 +40,7 @@ import {shell} from "electron";
     </popper>
     <button
       class="resolvedIssueLink"
+      :disabled="disabled"
       :title="`Open ${mountedIssueKey} in JIRA`"
       v-if="issueKeyIsValid"
       @click="openUrl"
