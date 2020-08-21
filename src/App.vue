@@ -74,7 +74,7 @@
           v-if="!isSubmittingWorklogs"
         >
           <font-awesome-icon icon="rocket"/>
-          Submit Worklogs {{totalMinutes}}
+          Submit Worklogs
         </button>
         <button
           id="submit-cancelSubmission"
@@ -92,6 +92,9 @@
         :work-attributes="workAttributes"
         :projects-account-links="projectsAccountLinks"
         :disable-ui="isSubmittingWorklogs"
+      />
+      <SummaryStats
+        :worklogs="worklogs"
       />
     </div>
     <FileImportWorklogsModal
@@ -182,6 +185,7 @@ import CheckBox from '@/components/CheckBox.vue';
 import { v4 as uuidv4 } from 'uuid';
 import FileImportIpcRenderer from '@/utils/ipc/fileImportIpcRenderer';
 import FileImportWorklogsSettings from '@/data/fileImportWorklogsSettings';
+import SummaryStats from '@/components/SummaryStats.vue';
 
 library.add(faCog);
 library.add(faTimes);
@@ -221,6 +225,7 @@ export default Vue.extend({
   name: 'App',
   components: {
     Worklogs,
+    SummaryStats,
     Toolbar,
     ConnectionStatus,
     FileImportWorklogsModal,
@@ -265,21 +270,6 @@ export default Vue.extend({
         (sumSelected, worklog) => (worklog.selected ? sumSelected + 1 : sumSelected),
         0,
       );
-    },
-    totalMinutes(): string {
-      const total = this.worklogs.reduce(
-        (accumulator, worklog) => {
-          if (worklog.minutes !== '') {
-            return accumulator + parseFloat(worklog.minutes ?? '0');
-          }
-          return accumulator;
-        },
-        0,
-      );
-      if (total === 0) {
-        return '';
-      }
-      return `(${total}m)`;
     },
   },
   methods: {
