@@ -102,9 +102,18 @@
         class="induction"
         v-if="worklogs.length === 0"
       >
-        <img src="Create.svg" draggable="false">
-        <img src="Edit.svg" draggable="false">
-        <img src="Submit.svg" draggable="false">
+        <div>
+          <img src="Create.svg" draggable="false" alt="Create or Import worklogs">
+          <p>Create or import time entries</p>
+        </div>
+        <div>
+          <img src="Edit.svg" draggable="false" alt="List of worklogs">
+          <p>Fill in worklog details until a <font-awesome-icon icon="check" /> appears for each</p>
+        </div>
+        <div>
+          <img src="Submit.svg" draggable="false" alt="Submit worklogs button">
+          <p>Submit when finished</p>
+        </div>
       </div>
       <SummaryStats
         :worklogs="worklogs"
@@ -554,5 +563,10 @@ export default Vue.extend({
   width: 100%;
   display: flex;
   justify-content: space-evenly;
+}
+.induction p {
+  font-size: 15px;
+  text-align: center;
+  width: 200px;
 }
 </style>

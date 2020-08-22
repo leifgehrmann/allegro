@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="200px" height="300px" viewBox="0 0 200 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
     <title>Edit</title>
     <desc>Created with Sketch.</desc>
@@ -7,18 +7,6 @@
         <circle id="path-1" cx="100" cy="100" r="100"></circle>
     </defs>
     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <text font-family="Helvetica" font-size="14" font-weight="normal" fill="#000000">
-            <tspan x="18.6899414" y="240">Fill in worklog details, until</tspan>
-        </text>
-        <text font-family="Helvetica" font-size="14" font-weight="normal" fill="#000000">
-            <tspan x="30.1069336" y="257">a</tspan>
-        </text>
-        <text font-family="Helvetica" font-size="14" font-weight="normal" fill="#000000">
-            <tspan x="64.4658203" y="257">appears for each</tspan>
-        </text>
-        <g transform="translate(43.000000, 246.000000)" fill="#000000" fill-rule="nonzero">
-            <path d="M6.11360156,13.1626406 L0.263601562,7.31264063 C-0.0878554688,6.96118359 -0.0878554688,6.39133594 0.263601562,6.03984375 L1.53636328,4.76704688 C1.88782031,4.41555469 2.45770313,4.41555469 2.80916016,4.76704688 L6.75,8.70785156 L15.1908398,0.267046875 C15.5422969,-0.0844101562 16.1121797,-0.0844101562 16.4636367,0.267046875 L17.7363984,1.53984375 C18.0878555,1.89130078 18.0878555,2.46114844 17.7363984,2.81264063 L7.38639844,13.1626758 C7.03490625,13.5141328 6.46505859,13.5141328 6.11360156,13.1626406 L6.11360156,13.1626406 Z"></path>
-        </g>
         <g>
             <mask id="mask-2" fill="white">
                 <use xlink:href="#path-1"></use>
