@@ -363,9 +363,17 @@ export default Vue.extend({
       jiraTempoFieldCache.invalidate();
       workAttributesCache.invalidate();
       projectsAccountLinksCache.invalidate();
-      // Todo: Force clear the Worklogs metadata, since the title and account will be set even when
-      // the cache is cleared.
+      this.clearWorklogCache();
       this.populate();
+    },
+    clearWorklogCache() {
+      this.worklogs.forEach((worklog, index) => {
+        this.worklogs[index].issueAccount = '';
+        this.worklogs[index].issueTempoAccountId = null;
+        this.worklogs[index].issueKeyIsValid = false;
+        this.worklogs[index].issueTitle = '';
+        this.worklogs[index].issueUrl = '';
+      });
     },
     async populate(): Promise<void> {
       const jiraTempoFieldPopulator = new JiraTempoFieldPopulator(
