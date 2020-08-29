@@ -364,7 +364,7 @@ export default Vue.extend({
       workAttributesCache.invalidate();
       projectsAccountLinksCache.invalidate();
       this.clearWorklogCache();
-      this.populate();
+      await this.populate();
     },
     clearWorklogCache() {
       this.worklogs.forEach((worklog, index) => {
@@ -458,12 +458,18 @@ export default Vue.extend({
         },
       );
     },
-    addNewWorklog(): void {
+    async addNewWorklog(): Promise<void> {
+      if (this.worklogs.length === 0) {
+        await this.clearCacheAndPopulate();
+      }
       this.addWorklog();
     },
-    addWorklogData(
+    async addWorklogData(
       newWorklogsData: {date: string, minutes: string, message: string, issueKey: string}[],
-    ): void {
+    ): Promise<void> {
+      if (this.worklogs.length === 0) {
+        await this.clearCacheAndPopulate();
+      }
       newWorklogsData.forEach((newWorklogData) => {
         this.addWorklog(
           newWorklogData.date,
