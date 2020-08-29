@@ -285,6 +285,7 @@ export default Vue.extend({
     jiraTempoFieldCache,
     projectsAccountLinksCache,
     workAttributesCache,
+    worklogsWatchHandlerTimeoutId: setTimeout(() => { /* Do nothing */ }, 0),
   }),
   computed: {
     hasPreferencesSet(): boolean {
@@ -543,9 +544,11 @@ export default Vue.extend({
   watch: {
     worklogs: {
       handler() {
-        // Todo: Defer to reduce massive I/O ops
-        store.set('worklogs', this.worklogs);
-        this.populate();
+        clearTimeout(this.worklogsWatchHandlerTimeoutId);
+        this.worklogsWatchHandlerTimeoutId = setTimeout(() => {
+          store.set('worklogs', this.worklogs);
+          this.populate();
+        }, 200);
       },
       deep: true,
     },
