@@ -12,6 +12,7 @@
         {{workAttribute.name}}
         <span v-if="workAttribute.required">*</span>
       </th>
+      <th scope="col"></th>
     </tr>
     <draggable :list="worklogs" tag="tbody" handle=".handle">
       <tr v-for="(item, index) in worklogs" :key="item.uuid">
@@ -111,6 +112,7 @@
             :disabled="disableUi"
           />
         </td>
+        <td></td>
       </tr>
     </draggable>
   </table>
