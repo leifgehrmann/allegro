@@ -325,7 +325,7 @@ export default Vue.extend({
     top: 5px;
     z-index: 20;
     min-width: 100px;
-    max-height: 200px;
+    max-height: 210px;
     overflow-y: scroll;
   }
 
