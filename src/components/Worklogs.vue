@@ -106,6 +106,7 @@
             :work-attribute="workAttribute"
             :projects-account-links="projectsAccountLinks"
             :issue-key="item.issueKey"
+            :issue-key-is-valid="item.issueKeyIsValid"
             :issue-tempo-account-id="item.issueTempoAccountId"
             :disabled="disableUi"
           />

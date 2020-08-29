@@ -50,6 +50,10 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    issueKeyIsValid: {
+      type: Boolean,
+      default: false,
+    },
     issueTempoAccountId: {
       type: Number,
       default: null,
@@ -87,6 +91,9 @@ export default Vue.extend({
       this.update();
     },
     issueKey() {
+      this.populateProjectAccountLink();
+    },
+    issueKeyIsValid() {
       this.populateProjectAccountLink();
     },
     projectsAccountLinks() {
