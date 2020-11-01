@@ -67,7 +67,7 @@ export default class ProjectAccountLinksPopulator {
 
   private static async asyncForEach<T>(
     array: T[],
-    callback: (element: T, index: number, array: T[]) => void,
+    callback: (element: T, index: number, originalArray: T[]) => void,
   ) {
     for (let index = 0; index < array.length; index += 1) {
       // Todo: Run callbacks in parallel, not synchronously

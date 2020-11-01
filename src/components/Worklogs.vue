@@ -195,12 +195,12 @@ export default Vue.extend({
         this.lastSelectedIndex !== null ? this.lastSelectedIndex : index,
       );
       for (let i = minRange; i <= maxRange; i += 1) {
-        this.worklogs[i].selected = !checkBoxIsSelected;
+        this.$emit('selected-changed', i, !checkBoxIsSelected);
       }
       this.lastSelectedIndex = index;
     },
     toggleWorklogSelection(index: number, checkBoxIsSelected: boolean) {
-      this.worklogs[index].selected = !checkBoxIsSelected;
+      this.$emit('selected-changed', index, !checkBoxIsSelected);
       this.lastSelectedIndex = index;
     },
     resizeMessageTextarea(e: Event) {

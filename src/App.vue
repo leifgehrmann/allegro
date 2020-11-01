@@ -97,6 +97,7 @@
         :work-attributes="workAttributes"
         :projects-account-links="projectsAccountLinks"
         :disable-ui="isSubmittingWorklogs"
+        @selected-changed="updateSelectionOfWorklog"
       />
       <div
         class="induction"
@@ -124,13 +125,13 @@
       :fileData="fileImportWorklogsData"
       v-show="isFileImportWorklogsModalVisible"
       @close="closeFileImportWorklogsModal"
-      @importWorklogs="addWorklogData"
+      @import-worklogs="addWorklogData"
     />
     <BulkEditWorklogsModal
       :worklogs="worklogs"
       v-show="isBulkEditWorklogsModalVisible"
       @close="closeBulkEditWorklogsModal"
-      @bulkEdit="bulkEditSelectedWorklogs"
+      @bulk-edit="bulkEditSelectedWorklogs"
     />
     <MergeWorklogsModal
       :worklogs="worklogs"
@@ -141,7 +142,7 @@
     <PreferencesModal
       :preferences="preferences"
       v-show="isPreferencesModalVisible"
-      @resetCache="clearCacheAndPopulate"
+      @reset-cache="clearCacheAndPopulate"
       @close="closePreferencesModal"
       @save="savePreferences"
     />
@@ -434,6 +435,9 @@ export default Vue.extend({
       this.worklogs.forEach((worklog, index) => {
         this.worklogs[index].selected = newSelectedValue;
       });
+    },
+    updateSelectionOfWorklog(worklogIndex: number, newSelectedValue: boolean) {
+      this.worklogs[worklogIndex].selected = newSelectedValue;
     },
     addWorklog(date = '', issueKey = '', minutes = '', message = ''): void {
       // Get the last worklog entries date
