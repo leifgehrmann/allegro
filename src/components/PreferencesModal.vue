@@ -138,7 +138,7 @@ export default Vue.extend({
       this.testPreferences = { ...this.preferences };
     },
     resetCache() {
-      this.$emit('resetCache');
+      this.$emit('reset-cache');
       this.resettedCache = true;
       setTimeout(() => {
         this.resettedCache = false;

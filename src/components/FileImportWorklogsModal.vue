@@ -14,7 +14,7 @@
         </p>
         <label>
           <select
-            v-model="settings.dateColumn"
+            v-model="selectedSettings.dateColumn"
           >
             <option
               v-for="(column, index) in columns"
@@ -31,7 +31,7 @@
         </p>
         <label>
           <select
-            v-model="settings.minutesColumn"
+            v-model="selectedSettings.minutesColumn"
           >
             <option
               v-for="(column, index) in columns"
@@ -64,7 +64,7 @@
           <input
             type="radio"
             name="fileImportWorklogsParseMessageForIssueKey"
-            v-model="settings.parseMessageForIssueKey"
+            v-model="selectedSettings.parseMessageForIssueKey"
             :value="true"
           >
           Yes
@@ -73,7 +73,7 @@
           <input
             type="radio"
             name="fileImportWorklogsParseMessageForIssueKey"
-            v-model="settings.parseMessageForIssueKey"
+            v-model="selectedSettings.parseMessageForIssueKey"
             :value="false"
           >
           No
@@ -114,6 +114,7 @@ export default Vue.extend({
     },
   },
   data: () => ({
+    selectedSettings: {} as FileImportWorklogsSettings,
     isImporting: false,
     checkedNames: [] as string[] | undefined,
   }),
@@ -146,13 +147,20 @@ export default Vue.extend({
       this.checkedNames = [];
     },
     checkedNames() {
-      this.settings.messageColumns = this.checkedNames;
+      this.selectedSettings.messageColumns = this.checkedNames;
+    },
+    selectedSettings: {
+      handler() {
+        this.$emit('update:settings', this.selectedSettings);
+      },
+      deep: true,
     },
   },
   mounted(): void {
     if (this.settings.messageColumns) {
       this.checkedNames = this.settings.messageColumns;
     }
+    this.selectedSettings = { ...this.settings };
   },
   methods: {
     generateParsedData(): {date: string, minutes: string, message: string, issueKey: string}[] {
@@ -235,7 +243,7 @@ export default Vue.extend({
     },
     importWorklogs() {
       this.isImporting = true;
-      this.$emit('importWorklogs', this.generateParsedData());
+      this.$emit('import-worklogs', this.generateParsedData());
       this.close();
       this.isImporting = false;
     },

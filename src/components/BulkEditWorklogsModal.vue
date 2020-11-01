@@ -57,7 +57,7 @@ export default Vue.extend({
       this.$emit('close');
     },
     bulkEdit() {
-      this.$emit('bulkEdit', this.newDate);
+      this.$emit('bulk-edit', this.newDate);
       this.close();
     },
   },
