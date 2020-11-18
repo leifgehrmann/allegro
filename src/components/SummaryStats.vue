@@ -74,6 +74,7 @@ export default Vue.extend({
 <style scoped>
 .summary-stats-container {
   position: fixed;
+  pointer-events: none;
   right: 0;
   left: 0;
   bottom: 10px;
