@@ -15,9 +15,7 @@ jobs:
       matrix:
         os: [windows-latest, macOS-latest]
         node-version: [12.x]
-    env:
-      OS: ${{ matrix.os }}
-      NODE: ${{ matrix.node-version }}
+
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node.js
@@ -43,5 +41,4 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
-          env_vars: OS,NODE
           fail_ci_if_error: true
