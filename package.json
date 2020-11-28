@@ -17,10 +17,10 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.1",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/vue-fontawesome": "^2.0.0",
-    "core-js": "^3.6.5",
+    "core-js": "^3.8.0",
     "csv-string": "^4.0.1",
     "electron": "^9.2.1",
-    "electron-promise-ipc": "^2.1.0",
+    "electron-promise-ipc": "^2.2.1",
     "electron-store": "^5.2.0",
     "fs-jetpack": "4.1.0",
     "jira-client": "^6.21.1",
@@ -40,8 +40,8 @@
     "@types/node": "^12.12.47",
     "@types/uuid": "^8.3.0",
     "@types/vuedraggable": "^2.23.2",
-    "@typescript-eslint/eslint-plugin": "^4.8.1",
-    "@typescript-eslint/parser": "^4.8.1",
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
     "@vue/cli-plugin-babel": "^4.5.9",
     "@vue/cli-plugin-eslint": "^4.5.9",
     "@vue/cli-plugin-typescript": "^4.5.9",
@@ -56,7 +56,7 @@
     "node-sass": "^5.0.0",
     "sass-loader": "^10.1.0",
     "spectron": "^11.0.0",
-    "typescript": "^4.0.5",
+    "typescript": "^4.1.2",
     "vue-template-compiler": "^2.6.12"
   }
 }
