@@ -39,7 +39,7 @@ export default Vue.extend({
         name: 'default',
         required: false,
         self: '',
-        type: 'DEFAULT',
+        type: 'ACCOUNT',
       }),
     },
     projectsAccountLinks: {
@@ -76,12 +76,12 @@ export default Vue.extend({
       const dropdownArray = [
         { value: '', label: '' },
       ];
-      if (this.workAttribute.values === undefined) {
+      if (this.workAttribute.names === undefined) {
         return dropdownArray;
       }
-      dropdownArray.push(...this.workAttribute.values.map((value) => ({
+      dropdownArray.push(...Object.entries(this.workAttribute.names).map(([value, label]) => ({
         value,
-        label: value,
+        label,
       })));
       return dropdownArray;
     },
