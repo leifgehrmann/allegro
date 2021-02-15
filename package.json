@@ -24,7 +24,7 @@
     "electron-store": "^5.2.0",
     "fs-jetpack": "4.1.0",
     "jira-client": "^6.21.1",
-    "tempo-client": "^4.1.0",
+    "tempo-client": "^4.2.0",
     "uuid": "^8.3.1",
     "v-click-outside": "3.1.2",
     "vue": "^2.6.12",
